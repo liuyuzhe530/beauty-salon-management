@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { UserRole } from './types/index';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginPage } from './components/LoginPage';
 import { RoleSelector } from './components/RoleSelector';
 import { Navigation } from './components/Navigation';
@@ -12,33 +13,42 @@ import { AIAssistant } from './components/AIAssistant';
 import { Promotion } from './components/Promotion';
 import { FloatingAIChat } from './components/FloatingAIChat';
 import { ToastProvider } from './components/Toast';
-import { apiService } from './services/api';
 import { TrainingEducation } from './components/MiniProgramStore';
 
 function AppContent() {
+  const { user, isAuthenticated, logout, loading } = useAuth();
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [currentPage, setCurrentPage] = useState<string>('dashboard');
-  const [useLoginPage, setUseLoginPage] = useState(true);
 
-  const handleSelectRole = (role: UserRole) => {
-    setUserRole(role);
-    setCurrentPage('dashboard');
-  };
-
-  const handleLogout = () => {
-    setUserRole(null);
-    setCurrentPage('dashboard');
-    apiService.clearToken();
-    setUseLoginPage(true);
-  };
-
-  if (!userRole) {
-    return useLoginPage ? (
-      <LoginPage onLogin={handleSelectRole} />
-    ) : (
-      <RoleSelector onSelectRole={handleSelectRole} />
+  // Check authentication status
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
+          <p className="text-gray-600">加载中...</p>
+        </div>
+      </div>
     );
   }
+
+  // If not authenticated, show login page
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+        <LoginPage onLogin={(role) => {
+          setUserRole(role);
+          setCurrentPage('dashboard');
+        }} />
+      </div>
+    );
+  }
+
+  const handleLogout = () => {
+    logout();
+    setUserRole(null);
+    setCurrentPage('dashboard');
+  };
 
   const renderPage = () => {
     switch(currentPage) {
@@ -66,7 +76,7 @@ function AppContent() {
       {/* 顶部导航栏 - 桌面端显示 */}
       <Navigation 
         currentPage={currentPage}
-        userRole={userRole}
+        userRole={user.role as UserRole}
         onPageChange={setCurrentPage}
         onLogout={handleLogout}
       />
@@ -74,7 +84,7 @@ function AppContent() {
       {/* 底部导航栏 - 手机端显示 */}
       <BottomNavigation
         currentPage={currentPage}
-        userRole={userRole}
+        userRole={user.role as UserRole}
         onPageChange={setCurrentPage}
         onLogout={handleLogout}
       />
@@ -99,8 +109,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ToastProvider>
-      <AppContent />
-    </ToastProvider>
+    <AuthProvider>
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
+    </AuthProvider>
   );
 }
