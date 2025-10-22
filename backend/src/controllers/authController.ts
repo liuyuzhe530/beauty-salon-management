@@ -186,7 +186,7 @@ export class AuthController {
         return;
       }
 
-      const result = await authService.changePassword(
+      await authService.changePassword(
         req.user.id,
         oldPassword,
         newPassword,
@@ -212,7 +212,7 @@ export class AuthController {
    * 登出
    * POST /api/auth/logout
    */
-  async logout(req: AuthenticatedRequest, res: Response): Promise<void> {
+  async logout(_req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       // 前端应该删除本地存储的Token
       res.status(200).json({
