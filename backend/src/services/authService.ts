@@ -1,5 +1,5 @@
 import User from '../database/models/User';
-import { generateToken, verifyToken, JWTPayload } from '../config/jwt';
+import { generateToken, verifyToken } from '../config/jwt';
 import { RegisterRequest, LoginRequest } from '../types/auth';
 
 export class AuthService {
