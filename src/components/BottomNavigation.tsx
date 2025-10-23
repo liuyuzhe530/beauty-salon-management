@@ -22,7 +22,8 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       { id: 'customermanagement', label: '客户', icon: Users },
       { id: 'staff', label: '美容师', icon: Users },
       { id: 'shop', label: '商城', icon: ShoppingBag },
-      { id: 'ai', label: 'AI', icon: Zap }
+      { id: 'ai', label: 'AI', icon: Zap },
+      { id: 'procurement', label: '采购', icon: ShoppingBag }
     ],
     staff: [
       { id: 'dashboard', label: '日程', icon: Users },

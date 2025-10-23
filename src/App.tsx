@@ -15,6 +15,7 @@ import { AIChat } from './components/AIChat';
 import { ToastProvider } from './components/Toast';
 import { TrainingEducation } from './components/MiniProgramStore';
 import { OnSiteServiceManagement } from './components/OnSiteServiceManagement';
+import { IntelligentProcurementAI } from './components/IntelligentProcurementAI';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -72,6 +73,8 @@ function AppContent() {
         return <TrainingEducation />;
       case 'onsite':
         return <OnSiteServiceManagement />;
+      case 'procurement':
+        return <IntelligentProcurementAI />;
       default:
         return <Dashboard />;
     }
