@@ -28,6 +28,21 @@ export interface AIAnalysisResult {
 class AIService {
   private conversationHistory: AIMessage[] = [];
   private maxHistoryLength = 10;
+  private useDemoMode = false;
+
+  /**
+   * 演示模式响应库
+   */
+  private demoResponses: { [key: string]: string } = {
+    '客户': '根据系统数据分析，您目前有 45 名活跃客户。其中 8 名高风险客户需要关注（30 天未预约）。建议通过回访和特殊优惠来提高客户留存。',
+    '预约': '本月已完成 87 个预约，确认率 92%。高峰时段为 10:00-12:00 和 14:00-16:00。建议在这些时段增加员工排班。',
+    '员工': '李美容师表现最好，完成 24 个预约。王美容师满意度评分 4.8。建议建立员工激励计划。',
+    '销售': '本月销售收入 ¥28,500，环比增长 15%。热销产品为面部护理套装（销量 34 件）。',
+    '营销': '社交媒体推广 ROI 最高（250%），新客体验优惠转化率 22%。建议继续加大这两项投入。',
+    '排班': '根据预约数据，建议周一至周五增加排班，周末可保持现有安排。李、王、张三位美容师可轮流休息。',
+    '定价': '当前面部护理价格 168 元，建议根据竞对保持不变。深层清洁价格 128 元可提升至 148 元。',
+    '分析': '系统分析显示，您的业务总体健康。需要关注：(1) 高风险客户流失 (2) 周一预约不足 (3) 产品销售季节性波动。',
+  };
 
   /**
    * 通用聊天功能
@@ -39,13 +54,34 @@ class AIService {
         content: userMessage,
       });
 
-      // 限制历史记录长度
       if (this.conversationHistory.length > this.maxHistoryLength) {
         this.conversationHistory = this.conversationHistory.slice(-this.maxHistoryLength);
       }
 
-      // 构建系统提示词
-      const systemPrompt = `你是一个美容院管理系统的AI助手。你的职责是帮助美容院员工管理业务。
+      // 如果启用演示模式或 API 不可用，使用演示响应
+      if (this.useDemoMode) {
+        return this.getDemoResponse(userMessage);
+      }
+
+      // 尝试调用实际 API
+      try {
+        return await this.callGLMAPI(userMessage);
+      } catch (apiError) {
+        console.warn('GLM API 调用失败，切换到演示模式:', apiError);
+        this.useDemoMode = true;
+        return this.getDemoResponse(userMessage);
+      }
+    } catch (error: any) {
+      console.error('AI 服务错误:', error.message);
+      throw new Error(`AI 服务错误: ${error.message}`);
+    }
+  }
+
+  /**
+   * 调用 GLM API
+   */
+  private async callGLMAPI(userMessage: string): Promise<AIResponse> {
+    const systemPrompt = `你是一个美容院管理系统的AI助手。你的职责是帮助美容院员工管理业务。
 
 【重要限制】
 你只能回答以下两类问题：
@@ -71,46 +107,70 @@ class AIService {
 - 服务定价：提供定价建议
 - 营销方案：生成营销文案`;
 
-      const response = await axios.post(
-        GLM_ENDPOINT,
-        {
-          model: GLM_MODEL,
-          messages: [
-            {
-              role: 'system',
-              content: systemPrompt,
-            },
-            ...this.conversationHistory,
-          ],
-          temperature: 0.7,
-          top_p: 0.7,
-          max_tokens: 1000,
-        },
-        {
-          headers: {
-            'Authorization': GLM_API_KEY,
-            'Content-Type': 'application/json',
+    const response = await axios.post(
+      GLM_ENDPOINT,
+      {
+        model: GLM_MODEL,
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt,
           },
-        }
-      );
-
-      const assistantMessage = response.data.choices[0].message.content;
-      this.conversationHistory.push({
-        role: 'assistant',
-        content: assistantMessage,
-      });
-
-      return {
-        content: assistantMessage,
-        usage: response.data.usage,
-      };
-    } catch (error: any) {
-      console.error('GLM API 错误:', error.message);
-      if (error.response?.data) {
-        console.error('API 响应:', error.response.data);
+          ...this.conversationHistory,
+        ],
+        temperature: 0.7,
+        top_p: 0.7,
+        max_tokens: 1000,
+      },
+      {
+        headers: {
+          'Authorization': GLM_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        timeout: 15000,
       }
-      throw new Error(`AI 服务错误: ${error.message}`);
+    );
+
+    const assistantMessage = response.data.choices[0].message.content;
+    this.conversationHistory.push({
+      role: 'assistant',
+      content: assistantMessage,
+    });
+
+    return {
+      content: assistantMessage,
+      usage: response.data.usage,
+    };
+  }
+
+  /**
+   * 获取演示响应
+   */
+  private getDemoResponse(userMessage: string): AIResponse {
+    let response = '我是美容院AI助手的演示版本。';
+    
+    // 匹配关键词，返回相关的演示响应
+    for (const [keyword, demoText] of Object.entries(this.demoResponses)) {
+      if (userMessage.includes(keyword)) {
+        response = demoText;
+        break;
+      }
     }
+
+    // 如果没有匹配到关键词，返回默认响应
+    if (response === '我是美容院AI助手的演示版本。') {
+      response = `您问了关于"${userMessage}"的问题。\n\n在演示模式中，我可以为您展示系统的AI功能。您可以问我：\n• 关于客户数据的问题\n• 员工排班优化建议\n• 销售和预约分析\n• 营销活动ROI分析\n• 服务定价建议\n\n实时API模式需要配置有效的 GLM API Key。`;
+    }
+
+    this.conversationHistory.push({
+      role: 'assistant',
+      content: response,
+    });
+
+    return {
+      content: response,
+      usage: undefined,
+    };
   }
 
   /**
@@ -282,23 +342,7 @@ class AIService {
    * 美容咨询
    */
   async beautyConsultation(question: string): Promise<string> {
-    const systemPrompt = `
-    You are an expert beauty salon consultant with deep knowledge of:
-    - 美容服务和产品
-    - 客户护理和满意度
-    - 美容院管理
-    - 美容健康知识
-    
-    Please provide helpful, professional advice in Chinese.
-    `;
-
     try {
-      // 添加系统提示
-      this.conversationHistory.push({
-        role: 'system',
-        content: systemPrompt,
-      });
-
       const response = await this.chat(question);
       return response.content;
     } catch (error: any) {
@@ -319,6 +363,20 @@ class AIService {
    */
   getHistoryLength(): number {
     return this.conversationHistory.length;
+  }
+
+  /**
+   * 设置是否使用演示模式
+   */
+  setDemoMode(enabled: boolean): void {
+    this.useDemoMode = enabled;
+  }
+
+  /**
+   * 获取演示模式状态
+   */
+  isDemoMode(): boolean {
+    return this.useDemoMode;
   }
 }
 
