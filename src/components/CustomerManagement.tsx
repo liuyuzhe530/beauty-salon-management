@@ -23,6 +23,10 @@ export const CustomerManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingData, setEditingData] = useState<Customer | Appointment | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [onsiteAppointments, setOnsiteAppointments] = useState<any[]>([]);
+  const [onsiteHistory, setOnsiteHistory] = useState<any[]>([]);
 
   const searchResults = searchQuery.trim() ? searchCustomers(searchQuery) : customers;
   const filteredCustomers = searchResults.filter(c =>
@@ -163,6 +167,22 @@ export const CustomerManagement: React.FC = () => {
     }
   };
 
+  const handleViewCustomerServices = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    
+    // 从 localStorage 获取上门预约
+    const onsiteAppts = localStorage.getItem('onSiteAppointments');
+    const onsiteApptsList = onsiteAppts ? JSON.parse(onsiteAppts).filter((a: any) => a.customerName === customer.name) : [];
+    
+    // 从 localStorage 获取上门历史
+    const onsiteHist = localStorage.getItem('onSiteServiceHistory');
+    const onsiteHistList = onsiteHist ? JSON.parse(onsiteHist).filter((h: any) => h.customerName === customer.name) : [];
+    
+    setOnsiteAppointments(onsiteApptsList);
+    setOnsiteHistory(onsiteHistList);
+    setShowServiceModal(true);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -295,6 +315,12 @@ export const CustomerManagement: React.FC = () => {
                         className="text-red-600 hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleViewCustomerServices(customer)}
+                        className="text-blue-600 hover:text-blue-700 ml-2"
+                      >
+                        <MapPin className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>
@@ -473,6 +499,117 @@ export const CustomerManagement: React.FC = () => {
             ) : (
               <p className="text-gray-600">没有待处理的预约</p>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* 客户上门服务模态框 */}
+      {showServiceModal && selectedCustomer && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white">
+              <h2 className="text-xl font-bold text-gray-900">
+                {selectedCustomer.name} - 上门服务记录
+              </h2>
+              <button
+                onClick={() => setShowServiceModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <span className="text-2xl">&times;</span>
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-green-600" />
+                  上门预约 ({onsiteAppointments.length})
+                </h3>
+                {onsiteAppointments.length > 0 ? (
+                  <div className="space-y-2">
+                    {onsiteAppointments.map(apt => (
+                      <div key={apt.id} className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <p className="font-medium text-gray-900">{apt.serviceType}</p>
+                            <p className="text-sm text-gray-600">
+                              {apt.appointmentDate} {apt.appointmentTime} | 
+                              <span className="ml-2">员工: {apt.staffName}</span>
+                            </p>
+                            <p className="text-sm text-gray-600">地址: {apt.serviceAddress}</p>
+                            <p className="text-sm font-semibold text-green-600 mt-1">
+                              ¥{apt.price} | {apt.duration}分钟
+                            </p>
+                          </div>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                            apt.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
+                            apt.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            apt.status === 'completed' ? 'bg-green-100 text-green-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {apt.status === 'confirmed' ? '已确认' :
+                             apt.status === 'pending' ? '待确认' :
+                             apt.status === 'completed' ? '已完成' :
+                             '已取消'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 text-center py-4">暂无上门预约</p>
+                )}
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-purple-600" />
+                  上门历史 ({onsiteHistory.length})
+                </h3>
+                {onsiteHistory.length > 0 ? (
+                  <div className="space-y-2">
+                    {onsiteHistory.map(hist => (
+                      <div key={hist.id} className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <p className="font-medium text-gray-900">{hist.serviceType}</p>
+                            <p className="text-sm text-gray-600">
+                              完成时间: {hist.completedDate} | 
+                              <span className="ml-2">员工: {hist.staffName}</span>
+                            </p>
+                            <p className="text-sm text-gray-600">地址: {hist.serviceAddress}</p>
+                            <p className="text-sm font-semibold text-purple-600 mt-1">
+                              ¥{hist.price} | {hist.duration}分钟
+                            </p>
+                            {hist.feedback && (
+                              <p className="text-sm text-gray-700 mt-2 italic">
+                                反馈: {hist.feedback}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1 whitespace-nowrap">
+                            {Array.from({ length: hist.rating }).map((_, i) => (
+                              <span key={i} className="text-yellow-400">★</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 text-center py-4">暂无上门历史</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-end p-6 border-t border-gray-200 sticky bottom-0 bg-white">
+              <button
+                onClick={() => setShowServiceModal(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors"
+              >
+                关闭
+              </button>
+            </div>
           </div>
         </div>
       )}
