@@ -21,8 +21,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       { id: 'staff', label: '美容师', icon: Users },
       { id: 'shop', label: '商城装修', icon: ShoppingBag },
       { id: 'training', label: '培训教育', icon: BookOpen },
-      { id: 'ai', label: 'AI助手', icon: Zap },
-      { id: 'procurement', label: '采购管理', icon: ShoppingBag }
+      { id: 'ai', label: 'AI助手', icon: Zap }
     ],
     staff: [
       { id: 'dashboard', label: '我的日程', icon: Users },
