@@ -12,7 +12,7 @@ export const AIChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: '👋 你好！我是美容院AI助手。我可以帮助您：\n\n1. 💬 回答美容相关问题\n2. 📊 分析客户流失风险\n3. 📅 优化员工排班\n4. 💰 提供定价建议\n5. ✍️ 生成营销文案\n\n您需要什么帮助呢？',
+      content: '你好！我是美容院AI助手。我可以帮助您：\n\n1. 回答美容相关问题\n2. 分析客户流失风险\n3. 优化员工排班\n4. 提供定价建议\n5. 生成营销文案\n\n您需要什么帮助呢？',
     },
   ]);
   const [input, setInput] = useState('');
@@ -54,7 +54,7 @@ export const AIChat: React.FC = () => {
     } catch (error: any) {
       const errorMessage: Message = {
         role: 'assistant',
-        content: `❌ 出错了: ${error.message}。\n\n请检查：\n1. 网络连接\n2. GLM API Key 是否正确\n3. 稍后重试`,
+        content: `出错了: ${error.message}。\n\n请检查：\n1. 网络连接\n2. GLM API Key 是否正确\n3. 稍后重试`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -103,7 +103,7 @@ export const AIChat: React.FC = () => {
     } catch (error: any) {
       const errorMessage: Message = {
         role: 'assistant',
-        content: `❌ 错误: ${error.message}`,
+        content: `错误: ${error.message}`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -131,7 +131,7 @@ export const AIChat: React.FC = () => {
           {/* 头部 */}
           <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 flex justify-between items-center rounded-t-xl">
             <div>
-              <h3 className="font-bold text-lg">🤖 AI 助手</h3>
+              <h3 className="font-bold text-lg">AI 助手</h3>
               <p className="text-xs opacity-90">由 GLM-4.5-Flash 提供支持</p>
             </div>
             <button
@@ -182,28 +182,28 @@ export const AIChat: React.FC = () => {
                   className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 transition"
                   disabled={isLoading}
                 >
-                  📊 流失分析
+                  流失分析
                 </button>
                 <button
                   onClick={() => handleQuickAction('schedule')}
                   className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200 transition"
                   disabled={isLoading}
                 >
-                  📅 排班优化
+                  排班优化
                 </button>
                 <button
                   onClick={() => handleQuickAction('pricing')}
                   className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded hover:bg-amber-200 transition"
                   disabled={isLoading}
                 >
-                  💰 定价建议
+                  定价建议
                 </button>
                 <button
                   onClick={() => handleQuickAction('marketing')}
                   className="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded hover:bg-pink-200 transition"
                   disabled={isLoading}
                 >
-                  ✍️ 营销文案
+                  营销文案
                 </button>
               </div>
             </div>

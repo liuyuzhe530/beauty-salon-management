@@ -55,7 +55,7 @@ class AIService {
         },
         {
           headers: {
-            'Authorization': `Bearer ${GLM_API_KEY}`,
+            'Authorization': GLM_API_KEY,
             'Content-Type': 'application/json',
           },
         }
@@ -72,7 +72,7 @@ class AIService {
         usage: response.data.usage,
       };
     } catch (error: any) {
-      console.error('❌ GLM API 错误:', error.message);
+      console.error('GLM API 错误:', error.message);
       if (error.response?.data) {
         console.error('API 响应:', error.response.data);
       }
