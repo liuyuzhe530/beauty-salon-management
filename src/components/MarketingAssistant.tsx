@@ -356,18 +356,18 @@ const CampaignPlanner: React.FC = () => {
   const [budget, setBudget] = useState('5000');
 
   const campaignTypes = [
-    { id: 'acquire', name: 'Customer Acquisition', icon: 'A', description: 'Methods to attract new customers' },
-    { id: 'retain', name: 'Customer Lock-in', icon: 'L', description: 'Methods to improve customer loyalty' },
-    { id: 'loyalty', name: 'Retention Plan', icon: 'R', description: 'Customer retention and repeat purchase strategy' },
-    { id: 'seasonal', name: 'Holiday Planning', icon: 'H', description: 'Holiday special event plans' }
+    { id: 'acquire', name: '客户获取', icon: 'A', description: '吸引新客户的方法' },
+    { id: 'retain', name: '客户锁定', icon: 'L', description: '提高客户忠诚度的方法' },
+    { id: 'loyalty', name: '留存计划', icon: 'R', description: '客户留存和重复购买策略' },
+    { id: 'seasonal', name: '假期规划', icon: 'H', description: '假期特色活动计划' }
   ];
 
   const getCampaignPlan = () => {
     const plans: { [key: string]: string } = {
-      acquire: 'Customer Acquisition Plan\n\n1. Social Media Marketing\n   - Publish professional content\n   - Interact with followers\n   - KOL collaboration\n\n2. Discount Activities\n   - First-time experience discount\n   - Referral reward program\n   - Limited-time offer\n\n3. Business Expansion\n   - Cooperation with fitness centers\n   - Cooperation with office buildings\n   - Community promotion',
-      retain: 'Customer Lock-in Plan\n\n1. Membership System\n   - VIP level system\n   - Points rewards\n   - Exclusive benefits\n\n2. Personalized Service\n   - Custom plans\n   - Professional consultation\n   - Regular follow-up\n\n3. Emotional Marketing\n   - Birthday gifts\n   - Holiday greetings\n   - Gratitude rewards',
-      loyalty: 'Retention Plan\n\n1. Customer Care\n   - Regular communication\n   - Satisfaction survey\n   - Quick problem resolution\n\n2. Repeat Purchase Incentives\n   - Package discounts\n   - Season card recommendations\n   - Referral rewards\n\n3. Community Building\n   - Customer events\n   - Share and exchange\n   - Brand fans',
-      seasonal: 'Holiday Planning\n\n1. Chinese New Year Activities\n   - New Year special offers\n   - Group purchase plans\n   - Year greetings gifts\n\n2. Summer Activities\n   - Sunscreen care\n   - Cool theme\n   - Summer packages\n\n3. Double Eleven/Double Twelve\n   - Early warming up\n   - Limited products\n   - Flash sales'
+      acquire: '客户获取计划\n\n1. 社交媒体营销\n   - 发布专业内容\n   - 与粉丝互动\n   - KOL合作\n\n2. 优惠活动\n   - 首次体验优惠\n   - 转介绍奖励\n   - 限时优惠\n\n3. 业务拓展\n   - 与健身房合作\n   - 与写字楼合作\n   - 社区推广',
+      retain: '客户锁定计划\n\n1. 会员系统\n   - VIP等级制度\n   - 积分奖励\n   - 专属权益\n\n2. 个性化服务\n   - 定制方案\n   - 专业咨询\n   - 定期跟进\n\n3. 情感营销\n   - 生日礼物\n   - 节假日问候\n   - 感谢奖励',
+      loyalty: '留存计划\n\n1. 客户关怀\n   - 定期沟通\n   - 满意度调查\n   - 快速问题解决\n\n2. 重复购买激励\n   - 套餐折扣\n   - 季卡推荐\n   - 转介绍奖励\n\n3. 社区建设\n   - 客户活动\n   - 分享交流\n   - 品牌粉丝',
+      seasonal: '假期规划\n\n1. 节假日主题活动\n   - 情人节特价\n   - 三八妇女节福利\n   - 圣诞新年活动\n\n2. 限时推广\n   - 节假日优惠券\n   - 套餐搭配\n   - 增值服务\n\n3. 营销宣传\n   - 提前宣传\n   - 社媒造势\n   - 口碑传播'
     };
     return plans[campaignType] || '';
   };
