@@ -42,13 +42,13 @@ export const OnSiteServiceManagement: React.FC = () => {
   const [formData, setFormData] = useState({
     customerName: '',
     customerPhone: '',
-    serviceType: '上门面部护理',
+    serviceType: '面部护理',
     appointmentDate: '',
     appointmentTime: '',
     serviceAddress: '',
     serviceArea: '',
     duration: 60,
-    price: 0,
+    price: 168,
     staffName: '',
     notes: '',
   });
@@ -70,13 +70,13 @@ export const OnSiteServiceManagement: React.FC = () => {
           id: '1',
           customerName: '王女士',
           customerPhone: '13800138000',
-          serviceType: '上门面部护理',
+          serviceType: '面部护理',
           appointmentDate: '2024-10-25',
           appointmentTime: '14:00',
           serviceAddress: '高新区科技路100号',
           serviceArea: '高新区',
           duration: 60,
-          price: 300,
+          price: 168,
           staffName: '李美容师',
           status: 'confirmed',
           notes: '客户要求保湿护理，有敏感肌肤',
@@ -96,14 +96,38 @@ export const OnSiteServiceManagement: React.FC = () => {
         {
           id: 'h1',
           customerName: '张女士',
-          serviceType: '上门面部护理',
+          serviceType: '面部护理',
           completedDate: '2024-10-20',
           serviceAddress: '南山区中心路50号',
           staffName: '王美容师',
-          price: 300,
+          price: 168,
           duration: 60,
           rating: 5,
           feedback: '非常满意，服务专业，环境舒适',
+        },
+        {
+          id: 'h2',
+          customerName: '李女士',
+          serviceType: '深层清洁',
+          completedDate: '2024-10-19',
+          serviceAddress: '福田区华强北路',
+          staffName: '陈美容师',
+          price: 128,
+          duration: 45,
+          rating: 5,
+          feedback: '皮肤清洁效果明显，非常推荐',
+        },
+        {
+          id: 'h3',
+          customerName: '刘女士',
+          serviceType: '全身SPA',
+          completedDate: '2024-10-18',
+          serviceAddress: '罗湖区东门路',
+          staffName: '李美容师',
+          price: 388,
+          duration: 120,
+          rating: 5,
+          feedback: '放松身心，服务一流',
         },
       ]);
     }
@@ -218,13 +242,13 @@ export const OnSiteServiceManagement: React.FC = () => {
     setFormData({
       customerName: '',
       customerPhone: '',
-      serviceType: '上门面部护理',
+      serviceType: '面部护理',
       appointmentDate: '',
       appointmentTime: '',
       serviceAddress: '',
       serviceArea: '',
       duration: 60,
-      price: 0,
+      price: 168,
       staffName: '',
       notes: '',
     });
@@ -338,11 +362,11 @@ export const OnSiteServiceManagement: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
                   className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
-                  <option>上门面部护理</option>
-                  <option>上门身体护理</option>
-                  <option>上门美甲服务</option>
-                  <option>上门去角质</option>
-                  <option>上门spa服务</option>
+                  <option>面部护理</option>
+                  <option>深层清洁</option>
+                  <option>扶痕护肤</option>
+                  <option>眼部护理</option>
+                  <option>全身SPA</option>
                 </select>
                 <input
                   type="date"
