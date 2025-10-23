@@ -11,7 +11,7 @@ import { CustomerManagement } from './components/CustomerManagement';
 import { MallPage } from './components/MallPage';
 import { AIAssistant } from './components/AIAssistant';
 import { Promotion } from './components/Promotion';
-import { FloatingAIChat } from './components/FloatingAIChat';
+import { AIChat } from './components/AIChat';
 import { ToastProvider } from './components/Toast';
 import { TrainingEducation } from './components/MiniProgramStore';
 
@@ -104,8 +104,8 @@ function AppContent() {
         </div>
       </footer>
 
-      {/* AI助手浮窗 */}
-      <FloatingAIChat />
+      {/* GLM AI 助手浮窗 */}
+      <AIChat />
     </div>
   );
 }
