@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, X, Loader } from 'lucide-react';
+import { MessageCircle, Send, X, Loader, Zap } from 'lucide-react';
 import aiService from '../services/aiService';
+import { enhancedAIService } from '../services/enhancedAIService';
+import { dataCollectorService } from '../services/dataCollectorService';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -12,12 +14,13 @@ export const AIChat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: '你好！我是美容院AI助手。我可以帮助您：\n\n1. 回答美容相关问题\n2. 分析客户流失风险\n3. 优化员工排班\n4. 提供定价建议\n5. 生成营销文案\n\n您需要什么帮助呢？',
+      content: '你好！我是美容院AI智能助手。我可以帮助您：\n\n1. 分析业务数据，发现机遇\n2. 优化员工排班和服务流程\n3. 识别高风险客户，制定留存策略\n4. 分析营销活动ROI\n5. 提供收入增长建议\n\n我现在可以访问您的系统数据，提供更智能的建议！',
     },
   ]);
   const [input, setInput] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [useEnhancedAI, setUseEnhancedAI] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -27,6 +30,24 @@ export const AIChat: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // 初始化增强 AI 数据
+  useEffect(() => {
+    const initializeEnhancedAI = async () => {
+      try {
+        const systemData = await dataCollectorService.collectAllData();
+        enhancedAIService.setSystemData(systemData);
+        setUseEnhancedAI(true);
+      } catch (error) {
+        console.error('初始化增强AI失败:', error);
+        setUseEnhancedAI(false);
+      }
+    };
+
+    if (isOpen) {
+      initializeEnhancedAI();
+    }
+  }, [isOpen]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +64,18 @@ export const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // 调用 GLM API
-      const response = await aiService.chat(input);
+      // 优先使用增强 AI（有系统数据）
+      let response;
+      if (useEnhancedAI) {
+        // 刷新系统数据
+        const systemData = await dataCollectorService.collectAllData();
+        enhancedAIService.setSystemData(systemData);
+        response = await enhancedAIService.chat(input);
+      } else {
+        // 降级到普通 AI
+        response = await aiService.chat(input);
+      }
+
       const assistantMessage: Message = {
         role: 'assistant',
         content: response.content,
@@ -63,6 +94,43 @@ export const AIChat: React.FC = () => {
     }
   };
 
+  const handleSmartRecommendations = async () => {
+    setIsLoading(true);
+    const userMessage: Message = {
+      role: 'user',
+      content: '请根据当前系统数据，给我一份完整的智能建议报告',
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+
+    try {
+      if (useEnhancedAI) {
+        // 刷新系统数据
+        const systemData = await dataCollectorService.collectAllData();
+        enhancedAIService.setSystemData(systemData);
+        const response = await enhancedAIService.getSmartRecommendations();
+
+        const assistantMessage: Message = {
+          role: 'assistant',
+          content: response.content,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      } else {
+        throw new Error('增强AI未初始化');
+      }
+    } catch (error: any) {
+      const errorMessage: Message = {
+        role: 'assistant',
+        content: `生成建议失败: ${error.message}`,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleQuickAction = async (action: string) => {
     setInput('');
     setIsLoading(true);
@@ -70,17 +138,20 @@ export const AIChat: React.FC = () => {
     let prompt = '';
     switch (action) {
       case 'risk':
-        prompt = '请帮我分析一下常见的客户流失原因，以及如何预防。';
+        prompt = '请分析我的高风险客户情况，并提出具体的留存策略。';
         break;
       case 'schedule':
-        prompt = '我想了解如何优化美容院员工排班，以提高效率和客户满意度。';
+        prompt = '根据预约数据，请建议如何优化员工排班以提高效率？';
         break;
       case 'pricing':
-        prompt = '我需要建议如何进行美容服务的动态定价，以最大化收益。';
+        prompt = '根据销售数据，我应该如何调整服务定价来增加收入？';
         break;
       case 'marketing':
-        prompt = '请为美容院的新服务项目生成一些营销建议。';
+        prompt = '分析我的营销活动ROI，请建议下月的营销策略。';
         break;
+      case 'smart':
+        await handleSmartRecommendations();
+        return;
       default:
         prompt = action;
     }
@@ -93,7 +164,16 @@ export const AIChat: React.FC = () => {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      const response = await aiService.chat(prompt);
+      let response;
+      if (useEnhancedAI) {
+        // 刷新系统数据
+        const systemData = await dataCollectorService.collectAllData();
+        enhancedAIService.setSystemData(systemData);
+        response = await enhancedAIService.chat(prompt);
+      } else {
+        response = await aiService.chat(prompt);
+      }
+
       const assistantMessage: Message = {
         role: 'assistant',
         content: response.content,
@@ -132,7 +212,9 @@ export const AIChat: React.FC = () => {
           <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 flex justify-between items-center rounded-t-xl">
             <div>
               <h3 className="font-bold text-lg">AI 助手</h3>
-              <p className="text-xs opacity-90">由 GLM-4.5-Flash 提供支持</p>
+              <p className="text-xs opacity-90">
+                {useEnhancedAI ? '数据驱动模式' : '标准模式'} (GLM-4.5-Flash)
+              </p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
@@ -173,7 +255,7 @@ export const AIChat: React.FC = () => {
           </div>
 
           {/* 快速操作按钮 */}
-          {messages.length === 1 && (
+          {messages.length <= 2 && (
             <div className="px-3 py-2 border-t bg-white">
               <div className="text-xs text-gray-600 mb-2">快速操作：</div>
               <div className="grid grid-cols-2 gap-2">
@@ -203,9 +285,19 @@ export const AIChat: React.FC = () => {
                   className="text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded hover:bg-pink-200 transition"
                   disabled={isLoading}
                 >
-                  营销文案
+                  营销分析
                 </button>
               </div>
+              {useEnhancedAI && (
+                <button
+                  onClick={() => handleQuickAction('smart')}
+                  className="w-full mt-2 text-xs bg-gradient-to-r from-green-400 to-emerald-400 text-white px-2 py-2 rounded hover:opacity-90 transition flex items-center justify-center gap-1"
+                  disabled={isLoading}
+                >
+                  <Zap size={14} />
+                  智能建议报告
+                </button>
+              )}
             </div>
           )}
 
