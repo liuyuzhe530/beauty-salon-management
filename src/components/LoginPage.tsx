@@ -37,17 +37,29 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         password,
       });
 
-      if (response.success && response.data) {
+      console.log('登录响应:', response);
+
+      // 检查响应格式 - authService 返回的是 response.data
+      if (response && response.success && response.data?.user) {
         console.log('登录成功:', response.data.user);
         // 使用后端返回的角色
         onLogin(response.data.user.role);
+      } else if (response && response.data?.user) {
+        // 备选格式检查
+        console.log('登录成功(备选):', response.data.user);
+        onLogin(response.data.user.role);
       } else {
-        setError(response.message || '登录失败，请重试');
+        setError(response?.message || '登录失败，请重试');
       }
     } catch (err: any) {
-      const errorMsg = err.response?.data?.message || err.message || '登录失败';
+      console.error('登录错误详情:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        error: err
+      });
+      const errorMsg = err.response?.data?.message || err.message || '登录失败，请检查后端服务';
       setError(errorMsg);
-      console.error('登录错误:', err);
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +100,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         role,
       });
 
-      if (response.success) {
+      console.log('注册响应:', response);
+
+      if (response && response.success) {
         setError('');
         setIsLogin(true);
         setUsername('');
@@ -96,16 +110,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         setPassword('');
         setConfirmPassword('');
         // 注册成功后自动登录
-        if (response.data) {
+        if (response.data?.user) {
           onLogin(response.data.user.role);
         }
       } else {
-        setError(response.message || '注册失败，请重试');
+        setError(response?.message || '注册失败，请重试');
       }
     } catch (err: any) {
-      const errorMsg = err.response?.data?.message || err.message || '注册失败';
+      console.error('注册错误详情:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        error: err
+      });
+      const errorMsg = err.response?.data?.message || err.message || '注册失败，请检查后端服务';
       setError(errorMsg);
-      console.error('注册错误:', err);
     } finally {
       setIsLoading(false);
     }
