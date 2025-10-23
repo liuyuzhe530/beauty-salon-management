@@ -19,6 +19,7 @@ function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [currentPage, setCurrentPage] = useState<string>('dashboard');
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // Check authentication status
   if (loading) {
@@ -32,12 +33,14 @@ function AppContent() {
     );
   }
 
-  // If not authenticated, show login page
-  if (!isAuthenticated || !user) {
+  // If not authenticated AND not in demo mode, show login page
+  if (!isAuthenticated && !isDemoMode && !user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
         <LoginPage onLogin={(role) => {
+          console.log('进入演示模式, 角色:', role);
           setUserRole(role);
+          setIsDemoMode(true);
           setCurrentPage('dashboard');
         }} />
       </div>
@@ -76,7 +79,7 @@ function AppContent() {
       {/* 顶部导航栏 - 桌面端显示 */}
       <Navigation 
         currentPage={currentPage}
-        userRole={user.role as UserRole}
+        userRole={(isDemoMode ? userRole : user?.role) as UserRole}
         onPageChange={setCurrentPage}
         onLogout={handleLogout}
       />
@@ -84,7 +87,7 @@ function AppContent() {
       {/* 底部导航栏 - 手机端显示 */}
       <BottomNavigation
         currentPage={currentPage}
-        userRole={user.role as UserRole}
+        userRole={(isDemoMode ? userRole : user?.role) as UserRole}
         onPageChange={setCurrentPage}
         onLogout={handleLogout}
       />
