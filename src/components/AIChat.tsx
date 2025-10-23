@@ -41,6 +41,13 @@ export const AIChat: React.FC = () => {
       } catch (error) {
         console.error('初始化增强AI失败:', error);
         setUseEnhancedAI(false);
+        // 启用演示模式
+        try {
+          enhancedAIService.setDemoMode(true);
+          aiService.setDemoMode(true);
+        } catch (e) {
+          console.error('设置演示模式失败:', e);
+        }
       }
     };
 
@@ -117,15 +124,32 @@ export const AIChat: React.FC = () => {
         };
         setMessages((prev) => [...prev, assistantMessage]);
       } else {
-        throw new Error('增强AI未初始化');
+        throw new Error('增强AI未初始化，使用基础AI');
       }
     } catch (error: any) {
       const errorMessage: Message = {
         role: 'assistant',
-        content: `生成建议失败: ${error.message}`,
+        content: `生成建议失败: ${error.message}。\n\n尝试中...`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
+      
+      // 降级到基础 AI
+      try {
+        const response = await aiService.chat('请根据当前系统数据，给我一份完整的智能建议报告');
+        const fallbackMessage: Message = {
+          role: 'assistant',
+          content: response.content,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1] = fallbackMessage;
+          return newMessages;
+        });
+      } catch (fallbackError: any) {
+        console.error('基础AI也失败:', fallbackError);
+      }
     } finally {
       setIsLoading(false);
     }
