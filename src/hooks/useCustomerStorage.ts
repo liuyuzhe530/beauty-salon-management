@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Customer } from '../types/index';
-import { customerService } from '@/api';
+import { customerService } from '../api';
 import { customers as initialData } from '../data/customerData';
 
 const STORAGE_KEY = 'beauty_salon_customers';

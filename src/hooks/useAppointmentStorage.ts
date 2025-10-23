@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Appointment } from '../types/index';
-import { appointmentService } from '@/api';
+import { appointmentService } from '../api';
 import { appointmentData as initialData } from '../data/appointmentData';
 
 const STORAGE_KEY = 'beauty_salon_appointments';

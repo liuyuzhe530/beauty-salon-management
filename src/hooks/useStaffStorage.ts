@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Staff } from '../types/index';
-import { staffService } from '@/api';
+import { staffService } from '../api';
 import { staffData as initialData } from '../data/staffData';
 
 const STORAGE_KEY = 'beauty_salon_staff';

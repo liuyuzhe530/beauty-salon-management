@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Zap } from 'lucide-react';
-import { authService } from '@/api';
+import { authService } from '../api';
 
 type UserRole = 'admin' | 'staff' | 'customer';
 
