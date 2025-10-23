@@ -14,6 +14,7 @@ import { Promotion } from './components/Promotion';
 import { AIChat } from './components/AIChat';
 import { ToastProvider } from './components/Toast';
 import { TrainingEducation } from './components/MiniProgramStore';
+import { OnSiteServiceManagement } from './components/OnSiteServiceManagement';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -69,6 +70,8 @@ function AppContent() {
         return <Promotion />;
       case 'training':
         return <TrainingEducation />;
+      case 'onsite':
+        return <OnSiteServiceManagement />;
       default:
         return <Dashboard />;
     }
