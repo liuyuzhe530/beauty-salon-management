@@ -1,8 +1,8 @@
 # 🔗 前后端集成进行中
 
-**状态**: ✅ **集成继续进行中** (步骤1-3完成)  
+**状态**: ✅ **集成高级阶段** (步骤1-4完成)  
 **日期**: 2025年10月23日  
-**进度**: 60%
+**进度**: 80%
 
 ---
 
@@ -23,115 +23,41 @@
 **创建的文件:**
 - ✅ `src/api/index.ts` - 统一导出所有API服务
 
-**特性:**
-- 简化导入: `import { authService, customerService } from '@/api'`
-- 集中管理: 所有API服务都在一个地方导出
-
 ### 步骤 3: 登录页面集成 ✅
 
 **更新的文件:**
 - ✅ `src/components/LoginPage.tsx` - 集成authService
 
+### 步骤 4: 数据管理Hooks集成 ✅
+
+**更新的文件:** (4个)
+- ✅ `src/hooks/useCustomerStorage.ts` - 集成customerService
+- ✅ `src/hooks/useAppointmentStorage.ts` - 集成appointmentService
+- ✅ `src/hooks/useStaffStorage.ts` - 集成staffService
+- ✅ `src/hooks/useProductStorage.ts` - 集成productService
+
 **更新内容:**
-- 用户登录: 调用 `authService.login()`
-- 用户注册: 调用 `authService.register()`
-- 错误处理: 显示后端返回的错误信息
-- 角色获取: 从后端返回的用户信息获取角色
-- 演示模式: 保留旧的演示模式以维持兼容性
-
-**关键变更:**
-```typescript
-// 之前: 本地状态管理
-onLogin(role);
-
-// 之后: 后端API调用
-const response = await authService.login({ username, password });
-if (response.success) {
-  onLogin(response.data.user.role); // 使用后端返回的角色
-}
-```
+- 所有hooks现在都尝试从API获取数据
+- 如果API失败，自动回退到本地localStorage
+- 所有CRUD操作（增删改查）都集成了API调用
+- 完全向后兼容现有UI组件
 
 ---
 
-## 🔄 下一步行动 (2个步骤)
+## 🔄 下一步行动 (1个步骤)
 
-### 步骤 4️⃣: 更新数据管理组件 (待执行)
+### 步骤 5️⃣: 启动后端服务器并进行集成测试 (待执行)
 
-需要更新以下组件以使用API服务:
-
-**1️⃣ 客户管理** (`src/components/Customers.tsx`)
-```typescript
-import { customerService } from '@/api';
-
-useEffect(() => {
-  const loadCustomers = async () => {
-    try {
-      const data = await customerService.getAll();
-      setCustomers(data);
-    } catch (error) {
-      console.error('获取客户失败:', error);
-    }
-  };
-  loadCustomers();
-}, []);
-```
-
-**2️⃣ 预约管理** (`src/components/Appointments.tsx`)
-```typescript
-import { appointmentService } from '@/api';
-
-useEffect(() => {
-  const loadAppointments = async () => {
-    try {
-      const data = await appointmentService.getAll();
-      setAppointments(data);
-    } catch (error) {
-      console.error('获取预约失败:', error);
-    }
-  };
-  loadAppointments();
-}, []);
-```
-
-**3️⃣ 美容师管理** (`src/components/Staff.tsx`)
-```typescript
-import { staffService } from '@/api';
-
-useEffect(() => {
-  const loadStaff = async () => {
-    try {
-      const data = await staffService.getAll();
-      setStaff(data);
-    } catch (error) {
-      console.error('获取美容师失败:', error);
-    }
-  };
-  loadStaff();
-}, []);
-```
-
-**4️⃣ 产品管理** (shop/产品页面)
-```typescript
-import { productService } from '@/api';
-
-useEffect(() => {
-  const loadProducts = async () => {
-    try {
-      const data = await productService.getAll();
-      setProducts(data);
-    } catch (error) {
-      console.error('获取产品失败:', error);
-    }
-  };
-  loadProducts();
-}, []);
-```
-
-### 步骤 5️⃣: 启动后端服务器并测试 (待执行)
+#### 5.1 启动后端服务器
 
 ```bash
-# 在新终端启动后端
+# 打开新终端
 cd backend
+
+# 安装依赖（如果需要）
+npm install
+
+# 启动开发服务器
 npm run dev
 
 # 预期输出:
@@ -139,6 +65,55 @@ npm run dev
 # Database synchronized
 # Server running on port 3001
 ```
+
+#### 5.2 启动前端开发服务器
+
+```bash
+# 打开另一个终端
+cd .
+
+# 启动前端（应该已在运行）
+npm run dev
+
+# 访问 http://localhost:5173
+```
+
+#### 5.3 测试端到端功能
+
+**测试场景1: 用户认证**
+- [ ] 进入登录页面
+- [ ] 尝试使用错误的凭证登录（验证错误消息）
+- [ ] 使用正确的凭证登录
+- [ ] 验证token被保存到localStorage
+- [ ] 刷新页面，验证仍然登录
+
+**测试场景2: 客户管理**
+- [ ] 导航到客户管理
+- [ ] 验证从API加载客户列表
+- [ ] 添加新客户
+- [ ] 编辑现有客户
+- [ ] 删除客户
+- [ ] 验证数据同步到backend
+
+**测试场景3: 预约管理**
+- [ ] 导航到预约管理
+- [ ] 验证从API加载预约列表
+- [ ] 创建新预约
+- [ ] 修改预约状态
+- [ ] 删除预约
+
+**测试场景4: 美容师管理**
+- [ ] 导航到美容师管理
+- [ ] 验证从API加载美容师列表
+- [ ] 添加新美容师
+- [ ] 更新美容师信息
+- [ ] 删除美容师
+
+**测试场景5: 产品管理**
+- [ ] 导航到商城/产品页面
+- [ ] 验证从API加载产品列表
+- [ ] 检查产品搜索功能
+- [ ] 验证库存管理
 
 ---
 
@@ -148,69 +123,121 @@ npm run dev
 创建API客户端和服务      ██████████░░░░░░░░░░░░░░░░  25% ✅
 创建API导出模块          ██████████░░░░░░░░░░░░░░░░  25% ✅
 更新前端登录组件         ██████████░░░░░░░░░░░░░░░░  20% ✅
-更新前端数据管理组件     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0%
-启动后端+测试            ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0%
+更新前端数据管理Hooks    ██████████░░░░░░░░░░░░░░░░  10% ✅
+启动后端+集成测试        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0%
 ─────────────────────────────────────────────────
-总体进度: 60% (3/5步骤完成)
+总体进度: 80% (4/5步骤完成)
 ```
 
 ---
 
 ## 📈 已提交的更改
 
-| Commit | 内容 | 时间 |
+| Commit | 内容 | 描述 |
 |--------|------|------|
 | `5a11342` | 添加API客户端和服务模块 | 第1阶段 |
-| `2e10623` | 添加API导出模块 + 更新LoginPage | 第2阶段 |
+| `2e10623` | 添加API导出模块 + 更新LoginPage | 第2-3阶段 |
+| `2d9260c` | 更新集成进度 | 文档更新 |
+| `880636c` | 集成所有数据Hooks | 第4阶段 |
 
 ---
 
-## 💡 使用示例
+## 🏗️ 集成架构总览
 
-### 登录示例
-```typescript
-import { authService } from '@/api';
-
-// 调用登录
-const response = await authService.login({
-  username: 'user@example.com',
-  password: 'password123'
-});
-
-if (response.success) {
-  console.log('登录成功，用户:', response.data.user);
-}
 ```
-
-### 获取数据示例
-```typescript
-import { customerService, appointmentService } from '@/api';
-
-// 获取所有客户
-const customers = await customerService.getAll();
-
-// 创建新客户
-const newCustomer = await customerService.create({
-  firstName: '张',
-  lastName: '三',
-  phone: '13800138000',
-  email: 'user@example.com'
-});
-
-// 获取客户的预约
-const appointments = await appointmentService.getByCustomer(customerId);
+┌─────────────────────────────────────────────────────┐
+│              React 前端 (Vite)                       │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  React Components (LoginPage, Customers...)  │  │
+│  └──────────────────┬───────────────────────────┘  │
+│                     │                               │
+│  ┌──────────────────▼───────────────────────────┐  │
+│  │  Storage Hooks (useCustomerStorage等)       │  │
+│  │  - 自动调用API服务                          │  │
+│  │  - 失败自动回退到localStorage               │  │
+│  └──────────────────┬───────────────────────────┘  │
+│                     │                               │
+│  ┌──────────────────▼───────────────────────────┐  │
+│  │  API Services (authService等)                │  │
+│  │  - 封装HTTP请求                             │  │
+│  │  - 处理认证token                            │  │
+│  │  - 错误处理                                 │  │
+│  └──────────────────┬───────────────────────────┘  │
+│                     │                               │
+│  ┌──────────────────▼───────────────────────────┐  │
+│  │  Axios API Client                            │  │
+│  │  - 请求拦截器 (添加token)                  │  │
+│  │  - 响应拦截器 (处理错误)                   │  │
+│  │  - 自动重定向 (token过期)                  │  │
+│  └──────────────────┬───────────────────────────┘  │
+│                     │                               │
+└─────────────────────┼───────────────────────────────┘
+                      │ HTTP
+                      │
+┌─────────────────────▼───────────────────────────────┐
+│          Express.js 后端 (Node.js)                  │
+│  ┌──────────────────────────────────────────────┐  │
+│  │  API Routes (/api/auth, /api/customers...)   │  │
+│  │  - 认证端点                                 │  │
+│  │  - CRUD端点 (50+)                          │  │
+│  └──────────────────┬───────────────────────────┘  │
+│                     │                               │
+│  ┌──────────────────▼───────────────────────────┐  │
+│  │  Middleware (认证, 授权)                    │  │
+│  │  - JWT验证                                  │  │
+│  │  - 角色检查                                 │  │
+│  └──────────────────┬───────────────────────────┘  │
+│                     │                               │
+│  ┌──────────────────▼───────────────────────────┐  │
+│  │  Controllers & Services                      │  │
+│  │  - 业务逻辑处理                             │  │
+│  │  - 数据验证                                 │  │
+│  └──────────────────┬───────────────────────────┘  │
+│                     │                               │
+│  ┌──────────────────▼───────────────────────────┐  │
+│  │  Sequelize ORM & MySQL Database             │  │
+│  │  - User, Customer, Appointment等模型       │  │
+│  │  - 关联关系                                 │  │
+│  └──────────────────────────────────────────────┘  │
+│                                                    │
+└────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ✨ API服务特性回顾
+## 💡 API集成模式
 
-- ✅ **自动Token管理** - 请求自动附加JWT token
-- ✅ **错误处理** - 统一的错误处理和日志记录
-- ✅ **类型安全** - 完整的TypeScript接口定义
-- ✅ **超时控制** - 10秒请求超时
-- ✅ **CORS支持** - 已配置跨域处理
-- ✅ **自动重定向** - Token过期自动跳转登录页
+所有数据管理Hooks使用一致的模式:
+
+```typescript
+// 初始化: 从API或本地缓存加载
+useEffect(() => {
+  const load = async () => {
+    try {
+      // 1. 尝试从API加载
+      const data = await service.getAll();
+      setData(data);
+    } catch (err) {
+      // 2. API失败，从本地缓存加载
+      const cached = localStorage.getItem(KEY);
+      setData(JSON.parse(cached) || initialData);
+    }
+  };
+  load();
+}, []);
+
+// 操作: 先API后本地
+const add = async (item) => {
+  try {
+    // 1. 尝试通过API添加
+    const result = await service.create(item);
+    setState(prev => [...prev, result]);
+  } catch (err) {
+    // 2. API失败，本地添加
+    setState(prev => [...prev, { ...item, id: Date.now() }]);
+  }
+};
+```
 
 ---
 
@@ -220,10 +247,10 @@ const appointments = await appointmentService.getByCustomer(customerId);
 - [x] 创建5个业务服务
 - [x] 创建API导出模块
 - [x] 更新登录页面
-- [ ] 更新客户管理组件
-- [ ] 更新预约管理组件
-- [ ] 更新美容师管理组件
-- [ ] 更新产品管理组件
+- [x] 更新客户管理Hook
+- [x] 更新预约管理Hook
+- [x] 更新美容师管理Hook
+- [x] 更新产品管理Hook
 - [ ] 启动后端服务器
 - [ ] 进行集成测试
 - [ ] 验证端到端功能
@@ -232,11 +259,34 @@ const appointments = await appointmentService.getByCustomer(customerId);
 
 ## 📝 重要提醒
 
-- ⏳ 数据管理组件更新需要逐个检查和修改
-- ⏳ 需要启动后端服务器进行实际测试
-- ⏳ 建议在浏览器DevTools中监控网络请求
-- 💡 登录页面现在支持实时认证和注册
+- ⏳ 下一步需要启动后端服务器
+- ✅ 前端现在已完全与API集成
+- 💡 所有Hooks都支持API故障的优雅降级
+- 📊 可以通过浏览器DevTools监控API请求
+- 🔐 Token自动添加到所有请求
 
 ---
 
-**下一步**: 更新数据管理组件，然后启动后端服务器进行测试 👉 步骤4
+## ✨ 已实现的特性总结
+
+**前端:**
+- ✅ 所有UI组件保持不变
+- ✅ Hooks自动处理API调用
+- ✅ 支持失败时回退到本地数据
+- ✅ 完整的错误处理
+
+**后端:**
+- ✅ 50+个RESTful API端点
+- ✅ JWT认证系统
+- ✅ 完整的CRUD操作
+- ✅ 数据验证和错误处理
+
+**集成:**
+- ✅ Axios请求/响应拦截器
+- ✅ 自动token管理
+- ✅ 错误重定向
+- ✅ 类型安全
+
+---
+
+**下一步**: 启动后端服务器并进行端到端测试 👉 步骤5
