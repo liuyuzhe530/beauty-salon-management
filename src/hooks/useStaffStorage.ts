@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Staff } from '../types/index';
+import { staffService } from '@/api';
 import { staffData as initialData } from '../data/staffData';
 
 const STORAGE_KEY = 'beauty_salon_staff';
@@ -9,8 +10,22 @@ export const useStaffStorage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadStaff = () => {
+    const loadStaff = async () => {
       try {
+        // 尝试从API加载
+        try {
+          const apiStaff = await staffService.getAll();
+          if (apiStaff && apiStaff.length > 0) {
+            setStaff(apiStaff);
+            // 同步到本地存储
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(apiStaff));
+            return;
+          }
+        } catch (apiError) {
+          console.warn('API加载美容师失败，使用本地缓存:', apiError);
+        }
+
+        // 如果API失败，从本地存储加载
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           setStaff(JSON.parse(stored));
@@ -29,38 +44,97 @@ export const useStaffStorage = () => {
     loadStaff();
   }, []);
 
-  const addStaff = useCallback((newStaff: Omit<Staff, 'id'>) => {
-    const id = Date.now().toString();
-    const staffMember: Staff = {
-      ...newStaff,
-      id
-    };
+  const addStaff = useCallback(async (newStaff: Omit<Staff, 'id'>) => {
+    try {
+      // 尝试通过API添加
+      try {
+        const apiStaff = await staffService.create(newStaff);
+        setStaff(prev => {
+          const updated = [...prev, apiStaff];
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+          return updated;
+        });
+        return apiStaff;
+      } catch (apiError) {
+        console.warn('API添加美容师失败，使用本地方式:', apiError);
+      }
 
-    setStaff(prev => {
-      const updated = [...prev, staffMember];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+      // 如果API失败，使用本地方式
+      const id = Date.now().toString();
+      const staffMember: Staff = {
+        ...newStaff,
+        id
+      };
 
-    return staffMember;
+      setStaff(prev => {
+        const updated = [...prev, staffMember];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        return updated;
+      });
+
+      return staffMember;
+    } catch (error) {
+      console.error('Failed to add staff:', error);
+      throw error;
+    }
   }, []);
 
-  const updateStaff = useCallback((id: string, updates: Partial<Staff>) => {
-    setStaff(prev => {
-      const updated = prev.map(s =>
-        s.id === id ? { ...s, ...updates } : s
-      );
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+  const updateStaff = useCallback(async (id: string, updates: Partial<Staff>) => {
+    try {
+      // 尝试通过API更新
+      try {
+        await staffService.update(id, updates);
+        setStaff(prev => {
+          const updated = prev.map(s =>
+            s.id === id ? { ...s, ...updates } : s
+          );
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+          return updated;
+        });
+        return;
+      } catch (apiError) {
+        console.warn('API更新美容师失败，使用本地方式:', apiError);
+      }
+
+      // 如果API失败，使用本地方式
+      setStaff(prev => {
+        const updated = prev.map(s =>
+          s.id === id ? { ...s, ...updates } : s
+        );
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        return updated;
+      });
+    } catch (error) {
+      console.error('Failed to update staff:', error);
+      throw error;
+    }
   }, []);
 
-  const deleteStaff = useCallback((id: string) => {
-    setStaff(prev => {
-      const updated = prev.filter(s => s.id !== id);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+  const deleteStaff = useCallback(async (id: string) => {
+    try {
+      // 尝试通过API删除
+      try {
+        await staffService.delete(id);
+        setStaff(prev => {
+          const updated = prev.filter(s => s.id !== id);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+          return updated;
+        });
+        return;
+      } catch (apiError) {
+        console.warn('API删除美容师失败，使用本地方式:', apiError);
+      }
+
+      // 如果API失败，使用本地方式
+      setStaff(prev => {
+        const updated = prev.filter(s => s.id !== id);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        return updated;
+      });
+    } catch (error) {
+      console.error('Failed to delete staff:', error);
+      throw error;
+    }
   }, []);
 
   const getStaff = useCallback((id: string) => {
