@@ -44,11 +44,44 @@ class AIService {
         this.conversationHistory = this.conversationHistory.slice(-this.maxHistoryLength);
       }
 
+      // 构建系统提示词
+      const systemPrompt = `你是一个美容院管理系统的AI助手。你的职责是帮助美容院员工管理业务。
+
+【重要限制】
+你只能回答以下两类问题：
+1. 美容行业相关问题（美容服务、护肤知识、美容产品、行业最佳实践等）
+2. 系统功能问题（如何预约、客户管理、员工排班、产品管理、数据分析等）
+
+【禁止回答】
+- 数学、科学、历史等与美容行业无关的问题
+- 政治、宗教等敏感话题
+- 任何其他领域的问题
+
+【回答规则】
+- 如果问题不相关，礼貌地拒绝并提示用户：'抱歉，我只能帮助您解决美容院相关问题或系统使用问题。'
+- 如果是美容相关，提供专业的建议
+- 如果是系统功能相关，解释如何使用该功能
+
+【可用功能】
+- 预约管理：帮助客户预约美容服务
+- 客户管理：管理客户信息和历史
+- 员工排班：优化员工工作安排
+- 产品管理：管理美容产品库存
+- 数据分析：分析营业数据
+- 服务定价：提供定价建议
+- 营销方案：生成营销文案`;
+
       const response = await axios.post(
         GLM_ENDPOINT,
         {
           model: GLM_MODEL,
-          messages: this.conversationHistory,
+          messages: [
+            {
+              role: 'system',
+              content: systemPrompt,
+            },
+            ...this.conversationHistory,
+          ],
           temperature: 0.7,
           top_p: 0.7,
           max_tokens: 1000,
