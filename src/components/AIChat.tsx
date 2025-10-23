@@ -132,7 +132,7 @@ export const AIChat: React.FC = () => {
           <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 flex justify-between items-center rounded-t-xl">
             <div>
               <h3 className="font-bold text-lg">🤖 AI 助手</h3>
-              <p className="text-xs opacity-90">由 GLM-4.5 提供支持</p>
+              <p className="text-xs opacity-90">由 GLM-4.5-Air 提供支持</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}

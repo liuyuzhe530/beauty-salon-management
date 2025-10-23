@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const GLM_API_KEY = import.meta.env.VITE_GLM_API_KEY || 'bddc38fc438e478cac87712b13d7a68f.KDOj6fpAoEOb8slt';
 const GLM_ENDPOINT = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
-const GLM_MODEL = 'glm-4-5-flash';
+const GLM_MODEL = 'glm-4-5-air';
 
 export interface AIMessage {
   role: 'user' | 'assistant' | 'system';
