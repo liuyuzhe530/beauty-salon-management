@@ -55,7 +55,7 @@ export const useCustomerStorage = () => {
     try {
       // 尝试通过API添加
       try {
-        const apiCustomer = await customerService.create(newCustomer);
+        const apiCustomer = await customerService.create(newCustomer as any);
         setCustomers(prev => {
           const updated = [...prev, apiCustomer];
           localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -69,7 +69,7 @@ export const useCustomerStorage = () => {
       // 如果API失败，使用本地方式
       const id = Date.now().toString();
       const customer: Customer = {
-        ...newCustomer,
+        ...newCustomer as any,
         id
       };
 
@@ -91,7 +91,7 @@ export const useCustomerStorage = () => {
     try {
       // 尝试通过API更新
       try {
-        await customerService.update(id, updates);
+        await customerService.update(id, updates as any);
         setCustomers(prev => {
           const updated = prev.map(c =>
             c.id === id ? { ...c, ...updates } : c
@@ -99,7 +99,7 @@ export const useCustomerStorage = () => {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
           return updated;
         });
-        return;
+        return true;
       } catch (apiError) {
         console.warn('API更新客户失败，使用本地方式:', apiError);
       }
@@ -112,6 +112,8 @@ export const useCustomerStorage = () => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
         return updated;
       });
+
+      return true;
     } catch (error) {
       console.error('Failed to update customer:', error);
       throw error;

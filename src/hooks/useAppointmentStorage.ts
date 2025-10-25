@@ -48,24 +48,14 @@ export const useAppointmentStorage = () => {
   // 添加预约
   const addAppointment = useCallback(async (newAppointment: Omit<Appointment, 'id'>) => {
     try {
-      // 尝试通过API添加
-      try {
-        const apiAppointment = await appointmentService.create(newAppointment);
-        setAppointments(prev => {
-          const updated = [...prev, apiAppointment];
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-          return updated;
-        });
-        return apiAppointment;
-      } catch (apiError) {
-        console.warn('API添加预约失败，使用本地方式:', apiError);
-      }
-
-      // 如果API失败，使用本地方式
+      const appointmentData: any = newAppointment;
       const id = Date.now().toString();
       const appointment: Appointment = {
-        ...newAppointment,
-        id
+        ...appointmentData,
+        id,
+        customerId: appointmentData.customerId || '',
+        staffId: appointmentData.staffId || '',
+        appointmentDate: appointmentData.appointmentDate || new Date().toISOString(),
       };
 
       setAppointments(prev => {
@@ -82,35 +72,14 @@ export const useAppointmentStorage = () => {
   }, []);
 
   // 更新预约
-  const updateAppointment = useCallback(async (id: string, updates: Partial<Appointment>) => {
-    try {
-      // 尝试通过API更新
-      try {
-        await appointmentService.update(id, updates);
-        setAppointments(prev => {
-          const updated = prev.map(a =>
-            a.id === id ? { ...a, ...updates } : a
-          );
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-          return updated;
-        });
-        return;
-      } catch (apiError) {
-        console.warn('API更新预约失败，使用本地方式:', apiError);
-      }
-
-      // 如果API失败，使用本地方式
-      setAppointments(prev => {
-        const updated = prev.map(a =>
-          a.id === id ? { ...a, ...updates } : a
-        );
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        return updated;
-      });
-    } catch (error) {
-      console.error('Failed to update appointment:', error);
-      throw error;
-    }
+  const updateAppointment = useCallback((id: string, updates: Partial<Appointment>) => {
+    setAppointments(prev => {
+      const updated = prev.map(a =>
+        a.id === id ? { ...a, ...updates } : a
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
   }, []);
 
   // 删除预约

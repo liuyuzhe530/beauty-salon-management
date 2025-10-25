@@ -44,70 +44,32 @@ export const useStaffStorage = () => {
     loadStaff();
   }, []);
 
-  const addStaff = useCallback(async (newStaff: Omit<Staff, 'id'>) => {
-    try {
-      // 尝试通过API添加
-      try {
-        const apiStaff = await staffService.create(newStaff);
-        setStaff(prev => {
-          const updated = [...prev, apiStaff];
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-          return updated;
-        });
-        return apiStaff;
-      } catch (apiError) {
-        console.warn('API添加美容师失败，使用本地方式:', apiError);
-      }
+  // 添加员工
+  const addStaff = useCallback((newStaff: Omit<Staff, 'id'>) => {
+    const id = Date.now().toString();
+    const staff: Staff = {
+      ...newStaff as any,
+      id
+    };
 
-      // 如果API失败，使用本地方式
-      const id = Date.now().toString();
-      const staffMember: Staff = {
-        ...newStaff,
-        id
-      };
+    setStaff(prev => {
+      const updated = [...prev, staff];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
 
-      setStaff(prev => {
-        const updated = [...prev, staffMember];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        return updated;
-      });
-
-      return staffMember;
-    } catch (error) {
-      console.error('Failed to add staff:', error);
-      throw error;
-    }
+    return staff;
   }, []);
 
-  const updateStaff = useCallback(async (id: string, updates: Partial<Staff>) => {
-    try {
-      // 尝试通过API更新
-      try {
-        await staffService.update(id, updates);
-        setStaff(prev => {
-          const updated = prev.map(s =>
-            s.id === id ? { ...s, ...updates } : s
-          );
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-          return updated;
-        });
-        return;
-      } catch (apiError) {
-        console.warn('API更新美容师失败，使用本地方式:', apiError);
-      }
-
-      // 如果API失败，使用本地方式
-      setStaff(prev => {
-        const updated = prev.map(s =>
-          s.id === id ? { ...s, ...updates } : s
-        );
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        return updated;
-      });
-    } catch (error) {
-      console.error('Failed to update staff:', error);
-      throw error;
-    }
+  // 更新员工
+  const updateStaff = useCallback((id: string, updates: Partial<Staff>) => {
+    setStaff(prev => {
+      const updated = prev.map(s =>
+        s.id === id ? { ...s, ...updates } : s
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
   }, []);
 
   const deleteStaff = useCallback(async (id: string) => {

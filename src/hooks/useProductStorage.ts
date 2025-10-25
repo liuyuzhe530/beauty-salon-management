@@ -79,35 +79,15 @@ export const useProductStorage = () => {
     }
   }, []);
 
-  const updateProduct = useCallback(async (id: string, updates: Partial<Product>) => {
-    try {
-      // 尝试通过API更新
-      try {
-        await productService.update(id, updates);
-        setProducts(prev => {
-          const updated = prev.map(p =>
-            p.id === id ? { ...p, ...updates } : p
-          );
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-          return updated;
-        });
-        return;
-      } catch (apiError) {
-        console.warn('API更新产品失败，使用本地方式:', apiError);
-      }
-
-      // 如果API失败，使用本地方式
-      setProducts(prev => {
-        const updated = prev.map(p =>
-          p.id === id ? { ...p, ...updates } : p
-        );
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        return updated;
-      });
-    } catch (error) {
-      console.error('Failed to update product:', error);
-      throw error;
-    }
+  // 更新产品
+  const updateProduct = useCallback((id: string, updates: Partial<Product>) => {
+    setProducts(prev => {
+      const updated = prev.map(p =>
+        p.id === id ? { ...p, ...updates as any } : p
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
   }, []);
 
   const deleteProduct = useCallback(async (id: string) => {

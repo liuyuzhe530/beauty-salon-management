@@ -199,8 +199,8 @@ export const OnSiteServiceManagement: React.FC = () => {
 
   const handleCompleteAppointment = (appointment: OnSiteAppointment) => {
     // 标记为完成
-    const updated = appointments.map(a =>
-      a.id === appointment.id ? { ...a, status: 'completed' } : a
+    const updated: OnSiteAppointment[] = appointments.map(a =>
+      a.id === appointment.id ? { ...a, status: 'completed' as const } : a
     );
     saveAppointments(updated);
 
@@ -224,16 +224,16 @@ export const OnSiteServiceManagement: React.FC = () => {
 
   const handleCancelAppointment = (id: string) => {
     if (confirm('确定要取消这个预约吗？')) {
-      const updated = appointments.map(a =>
-        a.id === id ? { ...a, status: 'cancelled' } : a
+      const updated: OnSiteAppointment[] = appointments.map(a =>
+        a.id === id ? { ...a, status: 'cancelled' as const } : a
       );
       saveAppointments(updated);
     }
   };
 
   const handleConfirmAppointment = (id: string) => {
-    const updated = appointments.map(a =>
-      a.id === id ? { ...a, status: 'confirmed' } : a
+    const updated: OnSiteAppointment[] = appointments.map(a =>
+      a.id === id ? { ...a, status: 'confirmed' as const } : a
     );
     saveAppointments(updated);
   };
