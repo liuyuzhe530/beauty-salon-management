@@ -17,6 +17,7 @@ import { TrainingEducation } from './components/MiniProgramStore';
 import { OnSiteServiceManagement } from './components/OnSiteServiceManagement';
 import { OnSiteServiceBooking } from './components/OnSiteServiceBooking';
 import { IntelligentProcurementAI } from './components/IntelligentProcurementAI';
+import { PromotionPlan } from './components/PromotionPlan';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -70,6 +71,8 @@ function AppContent() {
         return <AIAssistant />;
       case 'promotion':
         return <Promotion />;
+      case 'promotion-plan':
+        return <PromotionPlan />;
       case 'training':
         return <TrainingEducation />;
       case 'onsite':
