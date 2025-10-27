@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BarChart3, Users, ShoppingBag, Zap, LogOut } from 'lucide-react';
+import { BarChart3, Users, ShoppingBag, Zap, LogOut, Home } from 'lucide-react';
 
 interface BottomNavigationProps {
   currentPage: string;
@@ -32,6 +32,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       { id: 'shop', label: '产品', icon: ShoppingBag }
     ],
     customer: [
+      { id: 'onsite-booking', label: '上门服务', icon: Home },
       { id: 'customermanagement', label: '预约', icon: Users },
       { id: 'shop', label: '商城', icon: ShoppingBag },
       { id: 'ai', label: '推荐', icon: Zap }

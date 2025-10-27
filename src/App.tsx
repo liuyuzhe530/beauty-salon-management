@@ -15,6 +15,7 @@ import { AIChat } from './components/AIChat';
 import { ToastProvider } from './components/Toast';
 import { TrainingEducation } from './components/MiniProgramStore';
 import { OnSiteServiceManagement } from './components/OnSiteServiceManagement';
+import { OnSiteServiceBooking } from './components/OnSiteServiceBooking';
 import { IntelligentProcurementAI } from './components/IntelligentProcurementAI';
 
 function AppContent() {
@@ -73,6 +74,8 @@ function AppContent() {
         return <TrainingEducation />;
       case 'onsite':
         return <OnSiteServiceManagement />;
+      case 'onsite-booking':
+        return <OnSiteServiceBooking />;
       case 'procurement':
         return <IntelligentProcurementAI />;
       default:

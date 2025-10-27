@@ -167,3 +167,116 @@ export interface OnSiteOrder {
   estimatedArrival: number;
 }
 
+// 服务项目
+export interface ServiceItem {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  detailedDescription: string;
+  price: number;
+  duration: number; // 分钟
+  images: string[];
+  supportsHomeService: boolean; // 是否支持上门
+  supportsInStoreService: boolean; // 是否支持到店
+  beauticianLevel: 'junior' | 'senior' | 'master'; // 需要的美容师级别
+  suitableFor: string[]; // 适用人群
+  benefits: string[]; // 功效
+  notes: string[]; // 注意事项
+  tags: string[];
+}
+
+// 美容师档案
+export interface BeauticianProfile {
+  id: string;
+  name: string;
+  avatar: string;
+  gender: 'male' | 'female';
+  age: number;
+  specialization: string[]; // 专业领域
+  qualifications: string[]; // 资质证书
+  experience: number; // 从业年限
+  rating: number;
+  totalServices: number;
+  totalReviews: number;
+  bio: string;
+  portfolio: {
+    id: string;
+    image: string;
+    description: string;
+    date: string;
+  }[];
+  schedules: {
+    date: string;
+    availableSlots: string[];
+  }[];
+  languages: string[];
+  serviceRadius: number; // 服务半径（公里）
+  basePrice: number; // 基础价格
+  availabilityStatus: 'available' | 'busy' | 'offline';
+}
+
+// 用户地址
+export interface UserAddress {
+  id: string;
+  label: string; // 如：家庭、公司
+  name: string;
+  phone: string;
+  address: string;
+  city: string;
+  district: string;
+  details: string; // 详细地址
+  latitude?: number;
+  longitude?: number;
+  isDefault: boolean;
+}
+
+// 预约详情
+export interface AppointmentDetail extends OnSiteOrder {
+  customerRequirements: {
+    skinType: string;
+    allergies: string[];
+    concerns: string[];
+    preferences: string;
+  };
+  serviceLocation: UserAddress;
+  paymentMethod: 'wechat' | 'alipay' | 'cash';
+  paymentStatus: 'unpaid' | 'partial' | 'paid';
+  tipAmount?: number;
+  reviewId?: string;
+}
+
+// 评价
+export interface ServiceReview {
+  id: string;
+  orderId: string;
+  customerName: string;
+  customerAvatar: string;
+  beauticianId: string;
+  beauticianName: string;
+  serviceType: string;
+  rating: number;
+  comment: string;
+  images: string[];
+  createdAt: string;
+  helpfulCount: number;
+  isFeatured: boolean; // 是否置顶
+  response?: {
+    beauticianName: string;
+    content: string;
+    createdAt: string;
+  };
+}
+
+// 订单状态更新
+export interface OrderStatusUpdate {
+  orderId: string;
+  status: OnSiteOrder['status'];
+  timestamp: string;
+  message: string;
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
+}
+

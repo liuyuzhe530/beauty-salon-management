@@ -7,6 +7,7 @@ import { Modal } from './Modal';
 import { CustomerForm } from './CustomerForm';
 import { AppointmentForm } from './AppointmentForm';
 import { InStoreService } from './InStoreService';
+import { OnSiteServiceBooking } from './OnSiteServiceBooking';
 import { Customer, Appointment } from '../types/index';
 
 export const CustomerManagement: React.FC = () => {
@@ -409,14 +410,7 @@ export const CustomerManagement: React.FC = () => {
       )}
 
       {activeTab === 'instore' && <InStoreService />}
-      {activeTab === 'onsite' && (
-        <div className="bg-white rounded-lg border border-green-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">上门服务</h2>
-          <p className="text-gray-600">
-            上门服务功能待开发。
-          </p>
-        </div>
-      )}
+      {activeTab === 'onsite' && <OnSiteServiceBooking mode="admin" />}
 
       {activeTab === 'operations' && (
         <div className="space-y-6">

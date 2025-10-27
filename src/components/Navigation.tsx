@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart3, Users, ShoppingBag, Zap, Store, LogOut, BookOpen } from 'lucide-react';
+import { BarChart3, Users, ShoppingBag, Zap, Store, LogOut, BookOpen, Home } from 'lucide-react';
 
 interface NavigationProps {
   currentPage: string;
@@ -31,6 +31,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       { id: 'shop', label: '产品', icon: ShoppingBag }
     ],
     customer: [
+      { id: 'onsite-booking', label: '上门服务', icon: Home },
       { id: 'customermanagement', label: '我的预约', icon: Users },
       { id: 'shop', label: '商城', icon: ShoppingBag },
       { id: 'ai', label: '推荐', icon: Zap }
