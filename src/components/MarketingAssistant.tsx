@@ -139,11 +139,11 @@ const PosterMaker: React.FC = () => {
 
     // 延迟处理以显示加载动画
     setTimeout(() => {
-      const colors: { [key: string]: { bg: string; text: string; accent: string } } = {
-        modern: { bg: '#f0f4f8', text: '#1a202c', accent: '#3182ce' },
-        elegant: { bg: '#fef5e7', text: '#2c1810', accent: '#8b4513' },
-        playful: { bg: '#fff5e1', text: '#ff6b6b', accent: '#ff8787' },
-        minimalist: { bg: '#ffffff', text: '#000000', accent: '#666666' }
+      const colors: { [key: string]: { backgroundColor: string; textColor: string; accentColor: string } } = {
+        modern: { backgroundColor: '#f0f4f8', textColor: '#1a202c', accentColor: '#3182ce' },
+        elegant: { backgroundColor: '#fef5e7', textColor: '#2c1810', accentColor: '#8b4513' },
+        playful: { backgroundColor: '#fff5e1', textColor: '#ff6b6b', accentColor: '#ff8787' },
+        minimalist: { backgroundColor: '#ffffff', textColor: '#000000', accentColor: '#666666' }
       };
 
       const titles: { [key: string]: string } = {
@@ -179,55 +179,55 @@ const PosterMaker: React.FC = () => {
     const canvas = document.createElement('canvas');
     canvas.width = 1080;
     canvas.height = 1440;
-    const ctx = canvas.getContext('2d');
+    const canvasContext = canvas.getContext('2d');
 
-    if (!ctx) return;
+    if (!canvasContext) return;
 
     // 填充背景
-    ctx.fillStyle = generatedPoster.colors.bg;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    canvasContext.fillStyle = generatedPoster.colors.backgroundColor;
+    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
     // 绘制装饰元素
-    ctx.fillStyle = generatedPoster.colors.accent;
-    ctx.fillRect(0, 0, canvas.width, 200);
+    canvasContext.fillStyle = generatedPoster.colors.accentColor;
+    canvasContext.fillRect(0, 0, canvas.width, 200);
 
     // 绘制标题
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 60px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(generatedPoster.title, canvas.width / 2, 120);
+    canvasContext.fillStyle = '#ffffff';
+    canvasContext.font = 'bold 60px Arial';
+    canvasContext.textAlign = 'center';
+    canvasContext.fillText(generatedPoster.title, canvas.width / 2, 120);
 
     // 绘制主要内容
-    ctx.fillStyle = generatedPoster.colors.text;
-    ctx.font = '40px Arial';
-    ctx.textAlign = 'center';
+    canvasContext.fillStyle = generatedPoster.colors.textColor;
+    canvasContext.font = '40px Arial';
+    canvasContext.textAlign = 'center';
 
     const lines = generatedPoster.content.split('\n');
-    let yPos = 400;
+    let yPosition = 400;
     lines.forEach((line: string) => {
-      ctx.fillText(line, canvas.width / 2, yPos);
-      yPos += 80;
+      canvasContext.fillText(line, canvas.width / 2, yPosition);
+      yPosition += 80;
     });
 
     // 绘制底部信息
-    ctx.fillStyle = generatedPoster.colors.accent;
-    ctx.fillRect(0, canvas.height - 150, canvas.width, 150);
+    canvasContext.fillStyle = generatedPoster.colors.accentColor;
+    canvasContext.fillRect(0, canvas.height - 150, canvas.width, 150);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '30px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('立即咨询', canvas.width / 2, canvas.height - 50);
+    canvasContext.fillStyle = '#ffffff';
+    canvasContext.font = '30px Arial';
+    canvasContext.textAlign = 'center';
+    canvasContext.fillText('立即咨询', canvas.width / 2, canvas.height - 50);
 
     // 下载
-    canvas.toBlob((blob) => {
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `poster-${Date.now()}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    canvas.toBlob((blobData) => {
+      if (blobData) {
+        const url = URL.createObjectURL(blobData);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = `海报-${Date.now()}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
         URL.revokeObjectURL(url);
       }
     });
@@ -241,11 +241,11 @@ const PosterMaker: React.FC = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">海报类型</label>
           <select
             value={posterType}
-            onChange={(e) => setPosterType(e.target.value)}
+            onChange={(event) => setPosterType(event.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            {posterTemplates.map(t => (
-              <option key={t.id} value={t.id}>{t.name}</option>
+            {posterTemplates.map(templateItem => (
+              <option key={templateItem.id} value={templateItem.id}>{templateItem.name}</option>
             ))}
           </select>
         </div>
@@ -254,11 +254,11 @@ const PosterMaker: React.FC = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">设计风格</label>
           <select
             value={style}
-            onChange={(e) => setStyle(e.target.value)}
+            onChange={(event) => setStyle(event.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            {styles.map(s => (
-              <option key={s.id} value={s.id}>{s.name}</option>
+            {styles.map(styleItem => (
+              <option key={styleItem.id} value={styleItem.id}>{styleItem.name}</option>
             ))}
           </select>
         </div>
@@ -269,8 +269,8 @@ const PosterMaker: React.FC = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">海报主题</label>
         <textarea
           value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="输入您的海报主题或描述...&#10;例如：&#10;春季护肤特价&#10;限时优惠50%&#10;新客户专享"
+          onChange={(event) => setContent(event.target.value)}
+          placeholder="输入您的海报主题或描述...&#10;例如：&#10;春季护肤特价&#10;限时优惠百分之五十&#10;新客户专享"
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           rows={4}
         />
@@ -290,7 +290,7 @@ const PosterMaker: React.FC = () => {
         ) : (
           <>
             <Sparkles className="w-4 h-4" />
-            AI 生成海报
+            人工智能生成海报
           </>
         )}
       </button>
@@ -308,14 +308,14 @@ const PosterMaker: React.FC = () => {
             className="w-full rounded-lg overflow-hidden shadow-lg border-4 mx-auto"
             style={{
               aspectRatio: '3/4',
-              backgroundColor: generatedPoster.colors.bg,
+              backgroundColor: generatedPoster.colors.backgroundColor,
               maxWidth: '300px',
-              border: `4px solid ${generatedPoster.colors.accent}`
+              border: `4px solid ${generatedPoster.colors.accentColor}`
             }}
           >
             {/* 顶部条纹 */}
             <div
-              style={{ backgroundColor: generatedPoster.colors.accent }}
+              style={{ backgroundColor: generatedPoster.colors.accentColor }}
               className="p-4 text-center text-white"
             >
               <div className="text-2xl font-bold">{generatedPoster.title}</div>
@@ -324,7 +324,7 @@ const PosterMaker: React.FC = () => {
             {/* 主体内容 */}
             <div className="p-6 text-center flex flex-col justify-center items-center h-[calc(100%-120px)]">
               <div
-                style={{ color: generatedPoster.colors.text }}
+                style={{ color: generatedPoster.colors.textColor }}
                 className="text-lg font-semibold whitespace-pre-wrap"
               >
                 {generatedPoster.content}
@@ -333,7 +333,7 @@ const PosterMaker: React.FC = () => {
 
             {/* 底部 CTA */}
             <div
-              style={{ backgroundColor: generatedPoster.colors.accent }}
+              style={{ backgroundColor: generatedPoster.colors.accentColor }}
               className="p-3 text-center text-white font-bold"
             >
               立即咨询
@@ -343,8 +343,8 @@ const PosterMaker: React.FC = () => {
           {/* 海报信息 */}
           <div className="mt-4 p-3 bg-white rounded border border-gray-200 text-sm">
             <div className="grid grid-cols-2 gap-2 text-gray-600">
-              <div><span className="font-medium">类型：</span> {posterTemplates.find(t => t.id === posterType)?.name}</div>
-              <div><span className="font-medium">风格：</span> {styles.find(s => s.id === style)?.name}</div>
+              <div><span className="font-medium">类型：</span> {posterTemplates.find(templateItem => templateItem.id === posterType)?.name}</div>
+              <div><span className="font-medium">风格：</span> {styles.find(styleItem => styleItem.id === style)?.name}</div>
             </div>
           </div>
         </div>
@@ -375,10 +375,10 @@ const PosterMaker: React.FC = () => {
       <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 text-xs text-blue-900">
         <p className="font-medium mb-1">💡 使用提示：</p>
         <ul className="list-disc list-inside space-y-1">
-          <li>输入简明扼要的海报主题</li>
+          <li>输入简明扼要的海报主题内容</li>
           <li>选择合适的设计风格和类型</li>
-          <li>生成后可下载为图片使用</li>
-          <li>支持在社交媒体、门店等多渠道使用</li>
+          <li>生成后可下载为图片进行使用</li>
+          <li>支持在社交媒体、门店等多渠道使用推广</li>
         </ul>
       </div>
     </div>
@@ -400,10 +400,10 @@ const CopywritingGenerator: React.FC = () => {
 
   const handleGenerate = () => {
     const samples: { [key: string]: string } = {
-      xiaohongshu: '[Beauty Notes] This beauty package is amazing!\n\nSkincare, manicure, massage all included, solve all beauty needs in one go. Professional beautician team, carefully create your unique charm.\n\nLimited time offer - come experience it now!',
-      douyin: 'Are you still troubled by skin problems?\n\nOur professional beauticians will help you!\n\nDeep skincare x Skin management x Professional advice\n\nLet your skin be renewed!\n\nBook now and enjoy discounts',
-      wechat: 'Dear valued customers,\n\nThank you for your continued trust and support!\n\nThis week special: Beauty package 10% off\n\nMore surprises await you!\n\nWelcome to consult and book appointments',
-      weibo: '[Weekly Beauty Tips]\n\nHow to do autumn skincare\n\n1. Deep cleansing is important\n2. Moisturizing is essential\n3. Professional care is necessary\n\nCome experience our professional care! #Beauty #Skincare'
+      xiaohongshu: '[美容笔记] 这款美容套餐真的绝了！\n\n护肤、修甲、按摩全包含，一次性解决所有美容需求。专业美容师团队，精心打造您的独特魅力。\n\n限时优惠中 - 快来体验吧！',
+      douyin: '您还在为皮肤问题烦恼吗？\n\n我们的专业美容师会帮助您！\n\n深层护肤 × 皮肤管理 × 专业建议\n\n让您的皮肤焕然一新！\n\n现在预约享受优惠折扣',
+      wechat: '尊敬的客户朋友们，\n\n感谢您一直以来的信任与支持！\n\n本周特惠：美容套餐优惠力度高达百分之十\n\n更多惊喜等待您！\n\n欢迎咨询和预约我们的服务',
+      weibo: '[每周美容贴士]\n\n秋季护肤应该这样做\n\n一、深层清洁很重要\n二、补水保湿必不可少\n三、专业护理很必要\n\n来体验我们的专业护理服务吧！#美容 #护肤'
     };
     setGeneratedCopy(samples[platform] || '');
   };
@@ -414,11 +414,11 @@ const CopywritingGenerator: React.FC = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">选择平台</label>
         <select
           value={platform}
-          onChange={(e) => setPlatform(e.target.value)}
+          onChange={(event) => setPlatform(event.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         >
-          {platforms.map(p => (
-            <option key={p.id} value={p.id}>{p.name}</option>
+          {platforms.map(platformItem => (
+            <option key={platformItem.id} value={platformItem.id}>{platformItem.name}</option>
           ))}
         </select>
       </div>
@@ -427,7 +427,7 @@ const CopywritingGenerator: React.FC = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">文案主题</label>
         <textarea
           value={topic}
-          onChange={(e) => setTopic(e.target.value)}
+          onChange={(event) => setTopic(event.target.value)}
           placeholder="输入您要推广的产品或服务..."
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           rows={3}
@@ -436,7 +436,7 @@ const CopywritingGenerator: React.FC = () => {
 
       {generatedCopy && (
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-          <p className="text-sm font-medium text-blue-900 mb-2">生成的文案：</p>
+          <p className="text-sm font-medium text-blue-900 mb-2">生成的文案内容：</p>
           <p className="text-sm text-gray-700 whitespace-pre-wrap">{generatedCopy}</p>
         </div>
       )}
@@ -452,9 +452,20 @@ const CopywritingGenerator: React.FC = () => {
         {generatedCopy && (
           <button className="flex-1 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2">
             <Copy className="w-4 h-4" />
-            复制
+            复制文案
           </button>
         )}
+      </div>
+
+      {/* 使用提示 */}
+      <div className="bg-green-50 p-3 rounded-lg border border-green-200 text-xs text-green-900">
+        <p className="font-medium mb-1">💡 使用提示：</p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>选择对应的社交平台以获得最佳效果</li>
+          <li>输入您要推广的产品或服务主题</li>
+          <li>点击生成文案获取专业的营销文案</li>
+          <li>复制文案后可直接在平台上使用</li>
+        </ul>
       </div>
     </div>
   );
@@ -487,7 +498,7 @@ const DigitalAvatar: React.FC = () => {
         <input
           type="text"
           value={avatarName}
-          onChange={(e) => setAvatarName(e.target.value)}
+          onChange={(event) => setAvatarName(event.target.value)}
           placeholder="给您的数字分身取个名字..."
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         />
@@ -496,17 +507,17 @@ const DigitalAvatar: React.FC = () => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">分身风格</label>
         <div className="grid grid-cols-2 gap-2">
-          {styles.map(s => (
+          {styles.map(styleItem => (
             <button
-              key={s.id}
-              onClick={() => setAvatarStyle(s.id)}
+              key={styleItem.id}
+              onClick={() => setAvatarStyle(styleItem.id)}
               className={`py-2 px-3 rounded-lg border-2 transition-all text-sm ${
-                avatarStyle === s.id
+                avatarStyle === styleItem.id
                   ? 'border-green-500 bg-green-50 text-green-700 font-medium'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >
-              {s.name}
+              {styleItem.name}
             </button>
           ))}
         </div>
@@ -515,24 +526,24 @@ const DigitalAvatar: React.FC = () => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">分身特点</label>
         <div className="grid grid-cols-2 gap-2">
-          {traits.map(t => (
+          {traits.map(traitItem => (
             <button
-              key={t.id}
-              onClick={() => setAvatarTrait(t.id)}
+              key={traitItem.id}
+              onClick={() => setAvatarTrait(traitItem.id)}
               className={`py-2 px-3 rounded-lg border-2 transition-all text-sm ${
-                avatarTrait === t.id
+                avatarTrait === traitItem.id
                   ? 'border-green-500 bg-green-50 text-green-700 font-medium'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >
-              {t.name}
+              {traitItem.name}
             </button>
           ))}
         </div>
       </div>
 
       <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-        <p className="text-sm text-purple-900">Your digital avatar has been generated!</p>
+        <p className="text-sm text-purple-900">您的数字分身已生成完成！</p>
         <p className="text-xs text-gray-600 mt-2">
           该分身将用于自动回复客户消息、提供专业建议和品牌推广。
         </p>
@@ -577,39 +588,39 @@ const CampaignPlanner: React.FC = () => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">选择活动类型</label>
         <div className="grid grid-cols-2 gap-2">
-          {campaignTypes.map(type => (
+          {campaignTypes.map(campaignTypeItem => (
             <button
-              key={type.id}
-              onClick={() => setCampaignType(type.id)}
+              key={campaignTypeItem.id}
+              onClick={() => setCampaignType(campaignTypeItem.id)}
               className={`p-3 rounded-lg border-2 transition-all text-left ${
-                campaignType === type.id
+                campaignType === campaignTypeItem.id
                   ? 'border-green-500 bg-green-50'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-lg">{type.icon}</span>
-                <span className="font-semibold text-sm">{type.name}</span>
+                <span className="text-lg">{campaignTypeItem.icon}</span>
+                <span className="font-semibold text-sm">{campaignTypeItem.name}</span>
               </div>
-              <p className="text-xs text-gray-600">{type.description}</p>
+              <p className="text-xs text-gray-600">{campaignTypeItem.description}</p>
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">预算</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">预算（元）</label>
         <input
           type="text"
           value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-          placeholder="请输入预算 (例如: 5000)"
+          onChange={(event) => setBudget(event.target.value)}
+          placeholder="请输入预算金额（例如：五千）"
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         />
       </div>
 
       <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-        <p className="text-sm font-medium text-blue-900 mb-2">策划方案：</p>
+        <p className="text-sm font-medium text-blue-900 mb-2">策划方案内容：</p>
         <div className="bg-white p-4 rounded-lg border border-gray-200 text-sm text-gray-700 whitespace-pre-wrap">
           {getCampaignPlan()}
         </div>
@@ -622,6 +633,17 @@ const CampaignPlanner: React.FC = () => {
         <button className="flex-1 py-2 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
           重新生成
         </button>
+      </div>
+
+      {/* 使用提示 */}
+      <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200 text-xs text-yellow-900">
+        <p className="font-medium mb-1">💡 使用提示：</p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>选择适合您的活动类型和策略方向</li>
+          <li>输入您的营销预算以获取针对性方案</li>
+          <li>系统会根据选择生成专业策划方案</li>
+          <li>保存方案以便后续参考和优化</li>
+        </ul>
       </div>
     </div>
   );
