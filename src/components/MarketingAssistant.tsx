@@ -110,6 +110,9 @@ export const MarketingAssistant: React.FC = () => {
 const PosterMaker: React.FC = () => {
   const [posterType, setPosterType] = useState('promotion');
   const [style, setStyle] = useState('modern');
+  const [content, setContent] = useState('');
+  const [generatedPoster, setGeneratedPoster] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const posterTemplates = [
     { id: 'promotion', name: '促销活动' },
@@ -125,61 +128,258 @@ const PosterMaker: React.FC = () => {
     { id: 'minimalist', name: '极简风格' }
   ];
 
+  // 生成海报预览（使用 Canvas）
+  const generatePosterPreview = () => {
+    if (!content.trim()) {
+      alert('请输入海报主题！');
+      return;
+    }
+
+    setIsLoading(true);
+
+    // 延迟处理以显示加载动画
+    setTimeout(() => {
+      const colors: { [key: string]: { bg: string; text: string; accent: string } } = {
+        modern: { bg: '#f0f4f8', text: '#1a202c', accent: '#3182ce' },
+        elegant: { bg: '#fef5e7', text: '#2c1810', accent: '#8b4513' },
+        playful: { bg: '#fff5e1', text: '#ff6b6b', accent: '#ff8787' },
+        minimalist: { bg: '#ffffff', text: '#000000', accent: '#666666' }
+      };
+
+      const titles: { [key: string]: string } = {
+        promotion: '💰 特价优惠',
+        product: '✨ 产品推荐',
+        event: '🎉 活动预告',
+        seasonal: '🌸 季节营销'
+      };
+
+      const colorScheme = colors[style];
+      const title = titles[posterType];
+
+      // 模拟海报数据
+      const poster = {
+        type: posterType,
+        style: style,
+        title: title,
+        content: content,
+        colors: colorScheme,
+        timestamp: new Date().toISOString()
+      };
+
+      setGeneratedPoster(poster);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  // 下载海报（生成图片）
+  const downloadPoster = () => {
+    if (!generatedPoster) return;
+
+    // 创建 Canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1440;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) return;
+
+    // 填充背景
+    ctx.fillStyle = generatedPoster.colors.bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 绘制装饰元素
+    ctx.fillStyle = generatedPoster.colors.accent;
+    ctx.fillRect(0, 0, canvas.width, 200);
+
+    // 绘制标题
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 60px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(generatedPoster.title, canvas.width / 2, 120);
+
+    // 绘制主要内容
+    ctx.fillStyle = generatedPoster.colors.text;
+    ctx.font = '40px Arial';
+    ctx.textAlign = 'center';
+
+    const lines = generatedPoster.content.split('\n');
+    let yPos = 400;
+    lines.forEach((line: string) => {
+      ctx.fillText(line, canvas.width / 2, yPos);
+      yPos += 80;
+    });
+
+    // 绘制底部信息
+    ctx.fillStyle = generatedPoster.colors.accent;
+    ctx.fillRect(0, canvas.height - 150, canvas.width, 150);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '30px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('立即咨询', canvas.width / 2, canvas.height - 50);
+
+    // 下载
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `poster-${Date.now()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    });
+  };
+
   return (
     <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">海报类型</label>
-        <select
-          value={posterType}
-          onChange={(e) => setPosterType(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          {posterTemplates.map(t => (
-            <option key={t.id} value={t.id}>{t.name}</option>
-          ))}
-        </select>
+      {/* 海报配置 */}
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">海报类型</label>
+          <select
+            value={posterType}
+            onChange={(e) => setPosterType(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            {posterTemplates.map(t => (
+              <option key={t.id} value={t.id}>{t.name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">设计风格</label>
+          <select
+            value={style}
+            onChange={(e) => setStyle(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            {styles.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">设计风格</label>
-        <select
-          value={style}
-          onChange={(e) => setStyle(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          {styles.map(s => (
-            <option key={s.id} value={s.id}>{s.name}</option>
-          ))}
-        </select>
-      </div>
-
+      {/* 海报主题输入 */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">海报主题</label>
         <textarea
-          placeholder="输入您的海报主题或描述..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="输入您的海报主题或描述...&#10;例如：&#10;春季护肤特价&#10;限时优惠50%&#10;新客户专享"
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          rows={3}
+          rows={4}
         />
       </div>
 
-      <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-        <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-4 h-4 text-green-600" />
-          <p className="font-medium text-sm text-green-900">AI预览</p>
+      {/* 生成按钮 */}
+      <button
+        onClick={generatePosterPreview}
+        disabled={isLoading}
+        className="w-full py-2 px-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:opacity-50 flex items-center justify-center gap-2 font-medium"
+      >
+        {isLoading ? (
+          <>
+            <div className="animate-spin">⏳</div>
+            正在生成海报...
+          </>
+        ) : (
+          <>
+            <Sparkles className="w-4 h-4" />
+            AI 生成海报
+          </>
+        )}
+      </button>
+
+      {/* 海报预览 */}
+      {generatedPoster && (
+        <div className="bg-gradient-to-b from-green-50 to-white p-4 rounded-lg border-2 border-green-200">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 text-green-600" />
+            <p className="font-medium text-sm text-green-900">AI 生成预览</p>
+          </div>
+
+          {/* 模拟海报预览 */}
+          <div
+            className="w-full rounded-lg overflow-hidden shadow-lg border-4 mx-auto"
+            style={{
+              aspectRatio: '3/4',
+              backgroundColor: generatedPoster.colors.bg,
+              maxWidth: '300px',
+              border: `4px solid ${generatedPoster.colors.accent}`
+            }}
+          >
+            {/* 顶部条纹 */}
+            <div
+              style={{ backgroundColor: generatedPoster.colors.accent }}
+              className="p-4 text-center text-white"
+            >
+              <div className="text-2xl font-bold">{generatedPoster.title}</div>
+            </div>
+
+            {/* 主体内容 */}
+            <div className="p-6 text-center flex flex-col justify-center items-center h-[calc(100%-120px)]">
+              <div
+                style={{ color: generatedPoster.colors.text }}
+                className="text-lg font-semibold whitespace-pre-wrap"
+              >
+                {generatedPoster.content}
+              </div>
+            </div>
+
+            {/* 底部 CTA */}
+            <div
+              style={{ backgroundColor: generatedPoster.colors.accent }}
+              className="p-3 text-center text-white font-bold"
+            >
+              立即咨询
+            </div>
+          </div>
+
+          {/* 海报信息 */}
+          <div className="mt-4 p-3 bg-white rounded border border-gray-200 text-sm">
+            <div className="grid grid-cols-2 gap-2 text-gray-600">
+              <div><span className="font-medium">类型：</span> {posterTemplates.find(t => t.id === posterType)?.name}</div>
+              <div><span className="font-medium">风格：</span> {styles.find(s => s.id === style)?.name}</div>
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded border border-gray-200 text-center text-gray-500 h-48 flex items-center justify-center">
-          海报预览将在此显示...
-        </div>
+      )}
+
+      {/* 操作按钮 */}
+      <div className="flex gap-2">
+        {generatedPoster && (
+          <>
+            <button
+              onClick={downloadPoster}
+              className="flex-1 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2 font-medium"
+            >
+              <Download className="w-4 h-4" />
+              下载海报
+            </button>
+            <button
+              onClick={() => setGeneratedPoster(null)}
+              className="flex-1 py-2 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium"
+            >
+              重新生成
+            </button>
+          </>
+        )}
       </div>
 
-      <div className="flex gap-2">
-        <button className="flex-1 py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center justify-center gap-2">
-          <Download className="w-4 h-4" />
-          下载海报
-        </button>
-        <button className="flex-1 py-2 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
-          重新生成
-        </button>
+      {/* 提示信息 */}
+      <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 text-xs text-blue-900">
+        <p className="font-medium mb-1">💡 使用提示：</p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>输入简明扼要的海报主题</li>
+          <li>选择合适的设计风格和类型</li>
+          <li>生成后可下载为图片使用</li>
+          <li>支持在社交媒体、门店等多渠道使用</li>
+        </ul>
       </div>
     </div>
   );
