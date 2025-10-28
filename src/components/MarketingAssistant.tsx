@@ -561,10 +561,10 @@ const CopywritingGenerator: React.FC = () => {
     ];
 
     const details = [
-      '✓ 专业美容师团队\n✓ 高端进口产品\n✓ 一对一贴心服务\n✓ 效果看得见',
-      '✓ 全套皮肤检测\n✓ 定制护肤方案\n✓ 专业技术团队\n✓ 放心有保障',
-      '✓ 舒适的环境\n✓ 专业的设备\n✓ 优质的服务\n✓ 显著的效果',
-      '✓ 质量有保证\n✓ 效果真实有\n✓ 服务超贴心\n✓ 口碑很不错'
+      '• 专业美容师团队\n• 高端进口产品\n• 一对一贴心服务\n• 效果看得见',
+      '• 全套皮肤检测\n• 定制护肤方案\n• 专业技术团队\n• 放心有保障',
+      '• 舒适的环境\n• 专业的设备\n• 优质的服务\n• 显著的效果',
+      '• 质量有保证\n• 效果真实有\n• 服务超贴心\n• 口碑很不错'
     ];
 
     const calls = [
@@ -636,10 +636,10 @@ ${cta[Math.floor(Math.random() * cta.length)]}
 
 这是我们精心打造的特色服务，具有以下优势：
 
-✓ 专业的美容师团队，经验丰富
-✓ 采用高端进口产品，品质保证
-✓ 一对一贴心咨询，定制方案
-✓ 舒适的服务环境，让您放心
+• 专业的美容师团队，经验丰富
+• 采用高端进口产品，品质保证
+• 一对一贴心咨询，定制方案
+• 舒适的服务环境，让您放心
 
 客户反馈：
 "效果真的很满意，还会继续来！"
@@ -647,9 +647,9 @@ ${cta[Math.floor(Math.random() * cta.length)]}
 "价格公道，效果显著，推荐给朋友"
 
 现在预约享受特别优惠：
-✓ 新客户首次优惠百分之二十
-✓ 介绍朋友送护肤产品
-✓ 会员卡积分双倍
+• 新客户首次优惠百分之二十
+• 介绍朋友送护肤产品
+• 会员卡积分双倍
 
 欢迎您的咨询和预约！
 
@@ -673,10 +673,10 @@ ${cta[Math.floor(Math.random() * cta.length)]}
 每个月定期做${product}，效果加倍好
 
 来我们美容院体验：
-✓ 专业皮肤检测
-✓ 定制护理方案
-✓ 先进护理设备
-✓ 优质护肤产品
+• 专业皮肤检测
+• 定制护理方案
+• 先进护理设备
+• 优质护肤产品
 
 限时优惠中，快来预约吧
 
@@ -832,11 +832,11 @@ ${hashtags[Math.floor(Math.random() * hashtags.length)]} ${hashtags[Math.floor(M
           <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
             <h4 className="font-semibold text-yellow-900 mb-2">使用建议</h4>
             <ul className="text-sm text-yellow-800 space-y-1">
-              <li>✓ 小红书：适合详细笔记，强调体验和效果</li>
-              <li>✓ 抖音：节奏快，适合短视频配文</li>
-              <li>✓ 微信：重视信任，适合公众号和群发</li>
-              <li>✓ 微博：话题性强，适合互动和讨论</li>
-              <li>✓ 短信：简洁有力，直达转化</li>
+              <li>• 小红书：适合详细笔记，强调体验和效果</li>
+              <li>• 抖音：节奏快，适合短视频配文</li>
+              <li>• 微信：重视信任，适合公众号和群发</li>
+              <li>• 微博：话题性强，适合互动和讨论</li>
+              <li>• 短信：简洁有力，直达转化</li>
         </ul>
       </div>
         </div>
@@ -1562,7 +1562,7 @@ const CampaignPlanner: React.FC = () => {
                   <p className="text-sm text-gray-600 mb-2">重点: {week.focus}</p>
                   <ul className="space-y-1">
                     {week.actions.map((action: string, i: number) => (
-                      <li key={i} className="text-sm text-gray-700">✓ {action}</li>
+                      <li key={i} className="text-sm text-gray-700">• {action}</li>
                     ))}
                   </ul>
                 </div>

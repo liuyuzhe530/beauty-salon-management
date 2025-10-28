@@ -37,9 +37,11 @@ export const RoleSelector: React.FC<RoleSelectorProps> = ({ onSelectRole }) => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-green-900 mb-3">
-            美容院管理系�?          </h1>
+            美容院管理系统
+          </h1>
           <p className="text-lg text-green-700">
-            一台手机掌控整个美容院的管理系�?          </p>
+            一台手机掌控整个美容院的管理系统
+          </p>
         </div>
 
         {/* Role Cards */}
@@ -52,10 +54,10 @@ export const RoleSelector: React.FC<RoleSelectorProps> = ({ onSelectRole }) => {
                 onClick={() => onSelectRole(role.id as UserRole)}
                 className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:shadow-xl"
               >
-                {/* Background gradient */}
+                {/* 背景渐变 */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${role.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                 
-                {/* Card content */}
+                {/* 卡片内容 */}
                 <div className="relative bg-white p-8 rounded-xl border-2 border-green-200 group-hover:border-transparent transition-all duration-300">
                   <div className="flex flex-col items-center text-center">
                     <div className="p-4 rounded-lg mb-4 group-hover:text-white transition-colors duration-300">
@@ -69,7 +71,7 @@ export const RoleSelector: React.FC<RoleSelectorProps> = ({ onSelectRole }) => {
                     </p>
                   </div>
 
-                  {/* Bottom accent line */}
+                  {/* 底部装饰线 */}
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-green-300 to-transparent group-hover:via-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </button>
@@ -77,10 +79,10 @@ export const RoleSelector: React.FC<RoleSelectorProps> = ({ onSelectRole }) => {
           })}
         </div>
 
-        {/* Footer info */}
+        {/* 底部信息 */}
         <div className="mt-12 text-center">
           <p className="text-sm text-green-700">
-            淡绿色高端设�?| 完全响应�?| 无Emoji风格
+            精品设计 | 完全响应 | 专业风格
           </p>
         </div>
       </div>

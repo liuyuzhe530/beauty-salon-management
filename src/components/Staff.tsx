@@ -5,6 +5,7 @@ import { useToast } from './Toast';
 import { Modal } from './Modal';
 import { StaffForm } from './StaffForm';
 import { SmartManager } from './SmartManager';
+import { PromotionPlan } from './PromotionPlan';
 import { Staff as StaffType } from '../types/index';
 
 export const Staff: React.FC = () => {
@@ -15,7 +16,7 @@ export const Staff: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStaff, setEditingStaff] = useState<StaffType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'list' | 'smartmanager'>('list');
+  const [activeTab, setActiveTab] = useState<'list' | 'smartmanager' | 'promotion'>('list');
 
   // 搜索和筛选
   const searchResults = searchQuery.trim() ? searchStaff(searchQuery) : staff;
@@ -130,6 +131,17 @@ export const Staff: React.FC = () => {
         >
           <Zap className="w-4 h-4" />
           智能店长
+        </button>
+        <button
+          onClick={() => setActiveTab('promotion')}
+          className={`px-4 py-3 font-medium transition-colors border-b-2 flex items-center gap-2 ${
+            activeTab === 'promotion'
+              ? 'border-green-600 text-green-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <TrendingUp className="w-4 h-4" />
+          晋升计划
         </button>
       </div>
 
@@ -287,6 +299,13 @@ export const Staff: React.FC = () => {
       {activeTab === 'smartmanager' && (
         <div className="bg-white rounded-lg border border-green-200 p-6">
           <SmartManager />
+        </div>
+      )}
+
+      {/* 晋升计划标签页 */}
+      {activeTab === 'promotion' && (
+        <div className="bg-white rounded-lg border border-green-200 p-6">
+          <PromotionPlan />
         </div>
       )}
 

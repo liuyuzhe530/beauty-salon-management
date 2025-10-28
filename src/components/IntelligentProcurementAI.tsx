@@ -690,10 +690,10 @@ export const IntelligentProcurementAI: React.FC = () => {
                       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-4">
                         <h4 className="font-semibold text-blue-900 mb-2">采购决策建议</h4>
                         <ul className="space-y-1 text-sm text-blue-800">
-                          <li>✓ 最优方案：选择价格最低的平台（节省￥{(stats.maxPrice - stats.minPrice).toFixed(1)}）</li>
-                          <li>✓ 平衡方案：选择评分最高且价格接近的平台</li>
-                          <li>✓ 快速方案：优先选择发货时间为1-2天的平台</li>
-                          <li>✓ 分散风险：多个平台分批采购，降低供应风险</li>
+                          <li>• 最优方案：选择价格最低的平台（节省￥{(stats.maxPrice - stats.minPrice).toFixed(1)}）</li>
+                          <li>• 平衡方案：选择评分最高且价格接近的平台</li>
+                          <li>• 快速方案：优先选择发货时间为1-2天的平台</li>
+                          <li>• 分散风险：多个平台分批采购，降低供应风险</li>
                         </ul>
                       </div>
                     </>
