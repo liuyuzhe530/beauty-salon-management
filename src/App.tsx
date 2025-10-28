@@ -20,6 +20,7 @@ import { IntelligentProcurementAI } from './components/IntelligentProcurementAI'
 import { PromotionPlan } from './components/PromotionPlan';
 import { SkincareDetection } from './components/SkincareDetection';
 import { BeautyDiagnosis } from './components/BeautyDiagnosis';
+import { FunSkinTest } from './components/FunSkinTest';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -87,6 +88,8 @@ function AppContent() {
         return <SkincareDetection />;
       case 'beauty-diagnosis':
         return <BeautyDiagnosis />;
+      case 'fun-skin-test':
+        return <FunSkinTest />;
       default:
         return <Dashboard />;
     }
