@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, X, Loader, Zap } from 'lucide-react';
+import { MessageCircle, Send, X, Loader, Zap, Menu, Settings } from 'lucide-react';
 import aiService from '../services/aiService';
 import { enhancedAIService } from '../services/enhancedAIService';
 import { dataCollectorService } from '../services/dataCollectorService';
+import { businessFunctions, getBusinessPrompt } from '../services/prompts/businessPrompts';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -21,6 +22,8 @@ export const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [useEnhancedAI, setUseEnhancedAI] = useState(false);
+  const [showAdminMenu, setShowAdminMenu] = useState(false);
+  const [selectedBusinessFunction, setSelectedBusinessFunction] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -41,7 +44,6 @@ export const AIChat: React.FC = () => {
       } catch (error) {
         console.error('初始化增强AI失败:', error);
         setUseEnhancedAI(false);
-        // 启用演示模式
         try {
           enhancedAIService.setDemoMode(true);
           aiService.setDemoMode(true);
@@ -60,7 +62,6 @@ export const AIChat: React.FC = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // 添加用户消息
     const userMessage: Message = {
       role: 'user',
       content: input,
@@ -71,15 +72,12 @@ export const AIChat: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // 优先使用增强 AI（有系统数据）
       let response;
       if (useEnhancedAI) {
-        // 刷新系统数据
         const systemData = await dataCollectorService.collectAllData();
         enhancedAIService.setSystemData(systemData);
         response = await enhancedAIService.chat(input);
       } else {
-        // 降级到普通 AI
         response = await aiService.chat(input);
       }
 
@@ -101,6 +99,19 @@ export const AIChat: React.FC = () => {
     }
   };
 
+  const handleBusinessFunction = async (functionKey: string) => {
+    setSelectedBusinessFunction(functionKey);
+    const func = Object.values(businessFunctions).find((f) => 
+      f.name === Object.values(businessFunctions).find(bf => Object.keys(businessFunctions).find(k => k === functionKey))?.name
+    );
+    
+    if (func) {
+      const prompt = `请为我的美容院生成相关的${func.name}内容。`;
+      setInput(prompt);
+      setShowAdminMenu(false);
+    }
+  };
+
   const handleSmartRecommendations = async () => {
     setIsLoading(true);
     const userMessage: Message = {
@@ -112,7 +123,6 @@ export const AIChat: React.FC = () => {
 
     try {
       if (useEnhancedAI) {
-        // 刷新系统数据
         const systemData = await dataCollectorService.collectAllData();
         enhancedAIService.setSystemData(systemData);
         const response = await enhancedAIService.getSmartRecommendations();
@@ -134,7 +144,6 @@ export const AIChat: React.FC = () => {
       };
       setMessages((prev) => [...prev, errorMessage]);
       
-      // 降级到基础 AI
       try {
         const response = await aiService.chat('请根据当前系统数据，给我一份完整的智能建议报告');
         const fallbackMessage: Message = {
@@ -190,7 +199,6 @@ export const AIChat: React.FC = () => {
     try {
       let response;
       if (useEnhancedAI) {
-        // 刷新系统数据
         const systemData = await dataCollectorService.collectAllData();
         enhancedAIService.setSystemData(systemData);
         response = await enhancedAIService.chat(prompt);
@@ -240,13 +248,41 @@ export const AIChat: React.FC = () => {
                 {useEnhancedAI ? '数据驱动模式' : '标准模式'} (GLM-4.5-Flash)
               </p>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="hover:bg-white hover:bg-opacity-20 p-1 rounded transition"
-            >
-              <X size={20} />
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowAdminMenu(!showAdminMenu)}
+                className="hover:bg-white hover:bg-opacity-20 p-1 rounded transition"
+                title="管理员菜单"
+              >
+                <Settings size={20} />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="hover:bg-white hover:bg-opacity-20 p-1 rounded transition"
+              >
+                <X size={20} />
+              </button>
+            </div>
           </div>
+
+          {/* 管理员功能菜单 */}
+          {showAdminMenu && (
+            <div className="border-b bg-gray-50 p-3 max-h-32 overflow-y-auto">
+              <div className="text-xs font-bold text-gray-600 mb-2">📊 商业功能</div>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.entries(businessFunctions).map(([key, func]) => (
+                  <button
+                    key={key}
+                    onClick={() => handleBusinessFunction(key)}
+                    className={`text-xs px-2 py-1 rounded text-white font-medium transition bg-gradient-to-r ${func.color} hover:opacity-90`}
+                    title={func.description}
+                  >
+                    {func.icon} {func.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* 消息区域 */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">

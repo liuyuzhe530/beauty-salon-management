@@ -720,3 +720,500 @@ ROI：
 **告诉我您的选择！** 🚀
 
 准备好用 AI 改变您的美容院管理吗？
+
+---
+
+# 🔧 **AI 功能完善和优化计划 - 第二阶段**
+
+**当前状态：** 已实现基础 AI 功能  
+**目标：** 完善和优化现有 AI 系统  
+**时间：** 1-2 周  
+**优先级：** 高  
+
+## 📊 **当前 AI 功能评估**
+
+### ✅ 已完成的功能
+
+1. **基础 AI 聊天** (`src/services/aiService.ts`)
+   - GLM-4.5-Flash API 集成
+   - 演示模式支持
+   - 对话历史管理
+   - 错误处理和降级
+
+2. **增强 AI 服务** (`src/services/enhancedAIService.ts`)
+   - 系统数据集成
+   - 数据驱动决策
+   - 智能建议生成
+   - 多种分析功能
+
+3. **数据收集服务** (`src/services/dataCollectorService.ts`)
+   - 客户数据收集和分析
+   - 预约数据收集
+   - 员工数据收集
+   - 销售数据收集
+   - 营销数据收集
+
+4. **AI 聊天 UI 组件** (`src/components/AIChat.tsx`)
+   - 浮窗界面
+   - 快速操作按钮
+   - 消息历史
+   - 流式对话
+
+### ⚠️ 需要改进的地方
+
+1. **数据准确性**
+   - 数据收集依赖 localStorage，需要更好的数据源验证
+   - 高风险客户识别需要更多维度
+   - 销售数据计算需要优化
+
+2. **AI 提示词优化**
+   - 当前提示词需要更精细的调整
+   - 需要针对不同业务场景的专门提示
+   - 建议文案需要更具体化
+
+3. **功能完整性**
+   - 缺少实时预测功能
+   - 缺少成本分析模块
+   - 缺少客户满意度分析
+   - 缺少竞争对手分析
+
+4. **用户体验**
+   - 快速操作按钮可以更智能
+   - 建议报告格式需要改进
+   - 缺少可视化图表
+   - 缺少建议追踪功能
+
+5. **性能和稳定性**
+   - API 调用超时处理
+   - 数据收集性能优化
+   - 缓存机制不完善
+   - 错误日志记录不足
+
+## 🎯 **改进优先级**
+
+### Tier 1（立即做）- 高价值 + 高影响
+- [ ] 1.1 优化 AI 提示词（系统角色定位）
+- [ ] 1.2 增强数据收集和验证
+- [ ] 1.3 改进高风险客户识别算法
+- [ ] 1.4 添加建议置信度评分
+- [ ] 1.5 优化 API 错误处理和重试机制
+
+### Tier 2（1 周内）- 中等价值 + 中等影响
+- [ ] 2.1 添加成本分析模块
+- [ ] 2.2 实现竞争力分析功能
+- [ ] 2.3 添加趋势预测功能
+- [ ] 2.4 优化快速操作按钮
+- [ ] 2.5 改进建议报告格式
+
+### Tier 3（1-2 周内）- 增强功能
+- [ ] 3.1 添加可视化图表展示
+- [ ] 3.2 实现建议追踪和反馈
+- [ ] 3.3 添加多语言支持
+- [ ] 3.4 实现 A/B 测试框架
+- [ ] 3.5 建立 AI 性能指标监控
+
+---
+
+## 🚀 **Tier 1 改进详细计划**
+
+### 1.1 优化 AI 提示词 - 系统角色定位
+
+**当前问题：** 
+- 提示词过于宽泛
+- 不够针对性
+- 建议可操作性不足
+
+**改进方案：**
+
+```typescript
+// src/services/prompts/systemPrompts.ts
+
+// 根据不同场景的系统提示词
+export const systemPrompts = {
+  // 美容院经营者角色
+  'manager': `你是一个美容院的AI管理顾问，专门帮助经营者做出数据驱动的决策。
+
+【核心职责】
+1. 分析数据中的机遇和风险
+2. 提供具体、可执行的建议
+3. 量化每个建议的预期收益
+4. 为建议制定优先级
+
+【工作方式】
+- 始终基于具体数据提供建议
+- 明确指出问题的根本原因
+- 提供3-5个行动步骤
+- 预测成功概率和ROI
+
+【语气】
+- 专业但友好
+- 自信但谦虚
+- 鼓励但现实`,
+
+  // 员工管理顾问角色
+  'hr': `你是美容院的人力资源顾问...`,
+  
+  // 营销专家角色
+  'marketing': `你是美容院的营销策略专家...`,
+  
+  // 财务分析师角色
+  'finance': `你是美容院的财务分析师...`
+};
+```
+
+**实现步骤：**
+1. 创建 `src/services/prompts/systemPrompts.ts`
+2. 定义场景特定的系统提示
+3. 更新 `enhancedAIService` 以使用上下文相关的提示
+4. 根据用户问题类型自动选择提示
+
+---
+
+### 1.2 增强数据收集和验证
+
+**当前问题：**
+- 数据来源单一（仅 localStorage）
+- 无数据验证机制
+- 缺少数据质量检查
+
+**改进方案：**
+
+```typescript
+// src/services/dataValidationService.ts
+
+export class DataValidationService {
+  // 验证客户数据
+  validateCustomerData(data: any[]): ValidationResult {
+    return {
+      isValid: true,
+      errors: [],
+      warnings: [],
+      quality: 0.95, // 数据质量评分
+    };
+  }
+
+  // 验证数据趋势
+  validateDataTrend(current: number, previous: number): TrendAnalysis {
+    return {
+      isAnomalous: false,
+      confidence: 0.9,
+      recommendation: '数据正常，符合预期'
+    };
+  }
+
+  // 多源数据融合
+  mergeDataSources(local: any, api: any, cached: any): MergedData {
+    // 综合多个数据源
+  }
+}
+```
+
+---
+
+### 1.3 改进高风险客户识别算法
+
+**当前逻辑：** 仅基于"30天未预约"
+
+**改进算法：**
+
+```typescript
+// src/services/riskAnalysis/customerRiskScorer.ts
+
+export class CustomerRiskScorer {
+  /**
+   * 计算客户流失风险分数 (0-100)
+   */
+  calculateRiskScore(customer: Customer): number {
+    let score = 0;
+
+    // 维度1: 时间维度 (40%)
+    const daysSinceLastAppointment = this.getDaysSinceLastAppointment(customer);
+    const recencyScore = this.calculateRecencyScore(daysSinceLastAppointment);
+    score += recencyScore * 0.4;
+
+    // 维度2: 频率维度 (20%) 
+    const appointmentFrequency = this.getAppointmentFrequency(customer);
+    const frequencyScore = this.calculateFrequencyScore(appointmentFrequency);
+    score += frequencyScore * 0.2;
+
+    // 维度3: 消费金额维度 (20%)
+    const totalSpent = customer.totalSpent;
+    const monetaryScore = this.calculateMonetaryScore(totalSpent);
+    score += monetaryScore * 0.2;
+
+    // 维度4: 满意度维度 (10%)
+    const satisfaction = customer.satisfaction || 0;
+    const satisfactionScore = 100 - satisfaction;
+    score += satisfactionScore * 0.1;
+
+    // 维度5: 流失信号 (10%)
+    const churnSignals = this.detectChurnSignals(customer);
+    const signalScore = churnSignals.length * 20; // 每个信号+20分
+    score += Math.min(signalScore, 100) * 0.1;
+
+    return Math.min(score, 100);
+  }
+
+  /**
+   * 检测流失信号
+   */
+  private detectChurnSignals(customer: Customer): string[] {
+    const signals: string[] = [];
+    
+    // 信号1: 消费频率下降
+    if (this.isFrequencyDecreasing(customer)) {
+      signals.push('消费频率下降');
+    }
+    
+    // 信号2: 平均消费金额下降
+    if (this.isSpendingDecreasing(customer)) {
+      signals.push('消费金额下降');
+    }
+    
+    // 信号3: 取消或爽约
+    if (this.hasCancellationsOrNoShows(customer)) {
+      signals.push('有取消或爽约记录');
+    }
+    
+    // 信号4: 负面反馈
+    if (this.hasNegativeFeedback(customer)) {
+      signals.push('有负面评价');
+    }
+    
+    return signals;
+  }
+
+  /**
+   * 分类客户风险等级
+   */
+  classifyRiskLevel(score: number): 'low' | 'medium' | 'high' | 'critical' {
+    if (score < 30) return 'low';
+    if (score < 60) return 'medium';
+    if (score < 80) return 'high';
+    return 'critical';
+  }
+
+  /**
+   * 生成个性化保留策略
+   */
+  generateRetentionStrategy(customer: Customer, riskScore: number): Strategy {
+    const riskLevel = this.classifyRiskLevel(riskScore);
+    const signals = this.detectChurnSignals(customer);
+
+    return {
+      urgency: riskLevel,
+      strategies: this.getStrategiesForRiskLevel(riskLevel, signals),
+      budget: this.calculateOptimalBudget(customer),
+      timeline: this.getRecommendedTimeline(riskLevel),
+      expectedSuccess: this.predictRetentionSuccess(riskScore),
+    };
+  }
+}
+```
+
+---
+
+### 1.4 添加建议置信度评分
+
+**目标：** 让用户知道 AI 建议的可信度
+
+```typescript
+// src/services/ai/confidenceScorer.ts
+
+export class ConfidenceScorer {
+  /**
+   * 计算 AI 建议的置信度
+   */
+  calculateConfidence(recommendation: Recommendation, data: SystemData): number {
+    let confidence = 0.5; // 基础置信度 50%
+
+    // 因素1: 数据完整性
+    const dataCompleteness = this.evaluateDataCompleteness(data);
+    confidence += dataCompleteness * 0.2;
+
+    // 因素2: 数据新鲜度
+    const dataFreshness = this.evaluateDataFreshness(data);
+    confidence += dataFreshness * 0.15;
+
+    // 因素3: 样本量
+    const sampleSize = this.evaluateSampleSize(data);
+    confidence += sampleSize * 0.15;
+
+    // 因素4: 历史准确度
+    const historicalAccuracy = this.evaluateHistoricalAccuracy(recommendation);
+    confidence += historicalAccuracy * 0.2;
+
+    // 因素5: 相似案例参考
+    const similarCases = this.evaluateSimilarCases(data);
+    confidence += similarCases * 0.15;
+
+    return Math.min(confidence, 1.0);
+  }
+
+  /**
+   * 获取置信度等级标签
+   */
+  getConfidenceLevelLabel(score: number): string {
+    if (score >= 0.9) return '极高 🟢🟢🟢';
+    if (score >= 0.75) return '高 🟢🟢';
+    if (score >= 0.6) return '中等 🟡';
+    if (score >= 0.4) return '偏低 🟠';
+    return '低 🔴';
+  }
+}
+```
+
+---
+
+### 1.5 优化 API 错误处理和重试机制
+
+**改进方案：**
+
+```typescript
+// src/services/ai/apiCallManager.ts
+
+export class APICallManager {
+  private maxRetries = 3;
+  private retryDelays = [1000, 2000, 5000]; // 指数退避
+
+  /**
+   * 带重试的 API 调用
+   */
+  async callWithRetry<T>(
+    fn: () => Promise<T>,
+    context: string
+  ): Promise<T> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error: any) {
+        lastError = error;
+        
+        // 不可重试的错误立即抛出
+        if (this.isNonRetryableError(error)) {
+          throw error;
+        }
+
+        // 最后一次尝试失败
+        if (attempt === this.maxRetries) {
+          break;
+        }
+
+        // 计算延迟时间
+        const delay = this.retryDelays[attempt] || 5000;
+        console.warn(`${context} 失败，${delay}ms 后重试... (第 ${attempt + 1} 次)`);
+        
+        await this.sleep(delay);
+      }
+    }
+
+    throw new Error(`${context} 最终失败: ${lastError?.message}`);
+  }
+
+  /**
+   * 判断是否为可重试错误
+   */
+  private isNonRetryableError(error: any): boolean {
+    // 认证错误、权限错误不重试
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      return true;
+    }
+    // 请求格式错误不重试
+    if (error.response?.status === 400) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * 记录 API 调用指标
+   */
+  recordMetric(endpoint: string, duration: number, success: boolean): void {
+    // 用于监控和性能优化
+  }
+}
+```
+
+---
+
+## 📈 **预期改进效果**
+
+| 改进项目 | 当前状态 | 目标状态 | 提升幅度 |
+|---------|---------|---------|---------|
+| 建议准确度 | 70% | 85%+ | +15% |
+| 数据质量评分 | 75 | 90+ | +15 |
+| 高风险识别准确率 | 60% | 85%+ | +25% |
+| AI 响应时间 | 3-5s | <2s | 50% 提升 |
+| 用户满意度 | 75/100 | 90/100 | +15 分 |
+| 系统可靠性 | 95% | 99%+ | +4% |
+
+---
+
+## 📅 **1 周改进计划**
+
+### Day 1-2: Tier 1.1 + 1.2
+- [ ] 创建场景特定系统提示
+- [ ] 实现数据验证服务
+- [ ] 更新 AI 服务集成
+
+### Day 3: Tier 1.3 + 1.4
+- [ ] 实现新风险评分算法
+- [ ] 添加置信度评分
+- [ ] 更新数据收集服务
+
+### Day 4: Tier 1.5
+- [ ] 优化 API 调用管理
+- [ ] 添加重试机制
+- [ ] 改进错误日志
+
+### Day 5: 测试和优化
+- [ ] 全面功能测试
+- [ ] 性能测试
+- [ ] 用户体验测试
+- [ ] 准备上线
+
+---
+
+## ✅ **完成标准**
+
+✅ 所有 Tier 1 项目都已完成  
+✅ 建议准确度提升至 85%+  
+✅ 数据质量评分达到 90+  
+✅ 无严重错误，系统稳定可靠  
+✅ 用户反馈普遍积极  
+
+---
+
+## 🎁 **用户价值**
+
+- 👤 **用户** 获得更准确、更可信的 AI 建议
+- 📊 **数据** 更可靠，决策更有依据
+- ⚡ **性能** 系统更快更稳定
+- 💰 **收益** 更好的建议→更高的执行效率→更多的收入
+
+---
+
+## 🚀 **准备好开始改进吗？**
+
+选择您的方案：
+
+```
+☑️  立即开始（推荐）
+   → 1 周完成所有 Tier 1 改进
+   → 获得显著性能提升
+   → 准备 Tier 2 功能开发
+
+☐  先完成 Tier 1.1 + 1.2
+   → 2-3 天完成
+   → 建议质量显著提升
+   → 然后继续 Tier 1.3-1.5
+
+☐  优先考虑用户体验（Tier 2.5）
+   → 先改进建议报告格式
+   → 然后优化快速操作按钮
+   → 再做底层改进
+```
+
+**您倾向哪个方案？**

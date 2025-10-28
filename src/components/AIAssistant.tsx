@@ -414,10 +414,10 @@ export const AIAssistant: React.FC = () => {
               <h3 className="text-xl font-bold text-gray-900">AI对话助手</h3>
             </div>
             <p className="text-gray-700 mb-4">
-              💡 提示：使用界面右下角的 <span className="font-bold text-green-600">对话悬浮球</span> 与AI进行实时对话，获取营销、采购、数据分析等方面的智能建议。
+              提示：使用界面右下角的 <span className="font-bold text-green-600">对话悬浮球</span> 与AI进行实时对话，获取营销、采购、数据分析等方面的智能建议。
             </p>
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <p className="text-sm text-green-700">✨ <span className="font-semibold">悬浮球功能包括：</span></p>
+              <p className="text-sm text-green-700"><span className="font-semibold">悬浮球功能包括：</span></p>
               <ul className="text-sm text-green-700 mt-2 space-y-1 ml-4">
                 <li>• 实时智能聊天咨询</li>
                 <li>• AI建议和推荐</li>
