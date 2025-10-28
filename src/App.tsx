@@ -21,6 +21,7 @@ import { PromotionPlan } from './components/PromotionPlan';
 import { SkincareDetection } from './components/SkincareDetection';
 import { BeautyDiagnosis } from './components/BeautyDiagnosis';
 import { TongueCoatingDetection } from './components/TongueCoatingDetection';
+import { SmartPhotoSeries } from './components/SmartPhotoSeries';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -90,6 +91,8 @@ function AppContent() {
         return <BeautyDiagnosis />;
       case 'tongue-coating-detection':
         return <TongueCoatingDetection />;
+      case 'smart-photo-series':
+        return <SmartPhotoSeries onSelectService={setCurrentPage} />;
       default:
         return <Dashboard />;
     }

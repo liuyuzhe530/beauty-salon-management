@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart3, Users, ShoppingBag, Zap, Store, LogOut, BookOpen, Home, TrendingUp, Heart } from 'lucide-react';
+import { BarChart3, Users, ShoppingBag, Zap, Store, LogOut, BookOpen, Home, TrendingUp, Heart, Camera } from 'lucide-react';
 
 interface NavigationProps {
   currentPage: string;
@@ -22,6 +22,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       { id: 'shop', label: '商城装修', icon: ShoppingBag },
       { id: 'training', label: '培训教育', icon: BookOpen },
       { id: 'ai', label: 'AI', icon: Zap },
+      { id: 'smart-photo-series', label: '智能拍照', icon: Camera },
       { id: 'skincare-detection', label: '皮肤检测', icon: Zap },
       { id: 'beauty-diagnosis', label: '美容诊断', icon: TrendingUp },
       { id: 'tongue-coating-detection', label: '舌苔检测', icon: Heart }
@@ -35,6 +36,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       { id: 'onsite-booking', label: '上门服务', icon: Home },
       { id: 'customermanagement', label: '我的预约', icon: Users },
       { id: 'shop', label: '美容商城', icon: ShoppingBag },
+      { id: 'smart-photo-series', label: '智能拍照', icon: Camera },
       { id: 'skincare-detection', label: '皮肤检测', icon: Zap }
     ]
   };
