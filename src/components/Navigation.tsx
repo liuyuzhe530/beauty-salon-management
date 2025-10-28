@@ -26,15 +26,13 @@ export const Navigation: React.FC<NavigationProps> = ({
     staff: [
       { id: 'dashboard', label: '我的日程', icon: Users },
       { id: 'customermanagement', label: '我的客户', icon: Users },
-      { id: 'training', label: '培训学习', icon: BookOpen },
-      { id: 'ai', label: 'AI', icon: Zap },
-      { id: 'shop', label: '产品', icon: ShoppingBag }
+      { id: 'training', label: '培训学习', icon: BookOpen }
     ],
     customer: [
       { id: 'onsite-booking', label: '上门服务', icon: Home },
       { id: 'customermanagement', label: '我的预约', icon: Users },
-      { id: 'shop', label: '商城', icon: ShoppingBag },
-      { id: 'ai', label: 'AI', icon: Zap }
+      { id: 'shop', label: '美容商城', icon: ShoppingBag },
+      { id: 'skincare-detection', label: '皮肤检测', icon: Zap }
     ]
   };
 

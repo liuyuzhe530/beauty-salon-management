@@ -18,6 +18,7 @@ import { OnSiteServiceManagement } from './components/OnSiteServiceManagement';
 import { OnSiteServiceBooking } from './components/OnSiteServiceBooking';
 import { IntelligentProcurementAI } from './components/IntelligentProcurementAI';
 import { PromotionPlan } from './components/PromotionPlan';
+import { SkincareDetection } from './components/SkincareDetection';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -81,6 +82,8 @@ function AppContent() {
         return <OnSiteServiceBooking />;
       case 'procurement':
         return <IntelligentProcurementAI />;
+      case 'skincare-detection':
+        return <SkincareDetection />;
       default:
         return <Dashboard />;
     }
