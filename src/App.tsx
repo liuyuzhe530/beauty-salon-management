@@ -19,6 +19,7 @@ import { OnSiteServiceBooking } from './components/OnSiteServiceBooking';
 import { IntelligentProcurementAI } from './components/IntelligentProcurementAI';
 import { PromotionPlan } from './components/PromotionPlan';
 import { SkincareDetection } from './components/SkincareDetection';
+import { BeautyDiagnosis } from './components/BeautyDiagnosis';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -84,6 +85,8 @@ function AppContent() {
         return <IntelligentProcurementAI />;
       case 'skincare-detection':
         return <SkincareDetection />;
+      case 'beauty-diagnosis':
+        return <BeautyDiagnosis />;
       default:
         return <Dashboard />;
     }
