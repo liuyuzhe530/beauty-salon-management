@@ -20,6 +20,7 @@ import { IntelligentProcurementAI } from './components/IntelligentProcurementAI'
 import { PromotionPlan } from './components/PromotionPlan';
 import { SkincareDetection } from './components/SkincareDetection';
 import { BeautyDiagnosis } from './components/BeautyDiagnosis';
+import { TongueCoatingDetection } from './components/TongueCoatingDetection';
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -87,6 +88,8 @@ function AppContent() {
         return <SkincareDetection />;
       case 'beauty-diagnosis':
         return <BeautyDiagnosis />;
+      case 'tongue-coating-detection':
+        return <TongueCoatingDetection />;
       default:
         return <Dashboard />;
     }
