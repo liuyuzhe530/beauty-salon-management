@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart3, Users, ShoppingBag, Zap, Store, LogOut, BookOpen, Home, TrendingUp, Sparkles } from 'lucide-react';
+import { BarChart3, Users, ShoppingBag, Zap, Store, LogOut, BookOpen, Home, TrendingUp } from 'lucide-react';
 
 interface NavigationProps {
   currentPage: string;
@@ -23,8 +23,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       { id: 'training', label: '培训教育', icon: BookOpen },
       { id: 'ai', label: 'AI', icon: Zap },
       { id: 'skincare-detection', label: '皮肤检测', icon: Zap },
-      { id: 'beauty-diagnosis', label: '美容诊断', icon: TrendingUp },
-      { id: 'fun-skin-test', label: '趣味检测', icon: Sparkles }
+      { id: 'beauty-diagnosis', label: '美容诊断', icon: TrendingUp }
     ],
     staff: [
       { id: 'dashboard', label: '我的日程', icon: Users },
