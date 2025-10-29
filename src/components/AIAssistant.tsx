@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { Zap, TrendingUp, Users, ShoppingBag, Clock, CheckCircle, Target, ListTodo, BarChart3, MessageSquare } from 'lucide-react';
 import { MarketingAssistant } from './MarketingAssistant';
 import { IntelligentProcurementAI } from './IntelligentProcurementAI';
-import { DataAnalyticsDashboard } from './DataAnalyticsDashboard';
 
 interface AIRecommendation {
   id: string;
@@ -220,7 +219,21 @@ export const AIAssistant: React.FC = () => {
 
       {/* Content - Analytics Recommendations */}
       {activeTab === 'recommendations' && (
-        <DataAnalyticsDashboard />
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-blue-900">数据分析中心</h1>
+              <p className="text-blue-600 mt-1">AI 驱动的业务数据分析和决策支持</p>
+            </div>
+          </div>
+
+          {/* Placeholder - 敬请期待 */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-300 p-12 text-center">
+            <BarChart3 className="w-16 h-16 text-blue-400 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-gray-900 mb-2">数据分析功能</h3>
+            <p className="text-gray-600">敬请期待数据分析和智能推荐功能的完整版本</p>
+          </div>
+        </div>
       )}
 
       {/* Content - Marketing Assistant */}
