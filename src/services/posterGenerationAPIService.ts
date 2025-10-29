@@ -10,7 +10,7 @@ export interface PosterGenerationRequest {
   content?: string;
   style?: 'modern' | 'elegant' | 'playful' | 'minimalist';
   format?: 'vertical' | 'horizontal';
-  type?: 'promotion' | 'product' | 'skincare' | 'event' | 'general';
+  type?: 'promotion' | 'product' | 'skincare' | 'event' | 'seasonal' | 'general';
   includeQRCode?: boolean;
   [key: string]: any;
 }
@@ -48,8 +48,8 @@ class PosterGenerationAPIService {
   private fallbackMode = true;
   
   // API 凭证 - 从环境变量读取
-  private apiKey = process.env.REACT_APP_RUNNINGHUB_API_KEY || '';
-  private webappId = process.env.REACT_APP_RUNNINGHUB_WEBAPP_ID || '1877265245566922753'; // 默认海报生成应用ID
+  private apiKey = import.meta.env.VITE_RUNNINGHUB_API_KEY || '';
+  private webappId = import.meta.env.VITE_RUNNINGHUB_WEBAPP_ID || '1877265245566922753'; // 默认海报生成应用ID
 
   /**
    * 生成海报 - 真实 RunningHub API 调用
