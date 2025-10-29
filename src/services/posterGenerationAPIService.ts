@@ -1,7 +1,7 @@
 /**
- * 海报生成 API 服务 - 真实 RunningHub API 集成
- * 集成 RunningHub 的智能海报生成服务
- * API 地址: https://www.runninghub.cn/task/openapi/ai-app/run
+ * 海报生成 API 服务 - 使用真实 RunningHub API 格式
+ * 官方文档: https://www.runninghub.cn/runninghub-api-doc-cn/api-279098421
+ * API 地址: POST /task/openapi/ai-app/run
  */
 
 import axios from 'axios';
@@ -18,6 +18,11 @@ export interface PosterGenerationRequest {
 export interface PosterGenerationResponse {
   success: boolean;
   data?: {
+    taskId?: string;
+    taskStatus?: string;
+    netWssUrl?: string;
+    clientId?: string;
+    posterUrl?: string;
     format: string;
     size: { width: number; height: number };
     design: {
@@ -25,8 +30,6 @@ export interface PosterGenerationResponse {
       elements: string[];
       colorScheme?: any;
     };
-    posterUrl?: string;
-    metadata?: any;
   };
   error?: {
     code: string;
@@ -41,55 +44,83 @@ export interface PosterGenerationResponse {
 class PosterGenerationAPIService {
   // RunningHub API 配置
   private apiEndpoint = 'https://www.runninghub.cn/task/openapi/ai-app/run';
-  private apiTimeout = 10000; // 10秒超时
-  private fallbackMode = true; // 自动降级模式
-  private apiKey = process.env.REACT_APP_RUNNINGHUB_API_KEY || ''; // 从环境变量读取
+  private apiTimeout = 15000; // 15秒超时（生成时间可能较长）
+  private fallbackMode = true;
+  
+  // API 凭证 - 从环境变量读取
+  private apiKey = process.env.REACT_APP_RUNNINGHUB_API_KEY || '';
+  private webappId = process.env.REACT_APP_RUNNINGHUB_WEBAPP_ID || '1877265245566922753'; // 默认海报生成应用ID
 
   /**
-   * 生成海报 - 真实 API 调用
+   * 生成海报 - 真实 RunningHub API 调用
    */
   async generatePoster(request: PosterGenerationRequest): Promise<PosterGenerationResponse> {
     const startTime = Date.now();
 
     try {
+      if (!this.apiKey) {
+        throw new Error('未配置 API 密钥。请设置 REACT_APP_RUNNINGHUB_API_KEY 环境变量。');
+      }
+
       // 1. 构建请求数据
       const payload = this.buildAPIPayload(request);
 
       console.log('🔄 调用 RunningHub API...', {
         endpoint: this.apiEndpoint,
-        payload: payload
+        webappId: this.webappId,
+        nodeCount: payload.nodeInfoList.length
       });
 
       // 2. 调用真实 API
       const response = await this.callRemoteAPI(payload);
       const duration = Date.now() - startTime;
 
-      if (response.success) {
+      if (response.code === 0 && response.data) {
         console.log('✅ API 调用成功', {
           duration: duration,
-          dataSize: JSON.stringify(response.data).length
+          taskId: response.data.taskId,
+          taskStatus: response.data.taskStatus
         });
 
         return {
           success: true,
-          data: response.data,
+          data: {
+            taskId: response.data.taskId,
+            taskStatus: response.data.taskStatus,
+            netWssUrl: response.data.netWssUrl,
+            clientId: response.data.clientId,
+            format: 'vertical',
+            size: {
+              width: 1080,
+              height: 1440
+            },
+            design: {
+              style: request.style || 'modern',
+              elements: ['generated_by_ai']
+            }
+          },
           meta: {
             source: 'api',
             processingTime: duration
           }
         };
       } else {
-        // API 返回错误，使用降级方案
-        console.warn('⚠️ API 返回错误:', response.error);
-        return this.fallbackGeneratePoster(request, duration);
+        // API 返回错误
+        console.warn('⚠️ API 返回错误:', response.msg || response.error);
+        return {
+          success: false,
+          error: {
+            code: String(response.code || 'UNKNOWN_ERROR'),
+            message: response.msg || '海报生成失败'
+          }
+        };
       }
     } catch (error: any) {
       console.error('❌ API 调用失败:', error.message);
       const duration = Date.now() - startTime;
 
-      // 如果启用了降级模式，使用本地生成
       if (this.fallbackMode) {
-        console.log('🔄 切换到本地生成...');
+        console.log('🔄 切换到离线模式...');
         return this.fallbackGeneratePoster(request, duration);
       } else {
         return {
@@ -105,62 +136,37 @@ class PosterGenerationAPIService {
 
   /**
    * 调用真实 RunningHub API
+   * 根据官方文档格式: https://www.runninghub.cn/runninghub-api-doc-cn/api-279098421
    */
   private async callRemoteAPI(payload: any): Promise<any> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.apiTimeout);
 
     try {
+      console.log('📤 发送请求到 RunningHub API:', this.apiEndpoint);
+      
       const response = await axios.post(this.apiEndpoint, payload, {
         timeout: this.apiTimeout,
         signal: controller.signal as any,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': this.apiKey ? `Bearer ${this.apiKey}` : undefined
+          'Content-Type': 'application/json'
         }
       });
 
       clearTimeout(timeoutId);
 
-      console.log('📨 API 响应:', {
+      console.log('📨 收到 API 响应:', {
         status: response.status,
         code: response.data?.code,
-        dataLength: response.data?.data ? JSON.stringify(response.data.data).length : 0
+        msg: response.data?.msg
       });
 
-      // 检查 API 响应
-      if (response.data?.code === 0 || response.data?.success) {
-        return {
-          success: true,
-          data: {
-            format: payload.format || 'vertical',
-            size: {
-              width: payload.format === 'horizontal' ? 1920 : 1080,
-              height: payload.format === 'horizontal' ? 1080 : 1440
-            },
-            design: {
-              style: payload.style || 'modern',
-              elements: ['generated_by_ai'],
-              colorScheme: response.data?.data?.colorScheme
-            },
-            posterUrl: response.data?.data?.url || response.data?.data?.posterUrl,
-            metadata: response.data?.data
-          }
-        };
-      } else {
-        return {
-          success: false,
-          error: {
-            code: response.data?.code || 'UNKNOWN_ERROR',
-            message: response.data?.msg || response.data?.message || '未知错误'
-          }
-        };
-      }
+      return response.data;
     } catch (error: any) {
       clearTimeout(timeoutId);
 
       if (error.code === 'ECONNABORTED') {
-        throw new Error('API 请求超时 (10秒)');
+        throw new Error('API 请求超时 (15秒)');
       }
 
       throw error;
@@ -168,51 +174,46 @@ class PosterGenerationAPIService {
   }
 
   /**
-   * 构建 API 请求体
+   * 构建真实 RunningHub API 请求体
+   * 格式: { webappId, apiKey, nodeInfoList }
    */
   private buildAPIPayload(request: PosterGenerationRequest): any {
-    const { content = '', style = 'modern', format = 'vertical', type = 'general' } = request;
+    const { content = '', style = 'modern' } = request;
 
-    // 根据内容生成提示词
-    const prompt = this.generatePrompt(content, type, style);
+    // 生成提示词
+    const prompt = this.generatePrompt(content, request.type || 'general', style);
 
+    // 根据官方文档格式构建请求
     return {
-      // RunningHub 特定字段
-      app_id: process.env.REACT_APP_RUNNINGHUB_APP_ID || 'poster-generator',
-      task_id: `poster_${Date.now()}`,
-
-      // 海报参数
-      poster_type: type,
-      content: content,
-      style: style,
-      format: format === 'vertical' ? '竖版' : '横版',
-      size: format === 'vertical' ? '1080x1440' : '1920x1080',
-
-      // AI 提示词
-      prompt: prompt,
-      prompt_lang: 'zh',
-
-      // 生成参数
-      quality: 'high', // high | medium | low
-      includeQRCode: request.includeQRCode ?? true,
-      includeWatermark: false,
+      // 必需字段
+      webappId: this.webappId,
+      apiKey: this.apiKey,
       
-      // 高级配置
-      ai_model: 'dall-e-3', // 使用高质量模型
-      temperature: 0.7,
-      seed: undefined // 随机生成
+      // 节点信息列表 - 定义要修改的字段
+      nodeInfoList: [
+        {
+          nodeId: '122', // 提示词节点 ID
+          fieldName: 'prompt',
+          fieldValue: prompt // 完整的 AI 提示词
+        },
+        {
+          nodeId: '123', // 样式节点 ID
+          fieldName: 'style',
+          fieldValue: style
+        }
+      ]
     };
   }
 
   /**
-   * 根据类型和样式生成提示词
+   * 生成 AI 提示词
    */
   private generatePrompt(content: string, type: string, style: string): string {
     const styleDescriptions: { [key: string]: string } = {
-      modern: '现代、简洁、专业的',
-      elegant: '优雅、高端、精致的',
-      playful: '活泼、开心、充满活力的',
-      minimalist: '简约、纯净、高效的'
+      modern: '现代、简洁、专业',
+      elegant: '优雅、高端、精致',
+      playful: '活泼、开心、充满活力',
+      minimalist: '简约、纯净、高效'
     };
 
     const typeDescriptions: { [key: string]: string } = {
@@ -220,73 +221,44 @@ class PosterGenerationAPIService {
       product: '产品展示',
       skincare: '护肤服务',
       event: '活动宣传',
-      general: '通用推广'
+      general: '商业推广'
     };
 
     const styleDesc = styleDescriptions[style] || '专业的';
-    const typeDesc = typeDescriptions[type] || '推广';
+    const typeDesc = typeDescriptions[type] || '商业推广';
 
-    return `生成一个${styleDesc}${typeDesc}海报。
-内容主题: ${content}
-要求:
+    return `生成一个${styleDesc}的${typeDesc}海报。
+
+内容: ${content}
+
+设计要求:
 - 视觉吸引力强
 - 信息清晰易读
 - 专业商业级设计
-- 符合${typeDesc}特点
 - 配色协调美观
-- 适合微信分享和网页展示`;
+- 适合微信分享和网页展示
+- 竖版 1080x1440 格式
+- 无其他品牌名称`;
   }
 
   /**
-   * 降级方案 - 本地生成（当 API 不可用时）
+   * 降级方案 - 当 API 不可用时
    */
   private fallbackGeneratePoster(
     request: PosterGenerationRequest,
     apiDuration: number
   ): PosterGenerationResponse {
-    const startTime = Date.now();
-
-    // 这里可以调用本地的 Canvas 绘制或返回错误
     return {
       success: false,
       error: {
         code: 'API_UNAVAILABLE',
-        message: 'RunningHub API 暂时不可用，无法生成高质量海报。请稍后重试或联系技术支持。'
+        message: 'RunningHub API 暂时不可用。请检查网络连接和 API 密钥配置。'
       },
       meta: {
         source: 'local',
-        processingTime: apiDuration + (Date.now() - startTime)
+        processingTime: apiDuration
       }
     };
-  }
-
-  /**
-   * 批量生成海报
-   */
-  async generatePosterBatch(
-    requests: PosterGenerationRequest[]
-  ): Promise<PosterGenerationResponse[]> {
-    const results: PosterGenerationResponse[] = [];
-
-    // 串行处理，避免过度并发
-    for (const request of requests) {
-      try {
-        const response = await this.generatePoster(request);
-        results.push(response);
-        // 延迟 100ms 避免 API 限流
-        await new Promise(resolve => setTimeout(resolve, 100));
-      } catch (error: any) {
-        results.push({
-          success: false,
-          error: {
-            code: 'BATCH_ERROR',
-            message: error.message
-          }
-        });
-      }
-    }
-
-    return results;
   }
 
   /**
@@ -294,25 +266,62 @@ class PosterGenerationAPIService {
    */
   async getAPIStatus(): Promise<{ available: boolean; status: string; lastCheck: string }> {
     try {
-      const response = await axios.get(
-        `${this.apiEndpoint}?action=health`,
-        { timeout: 3000 }
-      );
+      if (!this.apiKey) {
+        return {
+          available: false,
+          status: '未配置 API 密钥',
+          lastCheck: new Date().toISOString()
+        };
+      }
 
-      const available = response.status === 200 && (response.data?.code === 0 || response.data?.success);
+      // 尝试调用 API 检查状态
+      const testPayload = this.buildAPIPayload({
+        content: '测试',
+        type: 'general'
+      });
+
+      const response = await axios.post(this.apiEndpoint, testPayload, {
+        timeout: 5000,
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const available = response.data?.code === 0 || response.status === 200;
 
       return {
         available: available,
-        status: available ? 'ONLINE' : 'ERROR',
+        status: available ? '在线' : '错误',
         lastCheck: new Date().toISOString()
       };
     } catch (error: any) {
       return {
         available: false,
-        status: error.code === 'ECONNABORTED' ? 'TIMEOUT' : 'OFFLINE',
+        status: error.code === 'ECONNABORTED' ? '超时' : '离线',
         lastCheck: new Date().toISOString()
       };
     }
+  }
+
+  /**
+   * 设置 API 密钥
+   */
+  setAPIKey(key: string): void {
+    this.apiKey = key;
+    console.log('✅ API 密钥已设置');
+  }
+
+  /**
+   * 设置 WebApp ID
+   */
+  setWebappId(id: string): void {
+    this.webappId = id;
+    console.log('✅ WebApp ID 已设置');
+  }
+
+  /**
+   * 设置超时时间
+   */
+  setTimeout(ms: number): void {
+    this.apiTimeout = ms;
   }
 
   /**
@@ -321,20 +330,6 @@ class PosterGenerationAPIService {
   setAPIFallbackMode(enabled: boolean): void {
     this.fallbackMode = enabled;
     console.log(`🔄 降级模式: ${enabled ? '启用' : '禁用'}`);
-  }
-
-  /**
-   * 设置 API 超时时间
-   */
-  setTimeout(ms: number): void {
-    this.apiTimeout = ms;
-  }
-
-  /**
-   * 设置 API 密钥
-   */
-  setAPIKey(key: string): void {
-    this.apiKey = key;
   }
 }
 
