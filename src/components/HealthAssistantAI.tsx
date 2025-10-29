@@ -44,7 +44,7 @@ export const HealthAssistantAI: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // 这里应该调用实际的 AI API（如 OpenAI, 讯飞等）
-      // 现在使用示例输出
+      // 现在使用详细建议输出
       const mockResponse = healthAssistantAIService.getExampleOutput();
       const parsedResponse = healthAssistantAIService.parseAIResponse(mockResponse);
       setAiResponse(parsedResponse);
@@ -266,38 +266,75 @@ export const HealthAssistantAI: React.FC = () => {
                 <>
                   <h2 className="text-2xl font-bold text-gray-900">您的个性化建议</h2>
 
-                  {/* 综合建议 */}
-                  <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-lg p-6 border border-violet-200">
-                    <h3 className="text-lg font-bold text-gray-900 mb-4">综合建议</h3>
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                      {aiResponse.advice}
-                    </p>
-                  </div>
+                  {/* 综合建议 - 展开/收起 */}
+                  <details className="group bg-gradient-to-r from-violet-50 to-purple-50 rounded-lg p-6 border border-violet-200 cursor-pointer">
+                    <summary className="font-bold text-gray-900 text-lg mb-4 flex items-center justify-between">
+                      <span>📋 完整建议</span>
+                      <span className="text-violet-600 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div className="space-y-3 text-gray-700 leading-relaxed text-sm">
+                      {aiResponse.advice.split('\n').map((line, idx) => (
+                        line.trim() && (
+                          <p key={idx} className="flex items-start gap-3">
+                            <span className="text-violet-600 font-bold min-w-[1.5rem]">✓</span>
+                            <span>{line}</span>
+                          </p>
+                        )
+                      ))}
+                    </div>
+                  </details>
 
-                  {/* 分类建议 */}
-                  <div className="grid md:grid-cols-3 gap-4">
-                    {/* 护肤 */}
-                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
-                      <h4 className="font-bold text-blue-900 mb-2">💆 护肤建议</h4>
-                      <p className="text-sm text-blue-800">
-                        {aiResponse.skinCare}
-                      </p>
+                  {/* 分类详细建议 */}
+                  <div className="space-y-4">
+                    {/* 护肤建议 */}
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-5 border-2 border-blue-200">
+                      <h4 className="font-bold text-blue-900 mb-3 text-lg flex items-center gap-2">
+                        <span>💆</span> 护肤建议
+                      </h4>
+                      <div className="space-y-2 text-sm text-blue-800">
+                        {aiResponse.skinCare.split('\n').map((line, idx) => (
+                          line.trim() && (
+                            <div key={idx} className="flex items-start gap-2 bg-white bg-opacity-50 p-2 rounded">
+                              <span className="text-blue-600 font-bold">→</span>
+                              <span>{line}</span>
+                            </div>
+                          )
+                        ))}
+                      </div>
                     </div>
 
-                    {/* 饮食 */}
-                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
-                      <h4 className="font-bold text-green-900 mb-2">🥗 饮食建议</h4>
-                      <p className="text-sm text-green-800">
-                        {aiResponse.diet}
-                      </p>
+                    {/* 饮食建议 */}
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-5 border-2 border-green-200">
+                      <h4 className="font-bold text-green-900 mb-3 text-lg flex items-center gap-2">
+                        <span>🥗</span> 饮食建议
+                      </h4>
+                      <div className="space-y-2 text-sm text-green-800">
+                        {aiResponse.diet.split('\n').map((line, idx) => (
+                          line.trim() && (
+                            <div key={idx} className="flex items-start gap-2 bg-white bg-opacity-50 p-2 rounded">
+                              <span className="text-green-600 font-bold">→</span>
+                              <span>{line}</span>
+                            </div>
+                          )
+                        ))}
+                      </div>
                     </div>
 
-                    {/* 生活习惯 */}
-                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
-                      <h4 className="font-bold text-orange-900 mb-2">⏰ 生活习惯</h4>
-                      <p className="text-sm text-orange-800">
-                        {aiResponse.lifestyle}
-                      </p>
+                    {/* 生活习惯建议 */}
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-5 border-2 border-orange-200">
+                      <h4 className="font-bold text-orange-900 mb-3 text-lg flex items-center gap-2">
+                        <span>⏰</span> 生活习惯
+                      </h4>
+                      <div className="space-y-2 text-sm text-orange-800">
+                        {aiResponse.lifestyle.split('\n').map((line, idx) => (
+                          line.trim() && (
+                            <div key={idx} className="flex items-start gap-2 bg-white bg-opacity-50 p-2 rounded">
+                              <span className="text-orange-600 font-bold">→</span>
+                              <span>{line}</span>
+                            </div>
+                          )
+                        ))}
+                      </div>
                     </div>
                   </div>
 
