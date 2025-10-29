@@ -22,18 +22,19 @@ export const Navigation: React.FC<NavigationProps> = ({
       { id: 'shop', label: '商城装修', icon: ShoppingBag },
       { id: 'training', label: '培训教育', icon: BookOpen },
       { id: 'ai', label: 'AI', icon: Zap },
-      { id: 'smart-photo-series', label: '智能拍照', icon: Camera }
+      { id: 'health-assistant', label: '健康助手', icon: Camera }
     ],
     staff: [
       { id: 'dashboard', label: '我的日程', icon: Users },
       { id: 'customermanagement', label: '我的客户', icon: Users },
-      { id: 'training', label: '培训学习', icon: BookOpen }
+      { id: 'training', label: '培训学习', icon: BookOpen },
+      { id: 'health-assistant', label: '健康助手', icon: Camera }
     ],
     customer: [
       { id: 'onsite-booking', label: '上门服务', icon: Home },
       { id: 'customermanagement', label: '我的预约', icon: Users },
       { id: 'shop', label: '美容商城', icon: ShoppingBag },
-      { id: 'smart-photo-series', label: '智能拍照', icon: Camera }
+      { id: 'health-assistant', label: '健康助手', icon: Camera }
     ]
   };
 

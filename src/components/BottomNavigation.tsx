@@ -23,19 +23,22 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       { id: 'staff', label: '美容师', icon: Users },
       { id: 'shop', label: '商城', icon: ShoppingBag },
       { id: 'ai', label: 'AI', icon: Zap },
-      { id: 'procurement', label: '采购', icon: ShoppingBag }
+      { id: 'procurement', label: '采购', icon: ShoppingBag },
+      { id: 'health-assistant', label: '健康助手', icon: Users }
     ],
     staff: [
       { id: 'dashboard', label: '日程', icon: Users },
       { id: 'customermanagement', label: '客户', icon: Users },
       { id: 'ai', label: 'AI建议', icon: Zap },
-      { id: 'shop', label: '产品', icon: ShoppingBag }
+      { id: 'shop', label: '产品', icon: ShoppingBag },
+      { id: 'health-assistant', label: '健康助手', icon: Users }
     ],
     customer: [
       { id: 'onsite-booking', label: '上门服务', icon: Home },
       { id: 'customermanagement', label: '预约', icon: Users },
       { id: 'shop', label: '商城', icon: ShoppingBag },
-      { id: 'ai', label: '推荐', icon: Zap }
+      { id: 'ai', label: '推荐', icon: Zap },
+      { id: 'health-assistant', label: '健康助手', icon: Users }
     ]
   };
 

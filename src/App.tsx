@@ -93,7 +93,7 @@ function AppContent() {
         return <BeautyDiagnosis />;
       case 'tongue-coating-detection':
         return <TongueCoatingDetection />;
-      case 'smart-photo-series':
+      case 'health-assistant':
         return <SmartPhotoSeries onSelectService={setCurrentPage} />;
       default:
         return <Dashboard />;
