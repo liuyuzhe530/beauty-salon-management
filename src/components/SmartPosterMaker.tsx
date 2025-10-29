@@ -1,12 +1,13 @@
 /**
  * 智能海报制作系统
- * 集成 RunningHub API + AI 智能模板推荐
+ * 集成 RunningHub API + AI 智能模板推荐 + 商用图片搜索
  * 用户只需选择模板，系统自动生成海报
  */
 
 import React, { useState } from 'react';
-import { Wand2, Zap, BarChart3, Sparkles, Download, Share2, Copy, Loader } from 'lucide-react';
+import { Wand2, Zap, BarChart3, Sparkles, Download, Share2, Copy, Loader, Image as ImageIcon, Search } from 'lucide-react';
 import posterGenerationAPIService from '../services/posterGenerationAPIService';
+import commercialImageSearchService, { StockImage, ImageSearchResponse } from '../services/commercialImageSearchService';
 
 // ============= 类型定义 =============
 
@@ -33,6 +34,7 @@ interface GeneratedPoster {
   status: 'pending' | 'generating' | 'success' | 'error';
   taskId?: string;
   posterUrl?: string;
+  backgroundImage?: StockImage;
   error?: string;
   generatedAt?: Date;
 }
@@ -165,6 +167,13 @@ export const SmartPosterMaker: React.FC = () => {
   const [generatedPosters, setGeneratedPosters] = useState<GeneratedPoster[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  
+  // 图片搜索相关状态
+  const [showImageSearch, setShowImageSearch] = useState(false);
+  const [searchImages, setSearchImages] = useState<StockImage[]>([]);
+  const [selectedImage, setSelectedImage] = useState<StockImage | null>(null);
+  const [isSearchingImages, setIsSearchingImages] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   // ============= 智能内容推荐 =============
 
@@ -192,6 +201,48 @@ export const SmartPosterMaker: React.FC = () => {
     });
 
     return content;
+  };
+
+  // ============= 图片搜索 =============
+
+  const handleSearchImages = async (template: PosterTemplate) => {
+    setIsSearchingImages(true);
+    setSearchError(null);
+    
+    try {
+      // 根据模板类别搜索相关图片
+      const themeMappings: { [key: string]: string } = {
+        'promotion': 'seasonal-promotion',
+        'product': 'new-product',
+        'skincare': 'skincare-routine',
+        'event': 'event-invitation',
+        'seasonal': 'seasonal-promotion'
+      };
+      
+      const theme = themeMappings[template.category] || 'seasonal-promotion';
+      const response = await commercialImageSearchService.searchByTheme({
+        theme,
+        category: template.category,
+        style: template.style,
+        perPage: 12
+      });
+      
+      if (response.success) {
+        setSearchImages(response.images);
+        setShowImageSearch(true);
+      } else {
+        setSearchError(response.error || '搜索失败，请重试');
+      }
+    } catch (error) {
+      console.error('搜索图片失败:', error);
+      setSearchError('搜索失败，请检查网络连接');
+    } finally {
+      setIsSearchingImages(false);
+    }
+  };
+
+  const handleSelectImage = (image: StockImage) => {
+    setSelectedImage(image);
   };
 
   // ============= 生成海报 =============
@@ -379,26 +430,48 @@ export const SmartPosterMaker: React.FC = () => {
                   </div>
 
                   {/* 按钮 */}
-                  <button
-                    className="w-full mt-4 bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 group-hover:shadow-lg disabled:opacity-50"
-                    disabled={isGenerating}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleGeneratePoster(template);
-                    }}
-                  >
-                    {isGenerating ? (
-                      <>
-                        <Loader className="w-4 h-4 animate-spin" />
-                        生成中...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4" />
-                        一键生成
-                      </>
-                    )}
-                  </button>
+                  <div className="flex gap-2 mt-4">
+                    <button
+                      className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                      disabled={isSearchingImages}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSearchImages(template);
+                      }}
+                    >
+                      {isSearchingImages ? (
+                        <>
+                          <Loader className="w-4 h-4 animate-spin" />
+                          搜索中...
+                        </>
+                      ) : (
+                        <>
+                          <Search className="w-4 h-4" />
+                          搜索图片
+                        </>
+                      )}
+                    </button>
+                    <button
+                      className="flex-1 bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 group-hover:shadow-lg disabled:opacity-50"
+                      disabled={isGenerating}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleGeneratePoster(template);
+                      }}
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader className="w-4 h-4 animate-spin" />
+                          生成中...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4" />
+                          一键生成
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -480,6 +553,100 @@ export const SmartPosterMaker: React.FC = () => {
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {/* 图片搜索结果模态 */}
+      {showImageSearch && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* 标题 */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <ImageIcon className="w-5 h-5 text-blue-600" />
+                  选择背景图片
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">为您的海报选择一张商用图片</p>
+              </div>
+              <button
+                onClick={() => setShowImageSearch(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                x
+              </button>
+            </div>
+
+            {/* 错误提示 */}
+            {searchError && (
+              <div className="m-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                {searchError}
+              </div>
+            )}
+
+            {/* 图片网格 */}
+            <div className="p-6">
+              {searchImages.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <ImageIcon className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>未找到相关图片</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {searchImages.map(image => (
+                    <div
+                      key={image.id}
+                      onClick={() => handleSelectImage(image)}
+                      className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                        selectedImage?.id === image.id
+                          ? 'border-purple-600 shadow-lg'
+                          : 'border-gray-200 hover:border-purple-400'
+                      }`}
+                    >
+                      <div className="relative pb-[100%]">
+                        <img
+                          src={image.thumbnailUrl}
+                          alt={image.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        {selectedImage?.id === image.id && (
+                          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                            <div className="text-white text-2xl">已选择</div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-2 bg-gray-50">
+                        <p className="text-xs font-medium text-gray-900 truncate">{image.source}</p>
+                        <p className="text-xs text-gray-600">{image.width}x{image.height}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 页脚 */}
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 flex gap-3 justify-end">
+              <button
+                onClick={() => setShowImageSearch(false)}
+                className="px-4 py-2 text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={() => {
+                  if (selectedImage) {
+                    setShowImageSearch(false);
+                    // 可以在这里保存选中的图片
+                  }
+                }}
+                disabled={!selectedImage}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                确认选择
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
