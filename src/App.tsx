@@ -8,7 +8,7 @@ import { BottomNavigation } from './components/BottomNavigation';
 import { Dashboard } from './components/Dashboard';
 import { Staff } from './components/Staff';
 import { CustomerManagement } from './components/CustomerManagement';
-import { MallPage } from './components/MallPage';
+import { BeautyProductMall } from './components/BeautyProductMall';
 import { AIAssistant } from './components/AIAssistant';
 import { Promotion } from './components/Promotion';
 import { AIChat } from './components/AIChat';
@@ -70,7 +70,7 @@ function AppContent() {
       case 'staff':
         return <Staff />;
       case 'shop':
-        return <MallPage />;
+        return <BeautyProductMall />;
       case 'ai':
         return <AIAssistant />;
       case 'promotion':
