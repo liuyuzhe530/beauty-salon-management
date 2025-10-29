@@ -323,8 +323,8 @@ const PosterMaker: React.FC = () => {
     const canvas = document.createElement('canvas');
     
     if (isVertical) {
-    canvas.width = 1080;
-    canvas.height = 1440;
+      canvas.width = 1080;
+      canvas.height = 1440;
     } else {
       canvas.width = 1920;
       canvas.height = 1080;
@@ -343,11 +343,12 @@ const PosterMaker: React.FC = () => {
     ctx.fillStyle = accentColor;
     ctx.fillRect(0, 0, canvas.width, isVertical ? 240 : 180);
 
-    // 标题
+    // 标题 - 从海报内容第一行获取
+    const titleText = poster.content.split('\n')[0] || '推荐推广';
     ctx.fillStyle = secondaryText;
     ctx.font = `bold ${isVertical ? 80 : 60}px Arial`;
     ctx.textAlign = 'center';
-    ctx.fillText('美容院特别推荐', canvas.width / 2, isVertical ? 160 : 120);
+    ctx.fillText(titleText, canvas.width / 2, isVertical ? 160 : 120);
 
     // 主要内容
     ctx.fillStyle = textColor;
@@ -357,19 +358,20 @@ const PosterMaker: React.FC = () => {
     let yPosition = isVertical ? 450 : 350;
     const lineHeight = isVertical ? 100 : 80;
 
-    lines.slice(0, 3).forEach((line: string) => {
+    // 跳过第一行（已作为标题），显示剩余内容
+    lines.slice(1, 3).forEach((line: string) => {
       ctx.fillText(line, canvas.width / 2, yPosition);
       yPosition += lineHeight;
     });
 
-    // 底部 CTA
+    // 底部 CTA - 改为通用文案
     ctx.fillStyle = accentColor;
     ctx.fillRect(0, isVertical ? canvas.height - 180 : canvas.height - 150, canvas.width, isVertical ? 180 : 150);
     
     ctx.fillStyle = secondaryText;
     ctx.font = `bold ${isVertical ? 60 : 48}px Arial`;
     ctx.textAlign = 'center';
-    ctx.fillText('立即预约咨询', canvas.width / 2, isVertical ? canvas.height - 70 : canvas.height - 55);
+    ctx.fillText('立即了解更多', canvas.width / 2, isVertical ? canvas.height - 70 : canvas.height - 55);
 
     return canvas;
   };
@@ -510,7 +512,7 @@ const PosterMaker: React.FC = () => {
                   style={{ backgroundColor: generatedPoster.colors.accentColor }}
                   className="px-4 py-6 text-center text-white"
                 >
-                  <div className="text-2xl font-bold">美容院特别推荐</div>
+                  <div className="text-2xl font-bold">{generatedPoster.content.split('\n')[0] || '特别推荐'}</div>
                 </div>
 
                 {/* 内容 */}
@@ -519,7 +521,7 @@ const PosterMaker: React.FC = () => {
                     style={{ color: generatedPoster.colors.textColor }}
                     className="text-lg font-semibold whitespace-pre-wrap"
                   >
-                    {generatedPoster.content}
+                    {generatedPoster.content.split('\n').slice(1).join('\n')}
                   </div>
                 </div>
 
@@ -528,7 +530,7 @@ const PosterMaker: React.FC = () => {
                   style={{ backgroundColor: generatedPoster.colors.accentColor }}
                   className="px-4 py-4 text-center text-white font-bold text-lg"
                 >
-                  立即预约咨询
+                  立即了解更多
                 </div>
               </div>
             </div>
