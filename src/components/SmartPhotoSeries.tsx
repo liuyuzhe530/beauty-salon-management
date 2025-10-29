@@ -1,5 +1,6 @@
-import React from 'react';
-import { Camera, Heart, TrendingUp, Zap, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Camera, Heart, TrendingUp, Zap, ChevronRight, Brain } from 'lucide-react';
+import { HealthAssistantAI } from './HealthAssistantAI';
 
 interface DetectionService {
   id: string;
@@ -16,6 +17,8 @@ interface SmartPhotoSeriesProps {
 }
 
 export const SmartPhotoSeries: React.FC<SmartPhotoSeriesProps> = ({ onSelectService }) => {
+  const [selectedAIService, setSelectedAIService] = useState<string | null>(null);
+
   const services: DetectionService[] = [
     {
       id: 'skincare-detection',
@@ -43,8 +46,33 @@ export const SmartPhotoSeries: React.FC<SmartPhotoSeriesProps> = ({ onSelectServ
       features: ['体质诊断', '中医调理', '食疗方案'],
       color: 'from-amber-600 to-orange-600',
       bgColor: 'from-amber-50 to-orange-50'
+    },
+    {
+      id: 'health-assistant-ai',
+      title: 'AI 健康助手',
+      description: '基于个人信息，提供个性化护肤、饮食和生活建议',
+      icon: <Brain className="w-12 h-12" />,
+      features: ['个性化分析', '护肤建议', '饮食方案', '生活指导'],
+      color: 'from-violet-600 to-purple-600',
+      bgColor: 'from-violet-50 to-purple-50'
     }
   ];
+
+  // 如果选择了 AI 健康助手，显示 AI 组件
+  if (selectedAIService === 'health-assistant-ai') {
+    return (
+      <div className="space-y-6">
+        <button
+          onClick={() => setSelectedAIService(null)}
+          className="flex items-center gap-2 text-violet-600 hover:text-violet-700 font-semibold mb-4"
+        >
+          <ChevronRight className="w-4 h-4 rotate-180" />
+          返回健康助手列表
+        </button>
+        <HealthAssistantAI />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -54,14 +82,14 @@ export const SmartPhotoSeries: React.FC<SmartPhotoSeriesProps> = ({ onSelectServ
           <Zap className="w-8 h-8" />
           <h1 className="text-3xl font-bold">智能拍照检测系列</h1>
         </div>
-        <p className="text-blue-100 text-lg">一键拍照，多维诊断 • 皮肤 • 美容 • 健康</p>
+        <p className="text-blue-100 text-lg">一键拍照，多维诊断 • 皮肤 • 美容 • 健康 • AI助手</p>
       </div>
 
       {/* 介绍卡片 */}
       <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border-2 border-blue-200 p-6">
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-4 gap-6">
           <div className="text-center">
-            <div className="text-4xl font-bold text-blue-600 mb-2">3</div>
+            <div className="text-4xl font-bold text-blue-600 mb-2">4</div>
             <p className="text-gray-700 font-semibold">智能诊断服务</p>
             <p className="text-sm text-gray-600 mt-1">全面覆盖皮肤、美容、健康</p>
           </div>
@@ -75,50 +103,61 @@ export const SmartPhotoSeries: React.FC<SmartPhotoSeriesProps> = ({ onSelectServ
             <p className="text-gray-700 font-semibold">快速诊断</p>
             <p className="text-sm text-gray-600 mt-1">获得完整检测报告</p>
           </div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-purple-600 mb-2">个性化</div>
+            <p className="text-gray-700 font-semibold">AI助手</p>
+            <p className="text-sm text-gray-600 mt-1">专属美容院建议</p>
+          </div>
         </div>
       </div>
 
       {/* 服务卡片网格 */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {services.map(service => (
           <div
             key={service.id}
             className="group"
           >
             <button
-              onClick={() => onSelectService(service.id)}
+              onClick={() => {
+                if (service.id === 'health-assistant-ai') {
+                  setSelectedAIService(service.id);
+                } else {
+                  onSelectService(service.id);
+                }
+              }}
               className="w-full h-full"
             >
-              <div className={`bg-gradient-to-br ${service.bgColor} rounded-lg border-2 border-gray-200 p-8 hover:shadow-xl transition-all duration-300 group-hover:border-transparent h-full flex flex-col`}>
+              <div className={`bg-gradient-to-br ${service.bgColor} rounded-lg border-2 border-gray-200 p-6 hover:shadow-xl transition-all duration-300 group-hover:border-transparent h-full flex flex-col`}>
                 {/* 图标 */}
-                <div className={`bg-gradient-to-br ${service.color} rounded-lg p-4 text-white w-fit mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                <div className={`bg-gradient-to-br ${service.color} rounded-lg p-3 text-white w-fit mx-auto mb-3 group-hover:scale-110 transition-transform`}>
                   {service.icon}
                 </div>
 
                 {/* 标题 */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {service.title}
                 </h3>
 
                 {/* 描述 */}
-                <p className="text-gray-600 mb-4 flex-1">
+                <p className="text-gray-600 mb-3 flex-1 text-sm">
                   {service.description}
                 </p>
 
                 {/* 特性列表 */}
-                <div className="space-y-2 mb-6">
+                <div className="space-y-1 mb-4">
                   {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm text-gray-700">
-                      <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+                    <div key={idx} className="flex items-center gap-2 text-xs text-gray-700">
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
                       {feature}
                     </div>
                   ))}
                 </div>
 
                 {/* 按钮 */}
-                <div className={`bg-gradient-to-r ${service.color} text-white py-3 px-4 rounded-lg font-bold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all`}>
+                <div className={`bg-gradient-to-r ${service.color} text-white py-2 px-3 rounded-lg font-bold flex items-center justify-center gap-2 group-hover:shadow-lg transition-all text-sm`}>
                   <Camera className="w-4 h-4" />
-                  立即检测
+                  {service.id === 'health-assistant-ai' ? '立即开始' : '立即检测'}
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
