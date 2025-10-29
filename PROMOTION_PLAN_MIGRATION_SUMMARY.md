@@ -7,10 +7,10 @@
 
 ### 1. `src/components/Staff.tsx`
 **修改内容：**
-- ✅ 导入 `PromotionPlan` 组件
-- ✅ 更新 `activeTab` 状态，添加 `'promotion'` 类型
-- ✅ 在标签页导航中添加"晋升计划"按钮，包含 `TrendingUp` 图标
-- ✅ 添加晋升计划标签页内容，显示 `<PromotionPlan />` 组件
+-  导入 `PromotionPlan` 组件
+-  更新 `activeTab` 状态，添加 `'promotion'` 类型
+-  在标签页导航中添加"晋升计划"按钮，包含 `TrendingUp` 图标
+-  添加晋升计划标签页内容，显示 `<PromotionPlan />` 组件
 
 **新增标签页按钮：**
 ```
@@ -22,7 +22,7 @@
 
 ### 2. `src/components/Navigation.tsx`
 **修改内容：**
-- ✅ 美容师（staff）角色的导航菜单项改变：
+-  美容师（staff）角色的导航菜单项改变：
   - 从：`{ id: 'promotion-plan', label: '晋升计划', icon: TrendingUp }`
   - 改为：`{ id: 'staff', label: '晋升计划', icon: TrendingUp }`
 
@@ -44,7 +44,7 @@
 
 ## 用户体验改进
 
-✨ **优势：**
+ **优势：**
 1. **集中管理**：所有美容师相关功能统一在一个页面内
 2. **更好的导航结构**：减少顶级菜单项，保持清晰
 3. **功能联系更紧密**：晋升计划与美容师管理关联度更高
@@ -52,10 +52,10 @@
 
 ## 测试验证
 
-✅ 代码通过 linter 检查，无错误
-✅ TypeScript 类型检查完成
-✅ 导航逻辑正确
-✅ 组件集成正确
+ 代码通过 linter 检查，无错误
+ TypeScript 类型检查完成
+ 导航逻辑正确
+ 组件集成正确
 
 ## 后续说明
 

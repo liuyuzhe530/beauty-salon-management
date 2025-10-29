@@ -592,7 +592,7 @@ export const CustomerManagement: React.FC = () => {
 
           {/* 今日预约 */}
           <div className="bg-white rounded-lg border border-green-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">📅 今日预约 ({todayAppointments.length})</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4"> 今日预约 ({todayAppointments.length})</h2>
             {todayAppointments.length > 0 ? (
               <div className="space-y-3">
                 {todayAppointments.map(apt => (
@@ -623,7 +623,7 @@ export const CustomerManagement: React.FC = () => {
 
           {/* 即将到来的预约 */}
           <div className="bg-white rounded-lg border border-green-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">🚀 即将到来的预约 (后续5个)</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4"> 即将到来的预约 (后续5个)</h2>
             {upcomingAppointments.length > 0 ? (
               <div className="space-y-3">
                 {upcomingAppointments.map(apt => (
@@ -663,7 +663,7 @@ export const CustomerManagement: React.FC = () => {
 
           {/* 待处理预约 */}
           <div className="bg-white rounded-lg border border-yellow-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">⏳ 待处理预约</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4"> 待处理预约</h2>
             {pendingAppointments.length > 0 ? (
               <div className="space-y-3">
                 {pendingAppointments.map(apt => (
@@ -754,7 +754,7 @@ export const CustomerManagement: React.FC = () => {
                     <div>
                       <h4 className="font-bold text-gray-900 flex items-center gap-2">
                         <span className="text-lg">
-                          {rec.priority === 'high' ? '🔴' : rec.priority === 'medium' ? '🟡' : '🔵'}
+                          {rec.priority === 'high' ? '' : rec.priority === 'medium' ? '' : ''}
                         </span>
                         {rec.title}
                       </h4>
@@ -789,22 +789,22 @@ export const CustomerManagement: React.FC = () => {
 
           {/* 智能建议 */}
           <div className="bg-white rounded-lg border border-green-200 p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">💡 智能决策支持</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4"> 智能决策支持</h3>
             <div className="space-y-3">
               <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                <p className="font-medium text-gray-900">✓ 预约管理</p>
+                <p className="font-medium text-gray-900"> 预约管理</p>
                 <p className="text-sm text-gray-700 mt-1">
                   建议优先处理 {pendingAppointments.length} 个待确认预约，预计可提升 15-20% 的确认率。
                 </p>
               </div>
               <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="font-medium text-gray-900">✓ 客户关怀</p>
+                <p className="font-medium text-gray-900"> 客户关怀</p>
                 <p className="text-sm text-gray-700 mt-1">
                   {customers.filter(c => c.status === 'inactive').length} 位不活跃客户建议进行主动关怀，预计可激活 20-30%。
                 </p>
               </div>
               <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                <p className="font-medium text-gray-900">✓ 收益优化</p>
+                <p className="font-medium text-gray-900"> 收益优化</p>
                 <p className="text-sm text-gray-700 mt-1">
                   建议为完成预约的客户推荐增值服务，可增长 10-15% 的客单价。
                 </p>

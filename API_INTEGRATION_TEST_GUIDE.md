@@ -1,11 +1,11 @@
 
-# 🧪 API 集成测试指南
+#  API 集成测试指南
 
 完整的 RunningHub API 集成测试方案和使用说明。
 
 ---
 
-## 📋 目录
+##  目录
 
 1. [快速开始](#快速开始)
 2. [测试方法](#测试方法)
@@ -17,7 +17,7 @@
 
 ---
 
-## 🚀 快速开始
+##  快速开始
 
 ### 方法 1: 浏览器控制台（最快）
 
@@ -29,7 +29,7 @@
 // 检查 API 状态
 import('src/services/posterGenerationAPIService.js').then(m => {
   m.posterGenerationAPIService.getAPIStatus().then(status => {
-    console.log('🔍 API 状态:', status);
+    console.log(' API 状态:', status);
   });
 });
 ```
@@ -43,7 +43,7 @@ npm test -- src/test/api-integration.test.ts
 
 ---
 
-## 🧪 测试方法
+##  测试方法
 
 ### 测试 1️⃣ : API 可用性检查
 
@@ -119,7 +119,7 @@ const requests = [
 const responses = await posterGenerationAPIService.generatePosterBatch(requests);
 console.log(`成功: ${responses.filter(r => r.success).length}/${responses.length}`);
 responses.forEach((r, i) => {
-  console.log(`海报 ${i + 1}:`, r.success ? '✅' : '❌');
+  console.log(`海报 ${i + 1}:`, r.success ? '' : '');
 });
 ```
 
@@ -165,7 +165,7 @@ for (let i = 0; i < iterations; i++) {
 
 const avg = times.reduce((a, b) => a + b) / times.length;
 console.log(`
-📊 性能统计:
+ 性能统计:
   平均时间: ${avg.toFixed(2)}ms
   最快: ${Math.min(...times).toFixed(2)}ms
   最慢: ${Math.max(...times).toFixed(2)}ms
@@ -174,7 +174,7 @@ console.log(`
 
 ---
 
-## 💻 浏览器控制台测试
+##  浏览器控制台测试
 
 ### 完整测试脚本
 
@@ -189,20 +189,20 @@ const groupEnd = console.groupEnd;
 const error = console.error;
 
 async function runAllTests() {
-  log('🚀 开始 API 集成测试...\n');
+  log(' 开始 API 集成测试...\n');
   
   try {
     const service = (await import('src/services/posterGenerationAPIService.js')).posterGenerationAPIService;
     
     // 测试 1: API 可用性
-    group('🧪 测试 1: API 可用性');
+    group(' 测试 1: API 可用性');
     const status = await service.getAPIStatus();
     log('API 状态:', status);
-    log(status.available ? '✅ API 在线' : '❌ API 离线');
+    log(status.available ? ' API 在线' : ' API 离线');
     groupEnd();
     
     // 测试 2: 生成促销海报
-    group('🧪 测试 2: 生成促销海报');
+    group(' 测试 2: 生成促销海报');
     const promoResponse = await service.generatePoster({
       content: '限时优惠 50% 折扣',
       style: 'modern',
@@ -210,11 +210,11 @@ async function runAllTests() {
       type: 'promotion'
     });
     log('生成结果:', promoResponse);
-    log(promoResponse.success ? '✅ 成功' : '❌ 失败');
+    log(promoResponse.success ? ' 成功' : ' 失败');
     groupEnd();
     
     // 测试 3: 生成产品海报
-    group('🧪 测试 3: 生成产品海报');
+    group(' 测试 3: 生成产品海报');
     const productResponse = await service.generatePoster({
       content: '新品上市 高端护肤精华液',
       style: 'elegant',
@@ -222,22 +222,22 @@ async function runAllTests() {
       type: 'product'
     });
     log('生成结果:', productResponse);
-    log(productResponse.success ? '✅ 成功' : '❌ 失败');
+    log(productResponse.success ? ' 成功' : ' 失败');
     groupEnd();
     
     // 测试 4: 批量生成
-    group('🧪 测试 4: 批量生成');
+    group(' 测试 4: 批量生成');
     const batchResponses = await service.generatePosterBatch([
       { content: '新客优惠', type: 'promotion' },
       { content: '会员招募', type: 'event' },
       { content: '护肤方案', type: 'skincare' }
     ]);
     const successCount = batchResponses.filter(r => r.success).length;
-    log(`✅ 成功 ${successCount}/${batchResponses.length} 个`);
+    log(` 成功 ${successCount}/${batchResponses.length} 个`);
     groupEnd();
     
     // 测试 5: 降级机制
-    group('🧪 测试 5: 自动降级');
+    group(' 测试 5: 自动降级');
     service.setAPIFallbackMode(true);
     const fallbackResponse = await service.generatePoster({
       content: '测试降级机制'
@@ -246,10 +246,10 @@ async function runAllTests() {
     log('来源:', fallbackResponse.meta?.source);
     groupEnd();
     
-    log('\n✅ 所有测试完成！');
+    log('\n 所有测试完成！');
     
   } catch (err) {
-    error('❌ 测试过程中发生错误:', err);
+    error(' 测试过程中发生错误:', err);
   }
 }
 
@@ -265,17 +265,17 @@ runAllTests();
 // 快速检查：3 秒内完成
 const { posterGenerationAPIService } = await import('src/services/posterGenerationAPIService.js');
 
-console.log('🔍 检查中...');
+console.log(' 检查中...');
 const status = await posterGenerationAPIService.getAPIStatus();
 console.log(status);
 
 const test = await posterGenerationAPIService.generatePoster({ content: '测试' });
-console.log(test.success ? '✅ 工作正常' : '❌ 有问题');
+console.log(test.success ? ' 工作正常' : ' 有问题');
 ```
 
 ---
 
-## 🔬 集成测试套件
+##  集成测试套件
 
 ### 使用 Vitest 运行测试
 
@@ -309,7 +309,7 @@ console.log('测试结果:', results);
 
 ---
 
-## 📊 性能基准
+##  性能基准
 
 ### 预期性能指标
 
@@ -343,7 +343,7 @@ for (let i = 0; i < requests.length; i += batchSize) {
 
 ---
 
-## 🔧 故障排查
+##  故障排查
 
 ### 常见问题
 
@@ -352,7 +352,7 @@ for (let i = 0; i < requests.length; i += batchSize) {
 **原因**：RunningHub API 服务暂时不可用
 
 **解决方案**：
-- ✅ 自动降级已启用，本地生成可用
+-  自动降级已启用，本地生成可用
 - 等待 API 恢复
 - 检查网络连接
 - 验证 API 密钥（如需要）
@@ -408,7 +408,7 @@ posterGenerationAPIService.clearHistory();
 
 ---
 
-## ✅ 集成检查清单
+##  集成检查清单
 
 在生产环境前，确保以下所有项都已检查：
 
@@ -420,11 +420,11 @@ posterGenerationAPIService.clearHistory();
 - [ ] 降级机制已启用
 
 ### 测试阶段
-- [ ] API 可用性测试 ✅
-- [ ] 单个生成测试 ✅
-- [ ] 批量生成测试 ✅
-- [ ] 降级机制测试 ✅
-- [ ] 性能基准测试 ✅
+- [ ] API 可用性测试 
+- [ ] 单个生成测试 
+- [ ] 批量生成测试 
+- [ ] 降级机制测试 
+- [ ] 性能基准测试 
 
 ### 生产前
 - [ ] 所有测试通过
@@ -441,7 +441,7 @@ posterGenerationAPIService.clearHistory();
 
 ---
 
-## 📈 监控与告警
+##  监控与告警
 
 ### 设置监控
 
@@ -484,29 +484,29 @@ class APIMonitor {
 
 ---
 
-## 🎯 下一步
+##  下一步
 
 ### 立即可以做的
 
-1. ✅ 在浏览器控制台运行快速测试
-2. ✅ 验证本地生成是否工作
-3. ✅ 检查 API 可用性
+1.  在浏览器控制台运行快速测试
+2.  验证本地生成是否工作
+3.  检查 API 可用性
 
 ### 短期（1周内）
 
-1. 📝 联系 RunningHub 支持
-2. 🔧 配置 API 认证信息
-3. 📊 设置监控告警
+1.  联系 RunningHub 支持
+2.  配置 API 认证信息
+3.  设置监控告警
 
 ### 中期（修复后）
 
-1. 🚀 启用 API 模式
-2. 📈 优化性能
-3. 📚 完整文档化
+1.  启用 API 模式
+2.  优化性能
+3.  完整文档化
 
 ---
 
-## 📞 支持
+##  支持
 
 遇到问题？
 
@@ -519,5 +519,5 @@ class APIMonitor {
 
 **版本**: 1.0.0  
 **最后更新**: 2024-10-29  
-**状态**: ✅ 生产就绪
+**状态**:  生产就绪
 

@@ -159,18 +159,18 @@ ${this.systemData.marketing?.activeActivities?.map(a => `• ${a.name}: 投入¥
 ═══════════════════════════════
 
 【客户管理现状】
-✓ 总客户数: ${this.systemData.customers?.total || 0}名
-✗ 流失率: ${this.systemData.customers?.churnRate || 0}% (目标<10%)
-⚠ 高风险客户: ${this.systemData.customers?.highRiskCustomers?.length || 0}名需关注
+ 总客户数: ${this.systemData.customers?.total || 0}名
+ 流失率: ${this.systemData.customers?.churnRate || 0}% (目标<10%)
+ 高风险客户: ${this.systemData.customers?.highRiskCustomers?.length || 0}名需关注
 
 优先级1 - 高风险客户流失预警
 → 立即行动: 逐一回访高风险客户
 → 预期效果: 留存率↑15-20%
 
 【预约运营现状】
-✓ 月预约数: ${this.systemData.appointments?.totalThisMonth || 0}
-✓ 确认率: ${this.systemData.appointments?.confirmationRate || 0}%
-⚠ 爽约率: ${this.systemData.appointments?.noShowRate || 0}% (应<5%)
+ 月预约数: ${this.systemData.appointments?.totalThisMonth || 0}
+ 确认率: ${this.systemData.appointments?.confirmationRate || 0}%
+ 爽约率: ${this.systemData.appointments?.noShowRate || 0}% (应<5%)
 
 优先级2 - 高峰时段排班优化
 → 关键时段: ${this.systemData.appointments?.peakHours?.join('、') || '10:00-12:00, 14:00-16:00'}
@@ -178,16 +178,16 @@ ${this.systemData.marketing?.activeActivities?.map(a => `• ${a.name}: 投入¥
 → 预期效果: 确认率↑10-12%, 客户满意度↑8%
 
 【员工管理现状】
-✓ 在职员工: ${this.systemData.staff?.activeStaff || 0}/${this.systemData.staff?.total || 0}
-✓ 表现最好: ${this.systemData.staff?.performanceRanking?.[0]?.name} (${this.systemData.staff?.performanceRanking?.[0]?.appointmentsCompleted}个预约)
+ 在职员工: ${this.systemData.staff?.activeStaff || 0}/${this.systemData.staff?.total || 0}
+ 表现最好: ${this.systemData.staff?.performanceRanking?.[0]?.name} (${this.systemData.staff?.performanceRanking?.[0]?.appointmentsCompleted}个预约)
 
 优先级3 - 员工绩效提升
 → 行动: 建立员工激励制度
 → 预期效果: 服务质量↑15%, 客户满意度↑10%
 
 【财务运营现状】
-✓ 本月收入: ¥${this.systemData.sales?.revenueThisMonth || 0}
-✓ 增长率: ${this.systemData.sales?.growth || 0}%
+ 本月收入: ¥${this.systemData.sales?.revenueThisMonth || 0}
+ 增长率: ${this.systemData.sales?.growth || 0}%
 
 优先级4 - 收入增长策略
 → 方案: 热销产品提价5-8%, 冷门产品打折促销

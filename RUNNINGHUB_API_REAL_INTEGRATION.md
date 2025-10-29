@@ -1,26 +1,26 @@
-# 🚀 RunningHub API 真实集成指南
+#  RunningHub API 真实集成指南
 
 **版本**: 3.0 - 生产级真实 API 集成  
 **日期**: 2024-10-29  
-**状态**: ✅ **准备商业化**
+**状态**:  **准备商业化**
 
 ---
 
-## 🎯 重要改变
+##  重要改变
 
 ### 之前（错误做法）
-❌ 本地 Canvas 绘制  
-❌ 没有真正调用 API  
-❌ 不能商业化  
+ 本地 Canvas 绘制  
+ 没有真正调用 API  
+ 不能商业化  
 
 ### 现在（正确做法）
-✅ **真实 RunningHub API 调用**  
-✅ **完整的 API 集成**  
-✅ **可以商业化**  
+ **真实 RunningHub API 调用**  
+ **完整的 API 集成**  
+ **可以商业化**  
 
 ---
 
-## 📋 API 详情
+##  API 详情
 
 ### 端点
 ```
@@ -40,7 +40,7 @@ Authorization: Bearer {API_KEY}  // 如果需要
 
 ---
 
-## 🔧 配置 API 密钥
+##  配置 API 密钥
 
 ### 方法 1：环境变量（推荐）
 
@@ -62,7 +62,7 @@ posterGenerationAPIService.setAPIKey('your_api_key_here');
 
 ---
 
-## 📤 API 请求格式
+##  API 请求格式
 
 ### 完整请求体
 
@@ -103,7 +103,7 @@ posterGenerationAPIService.setAPIKey('your_api_key_here');
 
 ---
 
-## 📥 API 响应格式
+##  API 响应格式
 
 ### 成功响应
 
@@ -148,7 +148,7 @@ posterGenerationAPIService.setAPIKey('your_api_key_here');
 
 ---
 
-## 💻 使用代码示例
+##  使用代码示例
 
 ### 基本使用
 
@@ -165,11 +165,11 @@ const response = await posterGenerationAPIService.generatePoster({
 });
 
 if (response.success) {
-  console.log('✅ 海报生成成功');
+  console.log(' 海报生成成功');
   console.log('海报 URL:', response.data?.posterUrl);
   console.log('耗时:', response.meta?.processingTime, 'ms');
 } else {
-  console.log('❌ 生成失败:', response.error?.message);
+  console.log(' 生成失败:', response.error?.message);
 }
 ```
 
@@ -179,9 +179,9 @@ if (response.success) {
 const status = await posterGenerationAPIService.getAPIStatus();
 
 if (status.available) {
-  console.log('✅ API 在线');
+  console.log(' API 在线');
 } else {
-  console.log('❌ API 离线 - 状态:', status.status);
+  console.log(' API 离线 - 状态:', status.status);
 }
 ```
 
@@ -198,9 +198,9 @@ const responses = await posterGenerationAPIService.generatePosterBatch(requests)
 
 responses.forEach((response, index) => {
   if (response.success) {
-    console.log(`✅ 海报 ${index + 1} 成功`);
+    console.log(` 海报 ${index + 1} 成功`);
   } else {
-    console.log(`❌ 海报 ${index + 1} 失败:`, response.error?.message);
+    console.log(` 海报 ${index + 1} 失败:`, response.error?.message);
   }
 });
 ```
@@ -214,7 +214,7 @@ posterGenerationAPIService.setTimeout(20000);
 
 ---
 
-## 🔄 工作流程
+##  工作流程
 
 ```
 用户输入海报内容
@@ -244,7 +244,7 @@ posterGenerationAPIService.setTimeout(20000);
 
 ---
 
-## ⚙️ 高级配置
+## ️ 高级配置
 
 ### 禁用自动降级
 
@@ -260,7 +260,7 @@ posterGenerationAPIService.setAPIKey('your_secret_key');
 
 ---
 
-## 🔍 故障排查
+##  故障排查
 
 ### 问题 1：API 返回 500 错误
 
@@ -273,11 +273,11 @@ posterGenerationAPIService.setAPIKey('your_secret_key');
 ```
 
 **解决**:
-- ✅ 检查 app_id 是否正确
-- ✅ 验证 API 密钥是否配置
-- ✅ 确认请求体格式是否正确
-- ✅ 检查网络连接
-- ✅ 稍后重试（可能是临时故障）
+-  检查 app_id 是否正确
+-  验证 API 密钥是否配置
+-  确认请求体格式是否正确
+-  检查网络连接
+-  稍后重试（可能是临时故障）
 
 ### 问题 2：请求超时
 
@@ -287,10 +287,10 @@ Error: API 请求超时 (10秒)
 ```
 
 **解决**:
-- ✅ 增加超时时间: `posterGenerationAPIService.setTimeout(20000)`
-- ✅ 检查网络速度
-- ✅ 使用更小的图片尺寸
-- ✅ 减少 API 并发请求
+-  增加超时时间: `posterGenerationAPIService.setTimeout(20000)`
+-  检查网络速度
+-  使用更小的图片尺寸
+-  减少 API 并发请求
 
 ### 问题 3：无效的 Content
 
@@ -303,14 +303,14 @@ Error: API 请求超时 (10秒)
 ```
 
 **解决**:
-- ✅ 确保 content 不为空
-- ✅ 确保 content 长度在 10-500 字符之间
-- ✅ 使用合法的 Unicode 字符
-- ✅ 避免特殊符号或脚本代码
+-  确保 content 不为空
+-  确保 content 长度在 10-500 字符之间
+-  使用合法的 Unicode 字符
+-  避免特殊符号或脚本代码
 
 ---
 
-## 📊 API 限制
+##  API 限制
 
 | 限制 | 值 | 说明 |
 |------|-----|------|
@@ -322,12 +322,12 @@ Error: API 请求超时 (10秒)
 
 ---
 
-## 🛡️ 安全最佳实践
+## ️ 安全最佳实践
 
 ### 1. 保护 API 密钥
 ```
-❌ 不要: 在代码中硬编码密钥
-✅ 要: 使用环境变量
+ 不要: 在代码中硬编码密钥
+ 要: 使用环境变量
 ```
 
 ### 2. 验证响应
@@ -355,7 +355,7 @@ try {
 
 ---
 
-## 📈 监控指标
+##  监控指标
 
 ### 可监控的指标
 
@@ -383,15 +383,15 @@ if (response.meta?.processingTime) {
 
 ---
 
-## 🚀 商业化部署
+##  商业化部署
 
 ### 前置条件
 
-- ✅ 获得 RunningHub API 密钥
-- ✅ 配置环境变量
-- ✅ 通过所有测试
-- ✅ 设置错误告警
-- ✅ 准备 24/7 支持
+-  获得 RunningHub API 密钥
+-  配置环境变量
+-  通过所有测试
+-  设置错误告警
+-  准备 24/7 支持
 
 ### 部署清单
 
@@ -405,7 +405,7 @@ if (response.meta?.processingTime) {
 
 ---
 
-## 💼 商业化优势
+##  商业化优势
 
 ### 相比本地生成
 
@@ -416,11 +416,11 @@ if (response.meta?.processingTime) {
 | **专业度** | 30% | **95%** |
 | **可定制** | 低 | **高** |
 | **成本** | 免费 | **按 API 计费** |
-| **商用** | ❌ | **✅** |
+| **商用** |  | **** |
 
 ---
 
-## 📞 支持联系
+##  支持联系
 
 ### RunningHub 官方
 
@@ -431,7 +431,7 @@ if (response.meta?.processingTime) {
 
 ---
 
-## 🎯 下一步
+##  下一步
 
 ### 立即
 
@@ -454,6 +454,6 @@ if (response.meta?.processingTime) {
 ---
 
 **版本**: 3.0 - 生产级真实 API 集成  
-**状态**: ✅ **准备好商业化了！**
+**状态**:  **准备好商业化了！**
 
-**现在你有真正的 AI 海报生成能力！** 🎨🚀
+**现在你有真正的 AI 海报生成能力！** 

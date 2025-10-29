@@ -1,4 +1,4 @@
-# 🚀 第1阶段快速启动指南
+#  第1阶段快速启动指南
 
 **日期**: 2025-10-22  
 **目标**: 验证后端对接和测试登录流程  
@@ -6,7 +6,7 @@
 
 ---
 
-## ✅ 系统要求检查清单
+##  系统要求检查清单
 
 在开始之前，请确保您有：
 
@@ -18,7 +18,7 @@
 
 ---
 
-## 🔧 启动步骤
+##  启动步骤
 
 ### 步骤 1: 启动后端服务器 (5分钟)
 
@@ -35,8 +35,8 @@ npm run dev
 
 **预期输出**:
 ```
-✓ Server running on port 5000
-✓ Database connected
+ Server running on port 5000
+ Database connected
 ```
 
 **常见问题**:
@@ -63,10 +63,10 @@ npm run dev
 
 **预期输出**:
 ```
-✓ Vite v5.x.x ready in XXX ms
+ Vite v5.x.x ready in XXX ms
 
-➜  Local:   http://localhost:5173/
-➜  press h to show help
+  Local:   http://localhost:5173/
+  press h to show help
 ```
 
 **打开浏览器**: http://localhost:5173
@@ -90,13 +90,13 @@ fetch('http://localhost:5000/api/auth/verify', {
   }
 })
 .then(r => r.json())
-.then(d => console.log('✅ 后端响应:', d))
-.catch(e => console.error('❌ 错误:', e));
+.then(d => console.log(' 后端响应:', d))
+.catch(e => console.error(' 错误:', e));
 ```
 
 **预期结果**:
-- ✅ 如果连接正常，会收到后端的 JSON 响应
-- ❌ 如果显示 `ERR_CONNECTION_REFUSED`，后端未启动
+-  如果连接正常，会收到后端的 JSON 响应
+-  如果显示 `ERR_CONNECTION_REFUSED`，后端未启动
 
 **方法 B: 使用 curl (Windows PowerShell)**
 
@@ -128,7 +128,7 @@ curl -X POST http://localhost:5000/api/auth/login `
 
 ---
 
-## 🧪 测试登录流程 (4分钟)
+##  测试登录流程 (4分钟)
 
 ### 测试凭证
 
@@ -147,8 +147,8 @@ curl -X POST http://localhost:5000/api/auth/login `
    - 密码: `Admin@123`
 4. **点击登录**
 5. **验证结果**:
-   - ✅ 成功: 进入仪表板，显示用户名
-   - ❌ 失败: 显示错误信息
+   -  成功: 进入仪表板，显示用户名
+   -  失败: 显示错误信息
 
 ### 浏览器开发者工具验证
 
@@ -164,7 +164,7 @@ curl -X POST http://localhost:5000/api/auth/login `
 
 ---
 
-## 📊 完整的检查清单
+##  完整的检查清单
 
 ### 后端检查
 - [ ] 服务器在 `http://localhost:5000` 运行
@@ -193,7 +193,7 @@ curl -X POST http://localhost:5000/api/auth/login `
 
 ---
 
-## 🔍 故障排查
+##  故障排查
 
 ### 问题 1: 后端连接被拒绝 (ERR_CONNECTION_REFUSED)
 
@@ -278,7 +278,7 @@ CORS_ORIGIN=http://localhost:5173,http://localhost:3000
 
 ---
 
-## 📝 实时日志监控
+##  实时日志监控
 
 ### 后端日志
 
@@ -298,28 +298,28 @@ CORS_ORIGIN=http://localhost:5173,http://localhost:3000
 # 在浏览器开发者工具中查看
 # Console 应该显示:
 
-✓ API Client initialized
-✓ Auth Context loaded
-✓ Login successful
-✓ Token saved: eyJhbGc...
+ API Client initialized
+ Auth Context loaded
+ Login successful
+ Token saved: eyJhbGc...
 ```
 
 ---
 
-## ✨ 成功标志
+##  成功标志
 
-当您看到以下任何一个，说明第1阶段启动成功 ✅:
+当您看到以下任何一个，说明第1阶段启动成功 :
 
-1. ✅ 能登录系统
-2. ✅ Token 正确保存到 localStorage
-3. ✅ 页面显示用户名
-4. ✅ 刷新页面后保持登录
-5. ✅ 能成功登出
-6. ✅ 后端和前端之间能正常通信
+1.  能登录系统
+2.  Token 正确保存到 localStorage
+3.  页面显示用户名
+4.  刷新页面后保持登录
+5.  能成功登出
+6.  后端和前端之间能正常通信
 
 ---
 
-## 📞 需要帮助？
+##  需要帮助？
 
 ### 常见错误代码
 
@@ -335,7 +335,7 @@ CORS_ORIGIN=http://localhost:5173,http://localhost:3000
 
 ---
 
-## 🎯 下一步
+##  下一步
 
 一旦登录流程工作正常，您可以：
 
@@ -355,17 +355,17 @@ CORS_ORIGIN=http://localhost:5173,http://localhost:3000
 
 ---
 
-## 📊 性能检查
+##  性能检查
 
 ### API 响应时间目标
 
 | 操作 | 目标 | 状态 |
 |------|------|------|
-| 登录 | < 500ms | ⏱️ |
-| 获取列表 | < 500ms | ⏱️ |
-| 创建数据 | < 1000ms | ⏱️ |
-| 更新数据 | < 500ms | ⏱️ |
-| 删除数据 | < 500ms | ⏱️ |
+| 登录 | < 500ms | ️ |
+| 获取列表 | < 500ms | ️ |
+| 创建数据 | < 1000ms | ️ |
+| 更新数据 | < 500ms | ️ |
+| 删除数据 | < 500ms | ️ |
 
 ### 检查方法
 
@@ -377,7 +377,7 @@ CORS_ORIGIN=http://localhost:5173,http://localhost:3000
 
 ---
 
-## 💾 数据备份
+##  数据备份
 
 在进行任何数据库操作前，建议备份：
 
@@ -391,8 +391,8 @@ mysql -u root -p beauty_salon < backup.sql
 
 ---
 
-**现在您已准备好开始第1阶段的测试！** 🚀
+**现在您已准备好开始第1阶段的测试！** 
 
 需要任何帮助，请参考上面的故障排查部分。
 
-祝测试顺利！✨
+祝测试顺利！

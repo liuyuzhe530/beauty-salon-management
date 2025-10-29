@@ -88,13 +88,13 @@ bc01de6 - fix: correct GLM model name to glm-4.5-flash (with dot)
 - 不是 `-` (中划线)
 
 正确示例:
-- glm-4.5-flash ✓
-- glm-4.5-air ✓
-- glm-4 ✓
+- glm-4.5-flash 
+- glm-4.5-air 
+- glm-4 
 
 错误示例:
-- glm-4-5-flash ✗
-- glm-4-5-air ✗
+- glm-4-5-flash 
+- glm-4-5-air 
 
 ---
 

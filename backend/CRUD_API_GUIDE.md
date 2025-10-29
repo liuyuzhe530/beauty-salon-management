@@ -1,10 +1,10 @@
-# 🚀 CRUD API 完整测试指南
+#  CRUD API 完整测试指南
 
 美容院管理系统的CRUD API完整文档和测试示例。
 
 ---
 
-## 📋 目录
+##  目录
 
 1. [客户管理 API](#客户管理-api)
 2. [预约管理 API](#预约管理-api)
@@ -15,7 +15,7 @@
 
 ---
 
-## 🔑 认证说明
+##  认证说明
 
 所有CRUD API都需要有效的JWT Token。获取Token的方式：
 
@@ -764,7 +764,7 @@ GET /api/products/search?keyword=护肤品
 
 ---
 
-## 🧪 完整测试流程
+##  完整测试流程
 
 ```bash
 #!/bin/bash
@@ -783,7 +783,7 @@ response=$(curl -s -X POST http://localhost:5000/api/auth/register \
   }')
 
 TOKEN=$(echo $response | jq -r '.data.token')
-echo "✅ Token: $TOKEN"
+echo " Token: $TOKEN"
 
 # 2. 创建客户
 curl -X POST http://localhost:5000/api/customers \
@@ -796,18 +796,18 @@ curl -X POST http://localhost:5000/api/customers \
     "status": "active"
   }'
 
-echo "✅ 客户创建成功"
+echo " 客户创建成功"
 
 # 3. 获取客户列表
 curl -X GET "http://localhost:5000/api/customers?page=1&limit=10" \
   -H "Authorization: Bearer $TOKEN"
 
-echo "✅ 客户列表获取成功"
+echo " 客户列表获取成功"
 ```
 
 ---
 
-## 📚 相关文档
+##  相关文档
 
 - [认证 API](./API_TESTING_GUIDE.md)
 - [后端 README](./README.md)
@@ -818,7 +818,7 @@ echo "✅ 客户列表获取成功"
 
 ---
 
-## 📋 目录
+##  目录
 
 1. [客户管理 API](#客户管理-api)
 2. [预约管理 API](#预约管理-api)
@@ -829,7 +829,7 @@ echo "✅ 客户列表获取成功"
 
 ---
 
-## 🔑 认证说明
+##  认证说明
 
 所有CRUD API都需要有效的JWT Token。获取Token的方式：
 
@@ -1578,7 +1578,7 @@ GET /api/products/search?keyword=护肤品
 
 ---
 
-## 🧪 完整测试流程
+##  完整测试流程
 
 ```bash
 #!/bin/bash
@@ -1597,7 +1597,7 @@ response=$(curl -s -X POST http://localhost:5000/api/auth/register \
   }')
 
 TOKEN=$(echo $response | jq -r '.data.token')
-echo "✅ Token: $TOKEN"
+echo " Token: $TOKEN"
 
 # 2. 创建客户
 curl -X POST http://localhost:5000/api/customers \
@@ -1610,18 +1610,18 @@ curl -X POST http://localhost:5000/api/customers \
     "status": "active"
   }'
 
-echo "✅ 客户创建成功"
+echo " 客户创建成功"
 
 # 3. 获取客户列表
 curl -X GET "http://localhost:5000/api/customers?page=1&limit=10" \
   -H "Authorization: Bearer $TOKEN"
 
-echo "✅ 客户列表获取成功"
+echo " 客户列表获取成功"
 ```
 
 ---
 
-## 📚 相关文档
+##  相关文档
 
 - [认证 API](./API_TESTING_GUIDE.md)
 - [后端 README](./README.md)
@@ -1632,7 +1632,7 @@ echo "✅ 客户列表获取成功"
 
 ---
 
-## 📋 目录
+##  目录
 
 1. [客户管理 API](#客户管理-api)
 2. [预约管理 API](#预约管理-api)
@@ -1643,7 +1643,7 @@ echo "✅ 客户列表获取成功"
 
 ---
 
-## 🔑 认证说明
+##  认证说明
 
 所有CRUD API都需要有效的JWT Token。获取Token的方式：
 
@@ -2392,7 +2392,7 @@ GET /api/products/search?keyword=护肤品
 
 ---
 
-## 🧪 完整测试流程
+##  完整测试流程
 
 ```bash
 #!/bin/bash
@@ -2411,7 +2411,7 @@ response=$(curl -s -X POST http://localhost:5000/api/auth/register \
   }')
 
 TOKEN=$(echo $response | jq -r '.data.token')
-echo "✅ Token: $TOKEN"
+echo " Token: $TOKEN"
 
 # 2. 创建客户
 curl -X POST http://localhost:5000/api/customers \
@@ -2424,18 +2424,18 @@ curl -X POST http://localhost:5000/api/customers \
     "status": "active"
   }'
 
-echo "✅ 客户创建成功"
+echo " 客户创建成功"
 
 # 3. 获取客户列表
 curl -X GET "http://localhost:5000/api/customers?page=1&limit=10" \
   -H "Authorization: Bearer $TOKEN"
 
-echo "✅ 客户列表获取成功"
+echo " 客户列表获取成功"
 ```
 
 ---
 
-## 📚 相关文档
+##  相关文档
 
 - [认证 API](./API_TESTING_GUIDE.md)
 - [后端 README](./README.md)

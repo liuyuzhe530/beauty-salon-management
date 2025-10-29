@@ -186,7 +186,7 @@ export const MallPage: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-8 text-white">
-          <h1 className="text-4xl font-bold mb-2">🎨 小程序店铺装修</h1>
+          <h1 className="text-4xl font-bold mb-2"> 小程序店铺装修</h1>
           <p className="text-lg opacity-90">专业的微信小程序门店展示页面编辑器</p>
         </div>
 
@@ -624,7 +624,7 @@ export const MallPage: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">👁️ 预览页面</h1>
+          <h1 className="text-3xl font-bold text-gray-900">️ 预览页面</h1>
           <div className="flex gap-2">
             <button
               onClick={() => setPreviewDevice('mobile')}
@@ -679,7 +679,7 @@ export const MallPage: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">📋 选择装修模板</h1>
+          <h1 className="text-3xl font-bold text-gray-900"> 选择装修模板</h1>
           <button onClick={() => setMode('editor')} className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
             返回
           </button>
@@ -717,7 +717,7 @@ export const MallPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">⚙️ 管理装修方案</h1>
+        <h1 className="text-3xl font-bold text-gray-900">️ 管理装修方案</h1>
         <button 
           onClick={() => {
             setSelectedDecoration({

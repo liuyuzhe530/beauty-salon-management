@@ -113,10 +113,10 @@ export const businessPrompts = {
 
 【推荐文案模板】
 「{客户名}，根据您的 {皮肤问题}，我建议：
-🌟 核心项目：{推荐项目}（效果/周期）
-💎 配套产品：{产品1}+{产品2}
-📊 套餐价格：{价格}（原价 {原价}）
-✨ 效果预期：{具体效果}」
+ 核心项目：{推荐项目}（效果/周期）
+ 配套产品：{产品1}+{产品2}
+ 套餐价格：{价格}（原价 {原价}）
+ 效果预期：{具体效果}」
 
 【推荐技巧】
 • 一定要有数据支撑
@@ -177,11 +177,11 @@ export const businessPrompts = {
 • 行动路径：短链接直达预约，或回复关键词
 
 【禁止内容】
-❌ 不要太长
-❌ 不要没有个性化
-❌ 不要缺少优惠信息
-❌ 不要没有行动号召
-❌ 不要过于生硬`,
+ 不要太长
+ 不要没有个性化
+ 不要缺少优惠信息
+ 不要没有行动号召
+ 不要过于生硬`,
 
   /**
    * 通用AI营销助手
@@ -223,28 +223,28 @@ export const businessFunctions = {
     name: '24h客服',
     description: '夜班机器人话术',
     type: 'night',
-    icon: '🌙',
+    icon: '',
     color: 'from-indigo-400 to-blue-500',
   },
   skinAnalysis: {
     name: '皮肤检测',
     description: '5秒AI测肤营销文案',
     type: 'skin',
-    icon: '✨',
+    icon: '',
     color: 'from-pink-400 to-rose-500',
   },
   projectRecommend: {
     name: '项目推荐',
     description: 'AI配项目+产品',
     type: 'project',
-    icon: '💎',
+    icon: '',
     color: 'from-yellow-400 to-orange-500',
   },
   autoMarketing: {
     name: '自动营销',
     description: '沉睡客唤醒短信',
     type: 'sms',
-    icon: '📱',
+    icon: '',
     color: 'from-green-400 to-emerald-500',
   },
 };

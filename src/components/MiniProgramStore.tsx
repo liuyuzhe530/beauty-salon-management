@@ -386,7 +386,7 @@ export const TrainingEducation: React.FC = () => {
                   )}
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-gray-600">{course.students} 人学习</span>
-                    <span className="text-yellow-500">⭐ {course.rating}</span>
+                    <span className="text-yellow-500"> {course.rating}</span>
                   </div>
                 </div>
 
@@ -407,7 +407,7 @@ export const TrainingEducation: React.FC = () => {
             <div className="bg-white rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto p-6">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-2xl font-bold text-gray-900">{selectedCourse.title}</h2>
-                <button onClick={() => setSelectedCourse(null)} className="text-gray-600 hover:text-gray-900">✕</button>
+                <button onClick={() => setSelectedCourse(null)} className="text-gray-600 hover:text-gray-900"></button>
               </div>
 
               <div className="space-y-4">
@@ -427,7 +427,7 @@ export const TrainingEducation: React.FC = () => {
                     <p className="text-sm text-gray-600">学员数</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-yellow-500">⭐{selectedCourse.rating}</p>
+                    <p className="text-2xl font-bold text-yellow-500">{selectedCourse.rating}</p>
                     <p className="text-sm text-gray-600">评分</p>
                   </div>
                 </div>
@@ -642,15 +642,15 @@ export const TrainingEducation: React.FC = () => {
                   <p className="text-sm text-blue-700 mb-3">直播互动数据</p>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700">👁️ 观看人数</span>
+                      <span className="text-sm text-gray-700">️ 观看人数</span>
                       <span className="font-bold text-gray-900">{selectedLiveClass.students}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700">💬 评论数</span>
+                      <span className="text-sm text-gray-700"> 评论数</span>
                       <span className="font-bold text-gray-900">{liveComments.length}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700">❤️ 点赞总数</span>
+                      <span className="text-sm text-gray-700">️ 点赞总数</span>
                       <span className="font-bold text-gray-900">{liveComments.reduce((sum, c) => sum + c.likes, 0)}</span>
                     </div>
                   </div>
@@ -826,7 +826,7 @@ export const TrainingEducation: React.FC = () => {
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">评分</span>
-                    <span className="font-medium text-yellow-500">⭐ {tutor.rating}</span>
+                    <span className="font-medium text-yellow-500"> {tutor.rating}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">可用性</span>
@@ -951,12 +951,12 @@ export const TrainingEducation: React.FC = () => {
           <h3 className="font-bold text-gray-900 mb-4">成就徽章</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {[
-              { name: '初学者', icon: '🎓' },
-              { name: '知识精英', icon: '🧠' },
-              { name: '连胜7天', icon: '🔥' },
-              { name: '课程完成者', icon: '🏆' },
-              { name: '答题高手', icon: '⚡' },
-              { name: '学霸', icon: '👑' }
+              { name: '初学者', icon: '' },
+              { name: '知识精英', icon: '' },
+              { name: '连胜7天', icon: '' },
+              { name: '课程完成者', icon: '' },
+              { name: '答题高手', icon: '' },
+              { name: '学霸', icon: '' }
             ].map(badge => (
               <div key={badge.name} className="text-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                 <p className="text-3xl mb-1">{badge.icon}</p>
@@ -1029,17 +1029,17 @@ export const TrainingEducation: React.FC = () => {
           <h3 className="font-bold text-gray-900 mb-4">工具和模板</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer text-center">
-              <p className="text-2xl mb-2">📋</p>
+              <p className="text-2xl mb-2"></p>
               <p className="font-medium text-sm mb-2">客户档案模板</p>
               <button className="text-xs text-blue-600 hover:text-blue-700">下载</button>
             </div>
             <div className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer text-center">
-              <p className="text-2xl mb-2">📊</p>
+              <p className="text-2xl mb-2"></p>
               <p className="font-medium text-sm mb-2">销售报表模板</p>
               <button className="text-xs text-blue-600 hover:text-blue-700">下载</button>
             </div>
             <div className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer text-center">
-              <p className="text-2xl mb-2">📅</p>
+              <p className="text-2xl mb-2"></p>
               <p className="font-medium text-sm mb-2">员工培训计划表</p>
               <button className="text-xs text-blue-600 hover:text-blue-700">下载</button>
             </div>
@@ -1060,11 +1060,11 @@ export const TrainingEducation: React.FC = () => {
       {/* 导航标签 */}
       <div className="flex gap-2 border-b border-gray-200 overflow-x-auto">
         {([
-          { key: 'learning', label: '📚 在线课程', icon: BookOpen },
-          { key: 'live', label: '🔴 直播课堂', icon: Video },
-          { key: 'tutor', label: '🤖 AI导师', icon: Brain },
-          { key: 'progress', label: '📊 学习进度', icon: BarChart3 },
-          { key: 'resources', label: '📁 学习资源', icon: FileText }
+          { key: 'learning', label: ' 在线课程', icon: BookOpen },
+          { key: 'live', label: ' 直播课堂', icon: Video },
+          { key: 'tutor', label: ' AI导师', icon: Brain },
+          { key: 'progress', label: ' 学习进度', icon: BarChart3 },
+          { key: 'resources', label: ' 学习资源', icon: FileText }
         ] as const).map(tab => (
           <button
             key={tab.key}
@@ -1106,7 +1106,7 @@ export const TrainingEducation: React.FC = () => {
 
       {/* 快速入门 */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">🚀 快速入门</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4"> 快速入门</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
             onClick={() => setActiveTab('learning')}

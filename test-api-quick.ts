@@ -27,11 +27,11 @@ function log(msg: string, color: keyof typeof colors = 'reset') {
 }
 
 function success(msg: string) {
-  console.log(`${colors.green}✅ ${msg}${colors.reset}`);
+  console.log(`${colors.green} ${msg}${colors.reset}`);
 }
 
 function error(msg: string) {
-  console.log(`${colors.red}❌ ${msg}${colors.reset}`);
+  console.log(`${colors.red} ${msg}${colors.reset}`);
 }
 
 function info(msg: string) {
@@ -39,7 +39,7 @@ function info(msg: string) {
 }
 
 function warn(msg: string) {
-  console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`);
+  console.log(`${colors.yellow}️  ${msg}${colors.reset}`);
 }
 
 // ============================================================================
@@ -130,10 +130,10 @@ async function quickTest() {
     success('所有基础测试已完成');
 
     const summary = {
-      '✅ API 可用性': status.available ? '在线' : '离线(已启用降级)',
-      '✅ 单个生成': response.success ? '成功' : '失败',
-      '✅ 批量生成': `成功 ${successCount}/${batchResponses.length}`,
-      '✅ 自动降级': fallbackResponse.success ? '正常' : '异常'
+      ' API 可用性': status.available ? '在线' : '离线(已启用降级)',
+      ' 单个生成': response.success ? '成功' : '失败',
+      ' 批量生成': `成功 ${successCount}/${batchResponses.length}`,
+      ' 自动降级': fallbackResponse.success ? '正常' : '异常'
     };
 
     Object.entries(summary).forEach(([key, value]) => {
@@ -141,7 +141,7 @@ async function quickTest() {
     });
 
     console.log('');
-    success('🎉 API 集成测试完成！');
+    success(' API 集成测试完成！');
     console.log('');
 
     return {
@@ -226,14 +226,14 @@ async function detailedTest() {
       totalTime += duration;
 
       if (response.success) {
-        success(`✓ ${testCase.name} (${duration}ms)`);
+        success(` ${testCase.name} (${duration}ms)`);
         passCount++;
       } else {
-        error(`✗ ${testCase.name}: ${response.error?.message}`);
+        error(` ${testCase.name}: ${response.error?.message}`);
         failCount++;
       }
     } catch (err: any) {
-      error(`✗ ${testCase.name}: ${err.message}`);
+      error(` ${testCase.name}: ${err.message}`);
       failCount++;
     }
   }

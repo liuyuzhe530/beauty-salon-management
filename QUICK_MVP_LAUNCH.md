@@ -1,20 +1,20 @@
-# ⚡ **MVP快速上线指南（5分钟启动）**
+#  **MVP快速上线指南（5分钟启动）**
 
-## 🎯 **目标：15分钟内系统完全运行**
+##  **目标：15分钟内系统完全运行**
 
 ```
-✅ MySQL 配置      (3分钟)
-✅ 数据库初始化    (2分钟)
-✅ 后端启动        (2分钟)
-✅ 前端启动        (2分钟)
-✅ 系统验证        (6分钟)
+ MySQL 配置      (3分钟)
+ 数据库初始化    (2分钟)
+ 后端启动        (2分钟)
+ 前端启动        (2分钟)
+ 系统验证        (6分钟)
 ━━━━━━━━━━━━━
-总计: 约15分钟 🚀
+总计: 约15分钟 
 ```
 
 ---
 
-## **第一步：一键启动MySQL** ⭐ 立即执行
+## **第一步：一键启动MySQL**  立即执行
 
 ### 选项 1️⃣ **Windows 用户 - 最快方式**
 
@@ -27,7 +27,7 @@ Start-Sleep -Seconds 3
 # 验证 MySQL 运行中
 Get-Service MySQL80 | Select-Object Status
 
-# 应该显示: Running ✅
+# 应该显示: Running 
 ```
 
 **如果您还未安装 MySQL**：
@@ -69,7 +69,7 @@ USE beauty_salon;
 EXIT;
 ```
 
-✅ 完成！数据库已创建
+ 完成！数据库已创建
 
 ---
 
@@ -83,7 +83,7 @@ cd E:\xincs\xincs\backend
 node test-connection.js
 
 # 应该看到:
-# ✅ 数据库连接成功！
+#  数据库连接成功！
 ```
 
 如果失败，执行快速修复：
@@ -107,7 +107,7 @@ npm run start
 # 应该看到:
 # Database connected
 # Database synchronized
-# Server running on port 3001 ✅
+# Server running on port 3001 
 ```
 
 **保持这个窗口打开！**
@@ -124,15 +124,15 @@ cd E:\xincs\xincs
 npm run dev
 
 # 应该看到:
-# ➜  Local:   http://localhost:3000/
-# 浏览器会自动打开 ✅
+#   Local:   http://localhost:3000/
+# 浏览器会自动打开 
 ```
 
 ---
 
 ## **第六步：系统验证** (6分钟)
 
-### ✅ 验证清单
+###  验证清单
 
 #### 前端检查 (应该自动打开 http://localhost:3000)
 ```
@@ -172,22 +172,22 @@ http://localhost:3001/api/health
 
 ---
 
-## **🎉 成功指标**
+## ** 成功指标**
 
 如果您看到以下情况，说明 **MVP 已成功启动**：
 
 ```
-✅ 前端加载完毕 (http://localhost:3000)
-✅ 能点击所有菜单并导航
-✅ 演示模式工作正常
-✅ 后端运行中 (http://localhost:3001/api/health)
-✅ 浏览器控制台无错误
-✅ 数据库连接成功
+ 前端加载完毕 (http://localhost:3000)
+ 能点击所有菜单并导航
+ 演示模式工作正常
+ 后端运行中 (http://localhost:3001/api/health)
+ 浏览器控制台无错误
+ 数据库连接成功
 ```
 
 ---
 
-## **⚠️ 快速故障排除**
+## **️ 快速故障排除**
 
 ### 问题 1: MySQL 启动失败
 ```powershell
@@ -242,7 +242,7 @@ npm run dev
 
 ---
 
-## **📊 系统架构速览**
+## ** 系统架构速览**
 
 ```
 前端 (React 18)
@@ -271,13 +271,13 @@ npm run dev
 
 ---
 
-## **🚀 一键启动脚本** (高级用法)
+## ** 一键启动脚本** (高级用法)
 
 如果您想一键启动所有服务，保存以下内容为 `launch-mvp.ps1`：
 
 ```powershell
 #!/usr/bin/env pwsh
-Write-Host "🚀 启动 MVP 系统..." -ForegroundColor Cyan
+Write-Host " 启动 MVP 系统..." -ForegroundColor Cyan
 
 # 1. 启动 MySQL
 Write-Host "1️⃣  启动 MySQL..." -ForegroundColor Yellow
@@ -295,11 +295,11 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd 'E:\xincs\xinc
 Start-Sleep -Seconds 3
 
 Write-Host ""
-Write-Host "✅ 所有服务已启动！" -ForegroundColor Green
-Write-Host "📱 前端: http://localhost:3000" -ForegroundColor Green
-Write-Host "🔌 后端: http://localhost:3001" -ForegroundColor Green
+Write-Host " 所有服务已启动！" -ForegroundColor Green
+Write-Host " 前端: http://localhost:3000" -ForegroundColor Green
+Write-Host " 后端: http://localhost:3001" -ForegroundColor Green
 Write-Host ""
-Write-Host "💡 提示: 保持所有窗口打开，系统即可运行。" -ForegroundColor Cyan
+Write-Host " 提示: 保持所有窗口打开，系统即可运行。" -ForegroundColor Cyan
 ```
 
 使用方法：
@@ -311,9 +311,9 @@ Write-Host "💡 提示: 保持所有窗口打开，系统即可运行。" -Fore
 
 ---
 
-## **📱 MVP 包含的核心功能**
+## ** MVP 包含的核心功能**
 
-### ✅ 已完成
+###  已完成
 - [x] 用户认证系统 (演示模式 + 真实登录)
 - [x] 客户管理 (CRUD 操作)
 - [x] 预约管理 (CRUD 操作)
@@ -325,12 +325,12 @@ Write-Host "💡 提示: 保持所有窗口打开，系统即可运行。" -Fore
 - [x] 绿色高端 UI 设计
 - [x] 仪表板统计
 
-### 🔄 测试中
+###  测试中
 - [ ] 真实数据库功能
 - [ ] API 集成完整性
 - [ ] 性能基准测试
 
-### 🎯 后续优化
+###  后续优化
 - [ ] 数据持久化完善
 - [ ] 性能优化
 - [ ] 安全加固
@@ -338,7 +338,7 @@ Write-Host "💡 提示: 保持所有窗口打开，系统即可运行。" -Fore
 
 ---
 
-## **⏱️ 预期时间表**
+## **️ 预期时间表**
 
 | 步骤 | 操作 | 预计时间 |
 |------|------|---------|
@@ -352,7 +352,7 @@ Write-Host "💡 提示: 保持所有窗口打开，系统即可运行。" -Fore
 
 ---
 
-## **✨ 下一步**
+## ** 下一步**
 
 系统启动后，您可以：
 
@@ -364,7 +364,7 @@ Write-Host "💡 提示: 保持所有窗口打开，系统即可运行。" -Fore
 
 ---
 
-## **🎁 快速链接**
+## ** 快速链接**
 
 | 资源 | 链接/命令 |
 |------|---------|
@@ -377,4 +377,4 @@ Write-Host "💡 提示: 保持所有窗口打开，系统即可运行。" -Fore
 
 ---
 
-**🎉 现在就开始！告诉我您完成了第几步，我会持续支持您！**
+** 现在就开始！告诉我您完成了第几步，我会持续支持您！**

@@ -268,7 +268,7 @@ export const AIChat: React.FC = () => {
           {/* 管理员功能菜单 */}
           {showAdminMenu && (
             <div className="border-b bg-gray-50 p-3 max-h-32 overflow-y-auto">
-              <div className="text-xs font-bold text-gray-600 mb-2">📊 商业功能</div>
+              <div className="text-xs font-bold text-gray-600 mb-2"> 商业功能</div>
               <div className="grid grid-cols-2 gap-2">
                 {Object.entries(businessFunctions).map(([key, func]) => (
                   <button

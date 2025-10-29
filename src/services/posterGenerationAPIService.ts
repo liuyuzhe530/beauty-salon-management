@@ -65,7 +65,7 @@ class PosterGenerationAPIService {
       // 1. 构建请求数据
       const payload = this.buildAPIPayload(request);
 
-      console.log('🔄 调用 RunningHub API...', {
+      console.log(' 调用 RunningHub API...', {
         endpoint: this.apiEndpoint,
         webappId: this.webappId,
         nodeCount: payload.nodeInfoList.length
@@ -76,7 +76,7 @@ class PosterGenerationAPIService {
       const duration = Date.now() - startTime;
 
       if (response.code === 0 && response.data) {
-        console.log('✅ API 调用成功', {
+        console.log(' API 调用成功', {
           duration: duration,
           taskId: response.data.taskId,
           taskStatus: response.data.taskStatus
@@ -106,7 +106,7 @@ class PosterGenerationAPIService {
         };
       } else {
         // API 返回错误
-        console.warn('⚠️ API 返回错误:', response.msg || response.error);
+        console.warn('️ API 返回错误:', response.msg || response.error);
         return {
           success: false,
           error: {
@@ -116,11 +116,11 @@ class PosterGenerationAPIService {
         };
       }
     } catch (error: any) {
-      console.error('❌ API 调用失败:', error.message);
+      console.error(' API 调用失败:', error.message);
       const duration = Date.now() - startTime;
 
       if (this.fallbackMode) {
-        console.log('🔄 切换到离线模式...');
+        console.log(' 切换到离线模式...');
         return this.fallbackGeneratePoster(request, duration);
       } else {
         return {
@@ -143,7 +143,7 @@ class PosterGenerationAPIService {
     const timeoutId = setTimeout(() => controller.abort(), this.apiTimeout);
 
     try {
-      console.log('📤 发送请求到 RunningHub API:', this.apiEndpoint);
+      console.log(' 发送请求到 RunningHub API:', this.apiEndpoint);
       
       const response = await axios.post(this.apiEndpoint, payload, {
         timeout: this.apiTimeout,
@@ -155,7 +155,7 @@ class PosterGenerationAPIService {
 
       clearTimeout(timeoutId);
 
-      console.log('📨 收到 API 响应:', {
+      console.log(' 收到 API 响应:', {
         status: response.status,
         code: response.data?.code,
         msg: response.data?.msg
@@ -306,7 +306,7 @@ class PosterGenerationAPIService {
    */
   setAPIKey(key: string): void {
     this.apiKey = key;
-    console.log('✅ API 密钥已设置');
+    console.log(' API 密钥已设置');
   }
 
   /**
@@ -314,7 +314,7 @@ class PosterGenerationAPIService {
    */
   setWebappId(id: string): void {
     this.webappId = id;
-    console.log('✅ WebApp ID 已设置');
+    console.log(' WebApp ID 已设置');
   }
 
   /**
@@ -329,7 +329,7 @@ class PosterGenerationAPIService {
    */
   setAPIFallbackMode(enabled: boolean): void {
     this.fallbackMode = enabled;
-    console.log(`🔄 降级模式: ${enabled ? '启用' : '禁用'}`);
+    console.log(` 降级模式: ${enabled ? '启用' : '禁用'}`);
   }
 }
 

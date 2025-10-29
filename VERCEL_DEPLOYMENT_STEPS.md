@@ -1,4 +1,4 @@
-# 🚀 Vercel 部署步骤 - 详细指南
+#  Vercel 部署步骤 - 详细指南
 
 **目标：** 将项目部署到 Vercel 获得公开 URL  
 **预计时间：** 30 分钟  
@@ -6,25 +6,25 @@
 
 ---
 
-## ✅ 前置条件检查
+##  前置条件检查
 
 在开始部署前，请确保：
 
 ```
-✓ 代码已推送到 GitHub
+ 代码已推送到 GitHub
   └─ Repository: https://github.com/liuyuzhe530/beauty-salon-management
   └─ Branch: main
 
-✓ GitHub 账户已创建
+ GitHub 账户已创建
   └─ 访问 https://github.com
 
-✓ 有效的邮箱地址
+ 有效的邮箱地址
   └─ 用于 Vercel 账户
 ```
 
 ---
 
-## 📋 第一步：访问 Vercel
+##  第一步：访问 Vercel
 
 ### 打开 Vercel 官网
 ```
@@ -40,7 +40,7 @@
 
 ---
 
-## 📋 第二步：登录或注册账户
+##  第二步：登录或注册账户
 
 ### 选项 A：如果您已有 Vercel 账户
 ```
@@ -60,13 +60,13 @@
 ```
 
 **推荐用 GitHub 登录：**
-- ✅ 更快更简便
-- ✅ 自动关联 GitHub 账户
-- ✅ 无需记住额外密码
+-  更快更简便
+-  自动关联 GitHub 账户
+-  无需记住额外密码
 
 ---
 
-## 📋 第三步：导入项目
+##  第三步：导入项目
 
 ### 进入项目导入界面
 
@@ -95,17 +95,17 @@ Owner: Your GitHub Account
 
 ---
 
-## 📋 第四步：配置构建设置
+##  第四步：配置构建设置
 
 ### Vercel 应该自动检测配置
 
 **预期看到的配置：**
 ```
-Framework: Vite ✓
-Root Directory: ./ (或 .) ✓
-Build Command: npm run build ✓
-Output Directory: dist ✓
-Install Command: npm install ✓
+Framework: Vite 
+Root Directory: ./ (或 .) 
+Build Command: npm run build 
+Output Directory: dist 
+Install Command: npm install 
 ```
 
 **如果没有自动检测，手动设置：**
@@ -138,7 +138,7 @@ Install Command: npm install ✓
 
 ---
 
-## 📋 第五步：部署项目
+##  第五步：部署项目
 
 ### 点击 Deploy 按钮
 
@@ -171,8 +171,8 @@ Install Command: npm install ✓
 
 **看到以下画面表示成功：**
 ```
-✅ Deployment successful!
-🎉 Congratulations!
+ Deployment successful!
+ Congratulations!
 
 Your project is now live at:
 https://beauty-salon-management.vercel.app
@@ -180,7 +180,7 @@ https://beauty-salon-management.vercel.app
 
 ---
 
-## ✅ 第六步：获取公开 URL
+##  第六步：获取公开 URL
 
 ### 部署完成后
 
@@ -213,7 +213,7 @@ https://beauty-salon-management.vercel.app
 
 ---
 
-## 🧪 第七步：测试部署
+##  第七步：测试部署
 
 ### 打开您的项目 URL
 
@@ -228,18 +228,18 @@ https://beauty-salon-management.vercel.app
 
 **应该看到：**
 ```
-✓ 系统首页加载
-✓ 底部导航显示
-✓ 可以进入商城装修
-✓ 编辑器功能正常
-✓ 预览功能正常
+ 系统首页加载
+ 底部导航显示
+ 可以进入商城装修
+ 编辑器功能正常
+ 预览功能正常
 ```
 
 ### 快速功能检查
 
 ```
 1. 进入商城装修
-   → 看到"🎨 小程序店铺装修"
+   → 看到" 小程序店铺装修"
 
 2. 添加一个组件
    → 看到成功提示
@@ -251,11 +251,11 @@ https://beauty-salon-management.vercel.app
    → 预览模式正常工作
 ```
 
-**✅ 如果所有项都正常 = 部署成功！**
+** 如果所有项都正常 = 部署成功！**
 
 ---
 
-## 📊 Vercel 仪表板功能
+##  Vercel 仪表板功能
 
 ### 部署后在 Vercel 中
 
@@ -269,7 +269,7 @@ https://vercel.com/dashboard
 项目列表
 └─ beauty-salon-management
    ├─ Production URL: https://xxx.vercel.app
-   ├─ Latest Deployment: Success ✓
+   ├─ Latest Deployment: Success 
    ├─ Deployments 历史
    ├─ Settings 设置
    └─ Analytics 分析
@@ -287,7 +287,7 @@ https://vercel.com/dashboard
 
 ---
 
-## 🔄 重新部署
+##  重新部署
 
 ### 自动重新部署
 
@@ -312,7 +312,7 @@ https://vercel.com/dashboard
 
 ---
 
-## 🌐 自定义域名（可选）
+##  自定义域名（可选）
 
 ### 绑定自定义域名
 
@@ -329,7 +329,7 @@ https://vercel.com/dashboard
 
 ---
 
-## 🚨 部署问题排查
+##  部署问题排查
 
 ### 问题 1：构建失败
 
@@ -398,7 +398,7 @@ API 不工作或配置未读取
 
 ---
 
-## 📞 获取帮助
+##  获取帮助
 
 ### Vercel 文档
 ```
@@ -415,7 +415,7 @@ FAQ：https://vercel.com/help
 
 ---
 
-## 📊 部署完成清单
+##  部署完成清单
 
 部署完成后，请检查以下项目：
 
@@ -444,24 +444,24 @@ FAQ：https://vercel.com/help
 
 ---
 
-## 🎉 部署成功！
+##  部署成功！
 
 **当您看到以下情况时，表示部署完全成功：**
 
 ```
-✅ Deployment completed successfully
-✅ 项目 URL 可以访问
-✅ 所有功能正常工作
-✅ 没有控制台错误
-✅ 可以分享给客户
+ Deployment completed successfully
+ 项目 URL 可以访问
+ 所有功能正常工作
+ 没有控制台错误
+ 可以分享给客户
 ```
 
 ### 下一步
 
 ```
-1. 本地测试完成 ✓
-2. 部署到 Vercel 完成 ✓
-3. 验证线上功能 ✓
+1. 本地测试完成 
+2. 部署到 Vercel 完成 
+3. 验证线上功能 
 4. 分享给客户/投资者 →
 
 演示内容：
@@ -473,7 +473,7 @@ FAQ：https://vercel.com/help
 
 ---
 
-## 📝 常用 Vercel 命令
+##  常用 Vercel 命令
 
 ### 使用 Vercel CLI（可选）
 
@@ -498,16 +498,16 @@ vercel logs
 
 ---
 
-## ✨ 恭喜！
+##  恭喜！
 
 **您已经完成了整个部署流程！**
 
 ```
-本地开发 ✓
-→ 提交 GitHub ✓
-→ 部署到 Vercel ✓
-→ 获得公开 URL ✓
-→ 可以分享给任何人 ✓
+本地开发 
+→ 提交 GitHub 
+→ 部署到 Vercel 
+→ 获得公开 URL 
+→ 可以分享给任何人 
 ```
 
-**您的项目现在已经在云端运行，可以从世界任何地方访问！** 🌍🚀
+**您的项目现在已经在云端运行，可以从世界任何地方访问！** 

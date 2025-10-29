@@ -143,7 +143,7 @@ export const Shop: React.FC = () => {
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="font-semibold text-red-900 mb-2">⚠️ 库存预警</h3>
+              <h3 className="font-semibold text-red-900 mb-2">️ 库存预警</h3>
               <p className="text-sm text-red-700 mb-2">以下产品库存不足，请及时补货：</p>
               <div className="flex flex-wrap gap-2">
                 {lowStockProducts.map(p => (

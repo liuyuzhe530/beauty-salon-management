@@ -371,9 +371,9 @@ ${this.generateOverallTrendAssessment(customerTrend, revenueTrend, efficiencyTre
   }
 
   private directionEmoji(direction: string): string {
-    if (direction === 'up') return '📈';
-    if (direction === 'down') return '📉';
-    return '➡️';
+    if (direction === 'up') return '';
+    if (direction === 'down') return '';
+    return '️';
   }
 }
 

@@ -184,7 +184,7 @@ export const SmartPhotoSeries: React.FC<SmartPhotoSeriesProps> = ({ onSelectServ
                 <td className="py-3 px-4 text-center">
                   {item.skincare ? (
                     <span className="inline-block w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 font-bold">✓</span>
+                      <span className="text-green-600 font-bold"></span>
                     </span>
                   ) : (
                     <span className="text-gray-400">-</span>
@@ -193,7 +193,7 @@ export const SmartPhotoSeries: React.FC<SmartPhotoSeriesProps> = ({ onSelectServ
                 <td className="py-3 px-4 text-center">
                   {item.beauty ? (
                     <span className="inline-block w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 font-bold">✓</span>
+                      <span className="text-green-600 font-bold"></span>
                     </span>
                   ) : (
                     <span className="text-gray-400">-</span>
@@ -202,7 +202,7 @@ export const SmartPhotoSeries: React.FC<SmartPhotoSeriesProps> = ({ onSelectServ
                 <td className="py-3 px-4 text-center">
                   {item.tongue ? (
                     <span className="inline-block w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 font-bold">✓</span>
+                      <span className="text-green-600 font-bold"></span>
                     </span>
                   ) : (
                     <span className="text-gray-400">-</span>

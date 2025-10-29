@@ -438,7 +438,7 @@ export const IntelligentProcurementAI: React.FC = () => {
                           <td className="py-2 px-3 text-gray-700">{result.supplier}</td>
                           <td className="py-2 px-3 text-right font-bold text-gray-900">￥{result.price}</td>
                           <td className="py-2 px-3 text-center">
-                            <span className="text-yellow-500">★</span> {result.rating}
+                            <span className="text-yellow-500"></span> {result.rating}
                           </td>
                           <td className="py-2 px-3 text-center text-gray-600">{result.delivery}</td>
                           <td className="py-2 px-3 text-center text-gray-600">{result.quantity}</td>
@@ -624,7 +624,7 @@ export const IntelligentProcurementAI: React.FC = () => {
                                   </td>
                                   <td className="py-4 px-4 text-center">
                                     <div className="flex items-center justify-center gap-1">
-                                      <span className="text-yellow-400">★</span>
+                                      <span className="text-yellow-400"></span>
                                       <span className="font-medium">{comp.rating}</span>
                                     </div>
                                   </td>
@@ -1150,7 +1150,7 @@ export const IntelligentProcurementAI: React.FC = () => {
                     <p className="font-bold text-gray-900 mb-3">{selectedOrderDetail.trackingNumber}</p>
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center">
-                        <span className="text-green-600 font-bold mr-2">✓</span>
+                        <span className="text-green-600 font-bold mr-2"></span>
                         <span className="text-gray-700">已发货 - {selectedOrderDetail.orderDate}</span>
                       </div>
                       <div className="flex items-center">

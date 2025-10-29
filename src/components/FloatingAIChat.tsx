@@ -288,7 +288,7 @@ export const FloatingAIChat: React.FC = () => {
                                 <div className="flex-1">
                                   <p className="font-medium text-gray-900 text-sm">{msg.recommendation.title}</p>
                                   <p className="text-xs text-gray-600 mt-1">{msg.recommendation.description}</p>
-                                  <p className="text-xs text-orange-600 mt-1">💡 {msg.recommendation.impact}</p>
+                                  <p className="text-xs text-orange-600 mt-1"> {msg.recommendation.impact}</p>
                                 </div>
                               </div>
                             </div>
@@ -334,7 +334,7 @@ export const FloatingAIChat: React.FC = () => {
                           <div className="flex-1">
                             <p className="font-medium text-gray-900 text-sm">{rec.title}</p>
                             <p className="text-xs text-gray-600 mt-1">{rec.description}</p>
-                            <p className="text-xs text-orange-600 mt-1">💡 {rec.impact}</p>
+                            <p className="text-xs text-orange-600 mt-1"> {rec.impact}</p>
                             <button className="mt-2 px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition-colors">
                               {rec.action}
                             </button>

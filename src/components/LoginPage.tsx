@@ -295,7 +295,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             </div>
 
             <p className="text-xs text-gray-500 text-center mt-4">
-              💡 提示：使用演示模式可立即体验系统
+               提示：使用演示模式可立即体验系统
             </p>
           </div>
         </div>

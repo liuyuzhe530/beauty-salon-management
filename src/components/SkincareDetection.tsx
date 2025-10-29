@@ -266,10 +266,10 @@ export const SkincareDetection: React.FC = () => {
               <div className="text-sm text-blue-800">
                 <p className="font-medium mb-1">检测说明</p>
                 <ul className="space-y-1 text-xs">
-                  <li>✓ 需要清晰的面部照片</li>
-                  <li>✓ 自然光线条件下效果更好</li>
-                  <li>✓ AI分析结果仅供参考</li>
-                  <li>✓ 建议咨询专业美容师</li>
+                  <li> 需要清晰的面部照片</li>
+                  <li> 自然光线条件下效果更好</li>
+                  <li> AI分析结果仅供参考</li>
+                  <li> 建议咨询专业美容师</li>
                 </ul>
               </div>
             </div>
@@ -295,7 +295,7 @@ export const SkincareDetection: React.FC = () => {
             {/* 问题列表 */}
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
-                <h5 className="font-medium text-gray-900 mb-3 text-red-600">⚠️ 主要问题</h5>
+                <h5 className="font-medium text-gray-900 mb-3 text-red-600">️ 主要问题</h5>
                 <ul className="space-y-2">
                   {analysisResult.problems.map((problem, idx) => (
                     <li key={idx} className="text-sm text-gray-600 flex items-center gap-2">
@@ -307,7 +307,7 @@ export const SkincareDetection: React.FC = () => {
               </div>
 
               <div>
-                <h5 className="font-medium text-gray-900 mb-3 text-green-600">✓ 护理建议</h5>
+                <h5 className="font-medium text-gray-900 mb-3 text-green-600"> 护理建议</h5>
                 <ul className="space-y-2">
                   {analysisResult.solutions.map((solution, idx) => (
                     <li key={idx} className="text-sm text-gray-600 flex items-center gap-2">
@@ -355,10 +355,10 @@ export const SkincareDetection: React.FC = () => {
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border border-indigo-200 p-6">
             <h4 className="font-semibold text-gray-900 mb-3">建议下一步</h4>
             <ul className="space-y-2 text-sm text-gray-700">
-              <li>✓ 根据推荐产品制定护肤方案</li>
-              <li>✓ 咨询专业美容师获取个性化建议</li>
-              <li>✓ 定期复检监测肤质变化</li>
-              <li>✓ 购买推荐产品开始护理</li>
+              <li> 根据推荐产品制定护肤方案</li>
+              <li> 咨询专业美容师获取个性化建议</li>
+              <li> 定期复检监测肤质变化</li>
+              <li> 购买推荐产品开始护理</li>
             </ul>
           </div>
 

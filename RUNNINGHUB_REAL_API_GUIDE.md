@@ -1,4 +1,4 @@
-# 🎯 RunningHub 真实 API 调用指南
+#  RunningHub 真实 API 调用指南
 
 **官方文档**: https://www.runninghub.cn/runninghub-api-doc-cn/api-279098421  
 **API 端点**: `POST /task/openapi/ai-app/run`  
@@ -6,16 +6,16 @@
 
 ---
 
-## 📌 关键理解
+##  关键理解
 
 你之前问的"怎么调用这个模版的API"，关键是理解 RunningHub 的**真实 API 格式**。
 
-### ❌ 错误的想法
+###  错误的想法
 ```
 "就是调用一个端点就行了"
 ```
 
-### ✅ 正确的理解
+###  正确的理解
 ```
 需要指定:
 1. webappId - 应用 ID
@@ -25,7 +25,7 @@
 
 ---
 
-## 🔌 真实 API 调用格式
+##  真实 API 调用格式
 
 ### 请求体结构
 
@@ -61,7 +61,7 @@
 
 ---
 
-## 🎯 如何找到你的 webappId 和 nodeId
+##  如何找到你的 webappId 和 nodeId
 
 ### 步骤 1：登录 RunningHub 控制台
 ```
@@ -91,7 +91,7 @@ nodeId 列表:
 
 ---
 
-## 💻 代码调用示例
+##  代码调用示例
 
 ### JavaScript/TypeScript
 
@@ -126,15 +126,15 @@ async function generatePoster(content: string) {
     );
 
     if (response.data.code === 0) {
-      console.log('✅ 成功！');
+      console.log(' 成功！');
       console.log('任务 ID:', response.data.data.taskId);
       console.log('任务状态:', response.data.data.taskStatus);
       return response.data.data;
     } else {
-      console.error('❌ 失败:', response.data.msg);
+      console.error(' 失败:', response.data.msg);
     }
   } catch (error) {
-    console.error('❌ API 调用失败:', error);
+    console.error(' API 调用失败:', error);
   }
 }
 
@@ -185,13 +185,13 @@ def generate_poster(content):
     if response.status_code == 200:
         data = response.json()
         if data['code'] == 0:
-            print('✅ 成功！')
+            print(' 成功！')
             print('任务ID:', data['data']['taskId'])
             return data['data']
         else:
-            print('❌ 失败:', data['msg'])
+            print(' 失败:', data['msg'])
     else:
-        print('❌ 请求失败:', response.status_code)
+        print(' 请求失败:', response.status_code)
 
 # 使用
 generate_poster('春季护肤特价')
@@ -199,7 +199,7 @@ generate_poster('春季护肤特价')
 
 ---
 
-## 📤 API 响应格式
+##  API 响应格式
 
 ### 成功响应 (code: 0)
 
@@ -240,7 +240,7 @@ generate_poster('春季护肤特价')
 
 ---
 
-## 🔄 工作流程
+##  工作流程
 
 ```
 步骤 1: 准备请求数据
@@ -254,11 +254,11 @@ generate_poster('春季护肤特价')
 └─ 内容类型: application/json
 
 步骤 3: 接收响应
-├─ code = 0: 成功 ✅
+├─ code = 0: 成功 
 │  ├─ taskId: 保存任务 ID
 │  └─ taskStatus: 检查任务状态
 │
-└─ code ≠ 0: 失败 ❌
+└─ code ≠ 0: 失败 
    └─ msg: 查看错误信息
 
 步骤 4: 查询结果（可选）
@@ -268,7 +268,7 @@ generate_poster('春季护肤特价')
 
 ---
 
-## 🔍 常见问题
+##  常见问题
 
 ### Q1: 我在哪里找到 webappId？
 
@@ -302,10 +302,10 @@ generate_poster('春季护肤特价')
 ### Q4: 返回 401 错误怎么办？
 
 **A**:
-- ✅ 检查 apiKey 是否正确
-- ✅ 检查是否有多余的空格
-- ✅ 确认密钥没有过期
-- ✅ 重新生成密钥
+-  检查 apiKey 是否正确
+-  检查是否有多余的空格
+-  确认密钥没有过期
+-  重新生成密钥
 
 ### Q5: 如何监控任务进度？
 
@@ -326,7 +326,7 @@ ws.onmessage = (event) => {
 
 ---
 
-## 🚀 在我们的应用中如何配置
+##  在我们的应用中如何配置
 
 ### 步骤 1: 获取你的凭证
 ```
@@ -356,7 +356,7 @@ posterGenerationAPIService.setWebappId('你的应用ID');
 
 ---
 
-## 📊 API 调用示例对比
+##  API 调用示例对比
 
 ### 方式 1: 使用 axios（推荐）
 ```typescript
@@ -399,7 +399,7 @@ curl -X POST https://www.runninghub.cn/task/openapi/ai-app/run \
 
 ---
 
-## ✅ 完整检查清单
+##  完整检查清单
 
 - [ ] 已获得 webappId
 - [ ] 已生成 API 密钥
@@ -412,7 +412,7 @@ curl -X POST https://www.runninghub.cn/task/openapi/ai-app/run \
 
 ---
 
-## 📚 参考资源
+##  参考资源
 
 | 资源 | 链接 |
 |------|------|
@@ -423,14 +423,14 @@ curl -X POST https://www.runninghub.cn/task/openapi/ai-app/run \
 
 ---
 
-## 🎓 总结
+##  总结
 
 ### 核心点
-1. ✅ API 需要 `webappId` 和 `apiKey`
-2. ✅ 通过 `nodeInfoList` 指定要修改的字段
-3. ✅ 每个字段需要 `nodeId`、`fieldName` 和 `fieldValue`
-4. ✅ 响应中的 `code` 为 0 表示成功
-5. ✅ 使用 `taskId` 可以查询任务进度
+1.  API 需要 `webappId` 和 `apiKey`
+2.  通过 `nodeInfoList` 指定要修改的字段
+3.  每个字段需要 `nodeId`、`fieldName` 和 `fieldValue`
+4.  响应中的 `code` 为 0 表示成功
+5.  使用 `taskId` 可以查询任务进度
 
 ### 下一步
 1. 在 RunningHub 控制台获取你的凭证
@@ -440,6 +440,6 @@ curl -X POST https://www.runninghub.cn/task/openapi/ai-app/run \
 
 ---
 
-**现在你知道怎么调用这个模版的 API 了！** 🎉
+**现在你知道怎么调用这个模版的 API 了！** 
 
-**关键是理解 webappId + nodeInfoList 的概念！** 🔑
+**关键是理解 webappId + nodeInfoList 的概念！** 

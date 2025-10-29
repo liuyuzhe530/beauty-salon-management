@@ -1,4 +1,4 @@
-# 🔧 系统诊断与故障排除指南
+#  系统诊断与故障排除指南
 
 **生成时间**: 2025年10月23日  
 **问题**: 数据库连接失败 (ConnectionRefusedError)  
@@ -6,7 +6,7 @@
 
 ---
 
-## 🚨 **当前问题**
+##  **当前问题**
 
 ### 错误信息
 ```
@@ -19,14 +19,14 @@ Location: MySQL connection to localhost:3306
 
 | 可能原因 | 概率 | 解决方案 |
 |---------|------|---------|
-| MySQL服务未启动 | 🔴 高 | 启动MySQL服务 |
-| MySQL端口被占用 | 🟡 中 | 检查3306端口 |
-| 凭证不正确 | 🟡 中 | 验证用户名密码 |
-| 防火墙阻止 | 🟢 低 | 配置防火墙 |
+| MySQL服务未启动 |  高 | 启动MySQL服务 |
+| MySQL端口被占用 |  中 | 检查3306端口 |
+| 凭证不正确 |  中 | 验证用户名密码 |
+| 防火墙阻止 |  低 | 配置防火墙 |
 
 ---
 
-## 📋 **快速诊断检查清单**
+##  **快速诊断检查清单**
 
 ### 检查1: MySQL服务状态
 
@@ -91,7 +91,7 @@ cat backend/.env
 
 ---
 
-## 🔧 **逐步修复指南**
+##  **逐步修复指南**
 
 ### 步骤1: 启动MySQL服务
 
@@ -159,11 +159,11 @@ cd backend
 cat .env
 
 # 确保配置正确:
-# ✅ DB_HOST=localhost
-# ✅ DB_PORT=3306
-# ✅ DB_USER=root
-# ✅ DB_PASSWORD=(正确的密码)
-# ✅ DB_NAME=beauty_salon
+#  DB_HOST=localhost
+#  DB_PORT=3306
+#  DB_USER=root
+#  DB_PASSWORD=(正确的密码)
+#  DB_NAME=beauty_salon
 ```
 
 ### 步骤4: 重新启动后端
@@ -190,7 +190,7 @@ npm run start
 
 ---
 
-## 🧪 **连接测试脚本**
+##  **连接测试脚本**
 
 ### 创建测试文件 (backend/test-connection.js)
 
@@ -210,7 +210,7 @@ const sequelize = new Sequelize({
 
 const testConnection = async () => {
   try {
-    console.log('📝 测试数据库连接...');
+    console.log(' 测试数据库连接...');
     console.log('配置:');
     console.log('  Host:', process.env.DB_HOST || 'localhost');
     console.log('  Port:', process.env.DB_PORT || '3306');
@@ -219,21 +219,21 @@ const testConnection = async () => {
     console.log('');
     
     await sequelize.authenticate();
-    console.log('✅ 数据库连接成功！');
+    console.log(' 数据库连接成功！');
     
     // 列出数据库信息
     const [results] = await sequelize.query('SELECT DATABASE() as db');
-    console.log('✅ 当前数据库:', results[0].db);
+    console.log(' 当前数据库:', results[0].db);
     
     process.exit(0);
   } catch (error) {
-    console.error('❌ 连接失败:', error.message);
+    console.error(' 连接失败:', error.message);
     console.error('');
     console.error('故障排除建议:');
-    console.error('1. ✓ 检查MySQL服务是否启动');
-    console.error('2. ✓ 验证.env文件中的数据库配置');
-    console.error('3. ✓ 检查MySQL用户名和密码');
-    console.error('4. ✓ 确保数据库已创建');
+    console.error('1.  检查MySQL服务是否启动');
+    console.error('2.  验证.env文件中的数据库配置');
+    console.error('3.  检查MySQL用户名和密码');
+    console.error('4.  确保数据库已创建');
     process.exit(1);
   }
 };
@@ -248,27 +248,27 @@ cd backend
 node test-connection.js
 
 # 成功输出示例:
-# 📝 测试数据库连接...
+#  测试数据库连接...
 # 配置:
 #   Host: localhost
 #   Port: 3306
 #   User: root
 #   Database: beauty_salon
 # 
-# ✅ 数据库连接成功！
-# ✅ 当前数据库: beauty_salon
+#  数据库连接成功！
+#  当前数据库: beauty_salon
 ```
 
 ---
 
-## 📊 **端到端功能测试计划**
+##  **端到端功能测试计划**
 
 ### 第一轮: 基础连接测试 (完成后进行)
 
 ```
-✓ 后端启动成功
-✓ 数据库连接正常
-✓ 健康检查端点通过
+ 后端启动成功
+ 数据库连接正常
+ 健康检查端点通过
 ```
 
 ### 第二轮: 认证测试
@@ -333,40 +333,40 @@ curl -X DELETE http://localhost:3001/api/customers/{id} \
 
 ---
 
-## 🎯 **端到端测试检查清单**
+##  **端到端测试检查清单**
 
-### 认证系统 ✓
+### 认证系统 
 - [ ] POST /api/auth/register - 新用户注册
 - [ ] POST /api/auth/login - 用户登录
 - [ ] GET /api/auth/verify - Token验证
 - [ ] 错误处理 - 无效凭证
 
-### 客户管理 ✓
+### 客户管理 
 - [ ] GET /api/customers - 获取列表
 - [ ] POST /api/customers - 创建客户
 - [ ] GET /api/customers/:id - 获取详情
 - [ ] PUT /api/customers/:id - 更新客户
 - [ ] DELETE /api/customers/:id - 删除客户
 
-### 预约管理 ✓
+### 预约管理 
 - [ ] GET /api/appointments - 获取列表
 - [ ] POST /api/appointments - 创建预约
 - [ ] PUT /api/appointments/:id - 更新预约
 - [ ] DELETE /api/appointments/:id - 取消预约
 
-### 美容师管理 ✓
+### 美容师管理 
 - [ ] GET /api/staff - 获取列表
 - [ ] POST /api/staff - 添加美容师
 - [ ] PUT /api/staff/:id - 更新信息
 - [ ] DELETE /api/staff/:id - 移除美容师
 
-### 产品管理 ✓
+### 产品管理 
 - [ ] GET /api/products - 获取列表
 - [ ] POST /api/products - 创建产品
 - [ ] PUT /api/products/:id - 更新产品
 - [ ] DELETE /api/products/:id - 删除产品
 
-### 前端集成 ✓
+### 前端集成 
 - [ ] 登录页面正常显示
 - [ ] API调用成功
 - [ ] Token正确保存
@@ -374,7 +374,7 @@ curl -X DELETE http://localhost:3001/api/customers/{id} \
 
 ---
 
-## ⚡ **性能评估指标**
+##  **性能评估指标**
 
 ### 后端性能
 
@@ -402,21 +402,21 @@ ab -n 1000 -c 10 http://localhost:3001/api/health
 
 ---
 
-## 🔐 **安全审计检查清单**
+##  **安全审计检查清单**
 
-### 认证安全 ✓
+### 认证安全 
 - [ ] 密码加密 (bcryptjs)
 - [ ] JWT Token验证
 - [ ] Token过期机制
 - [ ] 敏感信息不暴露
 
-### API安全 ✓
+### API安全 
 - [ ] CORS配置正确
 - [ ] SQL注入防护 (Sequelize ORM)
 - [ ] 请求验证 (Joi)
 - [ ] 错误消息不暴露系统信息
 
-### 数据安全 ✓
+### 数据安全 
 - [ ] 数据库加密连接 (可选)
 - [ ] 日志不包含敏感信息
 - [ ] 权限检查 (RBAC)
@@ -424,7 +424,7 @@ ab -n 1000 -c 10 http://localhost:3001/api/health
 
 ---
 
-## 📋 **部署准备检查清单**
+##  **部署准备检查清单**
 
 ### 代码准备
 - [ ] 所有测试通过
@@ -452,23 +452,23 @@ ab -n 1000 -c 10 http://localhost:3001/api/health
 
 ---
 
-## 🚀 **下一步行动**
+##  **下一步行动**
 
 ### 立即执行
-1. ✅ 启动MySQL服务
-2. ✅ 创建beauty_salon数据库
-3. ✅ 运行test-connection.js验证
-4. ✅ npm run start启动后端
+1.  启动MySQL服务
+2.  创建beauty_salon数据库
+3.  运行test-connection.js验证
+4.  npm run start启动后端
 
 ### 随后执行
-5. ⏳ 执行端到端测试
-6. ⏳ 进行性能评估
-7. ⏳ 完成安全审计
-8. ⏳ 准备部署
+5.  执行端到端测试
+6.  进行性能评估
+7.  完成安全审计
+8.  准备部署
 
 ---
 
-## 📞 **获取帮助**
+##  **获取帮助**
 
 如果遇到问题:
 

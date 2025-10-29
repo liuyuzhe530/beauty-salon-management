@@ -1,9 +1,9 @@
-# 🔗 前端与后端 API 集成指南
+#  前端与后端 API 集成指南
 
-## 📌 快速开始
+##  快速开始
 
 ### 1. 后端服务器状态
-**状态**: ✅ **运行中**  
+**状态**:  **运行中**  
 **地址**: http://localhost:5000  
 **API基础URL**: http://localhost:5000/api
 
@@ -196,7 +196,7 @@ export const apiService = new ApiService();
 
 ---
 
-## 📦 安装依赖
+##  安装依赖
 
 在前端项目中安装 axios:
 
@@ -207,7 +207,7 @@ npm install axios
 
 ---
 
-## 🔑 环境配置
+##  环境配置
 
 在 `.env` 文件中添加:
 
@@ -217,7 +217,7 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-## 🎯 集成步骤
+##  集成步骤
 
 ### 1. 修改登录流程
 
@@ -313,11 +313,11 @@ export const useCustomerStorage = () => {
 
 ---
 
-## 📊 迁移计划
+##  迁移计划
 
 ### 当前状态
-✅ 本地 localStorage 数据存储  
-✅ 后端 API 完全实现  
+ 本地 localStorage 数据存储  
+ 后端 API 完全实现  
 
 ### 迁移步骤
 1. **保持现有逻辑** - 前端继续使用 localStorage
@@ -327,7 +327,7 @@ export const useCustomerStorage = () => {
 
 ---
 
-## 🧪 测试 API
+##  测试 API
 
 ### 使用 Postman 或 curl 测试
 
@@ -353,7 +353,7 @@ curl -X POST http://localhost:5000/api/customers \
 
 ---
 
-## ⚠️ 常见问题
+## ️ 常见问题
 
 ### Q: CORS 错误？
 A: 后端已配置 CORS，确保后端服务正在运行。
@@ -366,12 +366,12 @@ A: 确保 localStorage 和数据库的结构一致。
 
 ---
 
-## 🚀 下一步
+##  下一步
 
-1. ✅ 后端 API 实现完成
-2. ⏳ 前端集成 API 服务
-3. ⏳ 数据迁移和验证
-4. ⏳ 生产部署
+1.  后端 API 实现完成
+2.  前端集成 API 服务
+3.  数据迁移和验证
+4.  生产部署
 
 ---
 

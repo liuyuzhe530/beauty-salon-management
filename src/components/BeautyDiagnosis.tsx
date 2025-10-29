@@ -220,13 +220,13 @@ export const BeautyDiagnosis: React.FC = () => {
             <div className="mt-10 bg-blue-50 border-2 border-blue-200 rounded-lg p-5 flex gap-4">
               <AlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-800">
-                <p className="font-bold mb-2">✨ 诊断说明</p>
+                <p className="font-bold mb-2"> 诊断说明</p>
                 <ul className="space-y-1 text-xs leading-relaxed">
-                  <li>✓ 需要清晰的正脸自拍照</li>
-                  <li>✓ 自然光线下效果更准确</li>
-                  <li>✓ AI分析涵盖肤质、肤色、问题等多维度</li>
-                  <li>✓ 获得专业美容建议和产品推荐</li>
-                  <li>✓ 支持历史对比，追踪美容效果</li>
+                  <li> 需要清晰的正脸自拍照</li>
+                  <li> 自然光线下效果更准确</li>
+                  <li> AI分析涵盖肤质、肤色、问题等多维度</li>
+                  <li> 获得专业美容建议和产品推荐</li>
+                  <li> 支持历史对比，追踪美容效果</li>
                 </ul>
               </div>
             </div>
@@ -256,22 +256,22 @@ export const BeautyDiagnosis: React.FC = () => {
 
           {/* 皮肤诊断 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">📋 皮肤诊断</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4"> 皮肤诊断</h3>
 
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg">
-                <h5 className="font-bold text-gray-900 mb-2">🎨 肤质状态</h5>
+                <h5 className="font-bold text-gray-900 mb-2"> 肤质状态</h5>
                 <p className="text-2xl font-bold text-pink-600">{analysisResult.skinCondition}</p>
               </div>
               <div className="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg">
-                <h5 className="font-bold text-gray-900 mb-2">🌈 肤色</h5>
+                <h5 className="font-bold text-gray-900 mb-2"> 肤色</h5>
                 <p className="text-2xl font-bold text-orange-600">{analysisResult.skinTone}</p>
               </div>
             </div>
 
             {/* 问题列表 */}
             <div className="mb-6">
-              <h5 className="font-bold text-gray-900 mb-3 text-red-600">⚠️ 皮肤问题</h5>
+              <h5 className="font-bold text-gray-900 mb-3 text-red-600">️ 皮肤问题</h5>
               <div className="grid md:grid-cols-2 gap-3">
                 {analysisResult.problems.map((problem, idx) => (
                   <div key={idx} className="flex items-center gap-2 p-3 bg-red-50 rounded-lg">
@@ -284,7 +284,7 @@ export const BeautyDiagnosis: React.FC = () => {
 
             {/* 建议列表 */}
             <div>
-              <h5 className="font-bold text-gray-900 mb-3 text-green-600">✓ 美容建议</h5>
+              <h5 className="font-bold text-gray-900 mb-3 text-green-600"> 美容建议</h5>
               <div className="grid md:grid-cols-2 gap-3">
                 {analysisResult.recommendations.map((rec, idx) => (
                   <div key={idx} className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
@@ -298,7 +298,7 @@ export const BeautyDiagnosis: React.FC = () => {
 
           {/* 美容疗程方案 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">💆 美容疗程方案</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4"> 美容疗程方案</h3>
             <div className="space-y-3">
               {analysisResult.treatmentPlan.map((plan, idx) => (
                 <div key={idx} className="flex items-center gap-3 p-4 bg-gradient-to-r from-pink-50 to-red-50 rounded-lg border border-pink-200">
@@ -313,7 +313,7 @@ export const BeautyDiagnosis: React.FC = () => {
 
           {/* 推荐产品 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">🛍️ 专业产品推荐</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">️ 专业产品推荐</h3>
 
             <div className="grid md:grid-cols-3 gap-4">
               {analysisResult.products.map(product => (
@@ -325,7 +325,7 @@ export const BeautyDiagnosis: React.FC = () => {
                         <p className="text-xs text-gray-600">{product.category}</p>
                       </div>
                       <div className="flex items-center gap-0.5">
-                        <span className="text-xs text-yellow-500">★</span>
+                        <span className="text-xs text-yellow-500"></span>
                         <span className="text-xs font-bold text-gray-700">{product.rating}</span>
                       </div>
                     </div>
@@ -345,12 +345,12 @@ export const BeautyDiagnosis: React.FC = () => {
 
           {/* 下一步操作 */}
           <div className="bg-gradient-to-r from-pink-100 to-red-100 rounded-lg border-2 border-pink-300 p-6">
-            <h4 className="font-bold text-gray-900 mb-3 text-lg">🌟 下一步建议</h4>
+            <h4 className="font-bold text-gray-900 mb-3 text-lg"> 下一步建议</h4>
             <ul className="space-y-2 text-sm text-gray-800">
-              <li>✓ 立即购买推荐产品，开始美容护理</li>
-              <li>✓ 咨询专业美容师，获取个性化护理方案</li>
-              <li>✓ 定期检测肌肤，追踪美容效果</li>
-              <li>✓ 根据疗程方案，持续护理和改善</li>
+              <li> 立即购买推荐产品，开始美容护理</li>
+              <li> 咨询专业美容师，获取个性化护理方案</li>
+              <li> 定期检测肌肤，追踪美容效果</li>
+              <li> 根据疗程方案，持续护理和改善</li>
             </ul>
           </div>
 

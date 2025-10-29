@@ -34,7 +34,7 @@ export const MarketingAssistant: React.FC = () => {
               : 'text-gray-600 hover:text-purple-600'
           }`}
         >
-          🎨 智能海报制作
+           智能海报制作
             </button>
             <button
           onClick={() => setActiveTab('copywriting')}
@@ -44,7 +44,7 @@ export const MarketingAssistant: React.FC = () => {
               : 'text-gray-600 hover:text-purple-600'
           }`}
         >
-          ✍️ 文案撰写
+          ️ 文案撰写
             </button>
             <button
           onClick={() => setActiveTab('analysis')}
@@ -54,7 +54,7 @@ export const MarketingAssistant: React.FC = () => {
               : 'text-gray-600 hover:text-purple-600'
           }`}
         >
-          📊 营销分析
+           营销分析
             </button>
       </div>
 
@@ -68,7 +68,7 @@ export const MarketingAssistant: React.FC = () => {
       {/* 文案撰写 - 保持现有功能 */}
       {activeTab === 'copywriting' && (
         <div className="bg-white rounded-lg border border-purple-200 p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">✍️ AI 文案撰写</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">️ AI 文案撰写</h2>
           <p className="text-gray-600">敬请期待...</p>
             </div>
           )}
@@ -76,7 +76,7 @@ export const MarketingAssistant: React.FC = () => {
       {/* 营销分析 - 保持现有功能 */}
       {activeTab === 'analysis' && (
         <div className="bg-white rounded-lg border border-purple-200 p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">📊 营销分析</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4"> 营销分析</h2>
           <p className="text-gray-600">敬请期待...</p>
       </div>
       )}

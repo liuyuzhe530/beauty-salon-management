@@ -1,23 +1,23 @@
-# 🔍 **系统诊断报告**
+#  **系统诊断报告**
 
 **诊断时间**: 2025年10月23日  
-**诊断结果**: ⚠️ **MySQL服务未启动**  
-**严重级别**: 🔴 **严重**  
-**修复时间**: ⏱️ **5分钟**
+**诊断结果**: ️ **MySQL服务未启动**  
+**严重级别**:  **严重**  
+**修复时间**: ️ **5分钟**
 
 ---
 
-## 📊 **诊断结果**
+##  **诊断结果**
 
 ### 发现的问题
 
 ```
-✅ 项目结构        - 完好
-✅ 代码编译        - 成功 (dist文件夹存在)
-✅ 依赖安装        - 完成 (node_modules存在)
-✅ 环境配置        - 正确 (.env文件正确)
-❌ MySQL服务       - 未启动 (ECONNREFUSED)
-❌ 数据库连接      - 失败 (无法连接localhost:3306)
+ 项目结构        - 完好
+ 代码编译        - 成功 (dist文件夹存在)
+ 依赖安装        - 完成 (node_modules存在)
+ 环境配置        - 正确 (.env文件正确)
+ MySQL服务       - 未启动 (ECONNREFUSED)
+ 数据库连接      - 失败 (无法连接localhost:3306)
 ```
 
 ### 根本原因
@@ -32,13 +32,13 @@ Location: localhost:3306
 ```
 
 这意味着:
-- ❌ MySQL服务进程未运行
-- ❌ 端口3306无法访问
-- ❌ 数据库无法被连接
+-  MySQL服务进程未运行
+-  端口3306无法访问
+-  数据库无法被连接
 
 ---
 
-## 🔧 **立即修复 (5分钟)**
+##  **立即修复 (5分钟)**
 
 ### 方案A: Windows 用户 (推荐)
 
@@ -59,7 +59,7 @@ net start MySQL80
 # 验证服务状态
 Get-Service MySQL80 | Select-Object Status
 
-# 应该显示: Status : Running ✅
+# 应该显示: Status : Running 
 ```
 
 #### 步骤3: 如果找不到MySQL80
@@ -95,7 +95,7 @@ brew services start mysql
 
 # 验证状态
 brew services list | grep mysql
-# 应该显示: mysql ... started ✅
+# 应该显示: mysql ... started 
 ```
 
 ### 方案C: Linux 用户 (Ubuntu/Debian)
@@ -106,12 +106,12 @@ sudo systemctl start mysql
 
 # 验证状态
 sudo systemctl status mysql
-# 应该显示: ● mysql.service - MySQL Community Server ... active (running) ✅
+# 应该显示: ● mysql.service - MySQL Community Server ... active (running) 
 ```
 
 ---
 
-## ✅ **验证修复成功**
+##  **验证修复成功**
 
 ### 步骤1: 测试MySQL连接
 
@@ -119,7 +119,7 @@ sudo systemctl status mysql
 # 尝试连接MySQL
 mysql -h localhost -u root
 
-# 如果看到 "mysql>" 提示，说明成功 ✅
+# 如果看到 "mysql>" 提示，说明成功 
 # 输入: exit 退出
 ```
 
@@ -159,17 +159,17 @@ cd backend
 node test-connection.js
 
 # 预期输出应该显示:
-# ✅ 数据库连接成功！
-# 📊 数据库信息:
+#  数据库连接成功！
+#  数据库信息:
 #   当前数据库: beauty_salon
 #   已有数据库: information_schema, mysql, performance_schema, beauty_salon
 #   当前表数: 0
-# ✅ 所有测试通过！
+#  所有测试通过！
 ```
 
 ---
 
-## 🚀 **启动系统 (1分钟)**
+##  **启动系统 (1分钟)**
 
 一旦数据库连接成功，按以下步骤启动系统：
 
@@ -180,9 +180,9 @@ cd backend
 npm run start
 
 # 预期输出:
-# Database connected ✅
-# Database synchronized ✅
-# Server running on port 3001 ✅
+# Database connected 
+# Database synchronized 
+# Server running on port 3001 
 ```
 
 ### 启动前端 (新终端)
@@ -191,19 +191,19 @@ npm run start
 npm run dev
 
 # 预期输出:
-# ✓ 准备好在浏览器中打开 http://localhost:5173/
+#  准备好在浏览器中打开 http://localhost:5173/
 ```
 
 ### 打开主页
 
 ```
 在浏览器中访问: http://localhost:5173
-应该看到登录页面 ✅
+应该看到登录页面 
 ```
 
 ---
 
-## 📋 **完整检查清单**
+##  **完整检查清单**
 
 ```
 MySQL服务
@@ -219,8 +219,8 @@ MySQL服务
 
 后端连接
   [ ] node test-connection.js返回成功
-  [ ] 显示 ✅ 数据库连接成功！
-  [ ] 显示 ✅ 所有测试通过！
+  [ ] 显示  数据库连接成功！
+  [ ] 显示  所有测试通过！
 
 后端启动
   [ ] npm run start成功
@@ -240,7 +240,7 @@ MySQL服务
 
 ---
 
-## 🔍 **常见问题**
+##  **常见问题**
 
 ### Q1: Windows中找不到MySQL80
 
@@ -306,30 +306,30 @@ sudo service mysql start
 
 ---
 
-## 🎯 **成功标志**
+##  **成功标志**
 
-当您看到以下消息时，说明系统已成功启动 ✅
+当您看到以下消息时，说明系统已成功启动 
 
 ### 后端成功消息
 ```
-✅ Database connected
-✅ Database synchronized
-✅ Server running on port 3001
+ Database connected
+ Database synchronized
+ Server running on port 3001
 ```
 
 ### 前端成功消息
 ```
-✓ 准备好在浏览器中打开 http://localhost:5173/
+ 准备好在浏览器中打开 http://localhost:5173/
 ```
 
 ### 浏览器成功标志
-- ✅ 可以访问 http://localhost:5173
-- ✅ 看到登录页面
-- ✅ DevTools显示API请求
+-  可以访问 http://localhost:5173
+-  看到登录页面
+-  DevTools显示API请求
 
 ---
 
-## 💡 **关键提示**
+##  **关键提示**
 
 1. **MySQL必须保持运行**
    - 应用需要MySQL进程一直运行
@@ -350,22 +350,22 @@ sudo service mysql start
 
 ---
 
-## 📞 **遇到问题**
+##  **遇到问题**
 
 如果上述步骤仍然无法解决，请检查：
 
-1. ✓ MySQL是否真的已安装
+1.  MySQL是否真的已安装
    ```bash
    mysql --version
    ```
 
-2. ✓ 是否有多个MySQL版本冲突
+2.  是否有多个MySQL版本冲突
    ```bash
    which mysql  # Linux/Mac
    where mysql  # Windows
    ```
 
-3. ✓ MySQL数据目录是否正常
+3.  MySQL数据目录是否正常
    ```bash
    # 检查MySQL进程日志
    # Windows: 查看事件查看器
@@ -374,21 +374,21 @@ sudo service mysql start
 
 ---
 
-## ✨ **下一步**
+##  **下一步**
 
 完成上述步骤后：
 
-1. ✅ MySQL服务启动并验证
-2. ✅ 后端连接测试通过
-3. ✅ 后端服务器启动
-4. ✅ 前端应用启动
-5. ✅ 打开浏览器访问主页
+1.  MySQL服务启动并验证
+2.  后端连接测试通过
+3.  后端服务器启动
+4.  前端应用启动
+5.  打开浏览器访问主页
 
 就可以开始系统测试了！
 
 ---
 
-**诊断完成** ✅  
-**修复预计时间**: ⏱️ 5分钟  
+**诊断完成**   
+**修复预计时间**: ️ 5分钟  
 **成功率**: 99%+  
 **最后提示**: 启动MySQL是关键，其他都会顺利进行！

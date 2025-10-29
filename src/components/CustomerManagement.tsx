@@ -526,7 +526,7 @@ export const CustomerManagement: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-1 whitespace-nowrap">
                             {Array.from({ length: hist.rating }).map((_, i) => (
-                              <span key={i} className="text-yellow-400">★</span>
+                              <span key={i} className="text-yellow-400"></span>
                             ))}
                           </div>
                         </div>

@@ -1,6 +1,6 @@
-# 🧪 完整功能测试指南
+#  完整功能测试指南
 
-## 📋 测试计划
+##  测试计划
 
 ### 第1部分：基础环境测试
 - [x] 后端服务启动
@@ -53,7 +53,7 @@
 
 ---
 
-## 🚀 环境启动
+##  环境启动
 
 ### 1. 启动后端服务
 
@@ -70,9 +70,9 @@ npm run dev
 
 **预期输出**:
 ```
-✅ 数据库连接成功
-✅ 数据库模型同步成功
-🚀 美容院管理系统 API 服务已启动
+ 数据库连接成功
+ 数据库模型同步成功
+ 美容院管理系统 API 服务已启动
 服务器地址: http://localhost:5000
 ```
 
@@ -90,8 +90,8 @@ npm run dev
 ```
 VITE v4.x.x  ready in xxx ms
 
-➜  Local:   http://localhost:3000/
-➜  press h to show help
+  Local:   http://localhost:3000/
+  press h to show help
 ```
 
 ### 3. 打开浏览器
@@ -102,7 +102,7 @@ VITE v4.x.x  ready in xxx ms
 
 ---
 
-## 🔐 认证测试
+##  认证测试
 
 ### 测试1：用户注册
 
@@ -117,10 +117,10 @@ VITE v4.x.x  ready in xxx ms
 3. 点击"注册"按钮
 
 **预期结果**:
-- ✅ 显示"注册成功"提示
-- ✅ 自动跳转到主页
-- ✅ 页面显示用户信息
-- ✅ Network中看到POST /api/auth/register 返回200
+-  显示"注册成功"提示
+-  自动跳转到主页
+-  页面显示用户信息
+-  Network中看到POST /api/auth/register 返回200
 
 **响应示例**:
 ```json
@@ -150,10 +150,10 @@ VITE v4.x.x  ready in xxx ms
 4. 点击"登录"按钮
 
 **预期结果**:
-- ✅ 显示"登录成功"提示
-- ✅ 自动跳转到主页
-- ✅ 可以看到用户角色和名称
-- ✅ Network中看到POST /api/auth/login 返回200
+-  显示"登录成功"提示
+-  自动跳转到主页
+-  可以看到用户角色和名称
+-  Network中看到POST /api/auth/login 返回200
 
 ### 测试3：Token验证
 
@@ -168,9 +168,9 @@ console.log('Token长度:', token?.length);
 ```
 
 **预期结果**:
-- ✅ 能看到Token值
-- ✅ Token长度超过100字符
-- ✅ Token格式为 `eyJhbGc...`
+-  能看到Token值
+-  Token长度超过100字符
+-  Token格式为 `eyJhbGc...`
 
 ### 测试4：用户登出
 
@@ -179,14 +179,14 @@ console.log('Token长度:', token?.length);
 2. 确认登出操作
 
 **预期结果**:
-- ✅ 显示"登出成功"提示
-- ✅ 返回登录页
-- ✅ localStorage中的Token被清除
-- ✅ Network中看到POST /api/auth/logout 返回200
+-  显示"登出成功"提示
+-  返回登录页
+-  localStorage中的Token被清除
+-  Network中看到POST /api/auth/logout 返回200
 
 ---
 
-## 👥 客户管理测试
+##  客户管理测试
 
 ### 测试5：创建客户
 
@@ -205,9 +205,9 @@ console.log('Token长度:', token?.length);
 5. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"提示
-- ✅ 客户列表中出现新客户
-- ✅ Network中看到POST /api/customers 返回201
+-  显示"创建成功"提示
+-  客户列表中出现新客户
+-  Network中看到POST /api/customers 返回201
 
 **验证**:
 ```javascript
@@ -226,10 +226,10 @@ fetch('http://localhost:5000/api/customers', {
 2. 观察客户列表
 
 **预期结果**:
-- ✅ 显示分页信息
-- ✅ 每一行显示客户基本信息
-- ✅ 能看到操作按钮（编辑、删除）
-- ✅ Network中看到GET /api/customers?page=1&limit=10 返回200
+-  显示分页信息
+-  每一行显示客户基本信息
+-  能看到操作按钮（编辑、删除）
+-  Network中看到GET /api/customers?page=1&limit=10 返回200
 
 ### 测试7：搜索客户
 
@@ -239,9 +239,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 按Enter或点击搜索按钮
 
 **预期结果**:
-- ✅ 列表只显示匹配的客户
-- ✅ 显示搜索结果数量
-- ✅ Network中看到GET /api/customers/search?keyword=张三 返回200
+-  列表只显示匹配的客户
+-  显示搜索结果数量
+-  Network中看到GET /api/customers/search?keyword=张三 返回200
 
 ### 测试8：更新客户
 
@@ -252,9 +252,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"更新成功"提示
-- ✅ 列表中的数据已更新
-- ✅ Network中看到PUT /api/customers/{id} 返回200
+-  显示"更新成功"提示
+-  列表中的数据已更新
+-  Network中看到PUT /api/customers/{id} 返回200
 
 ### 测试9：删除客户
 
@@ -264,10 +264,10 @@ fetch('http://localhost:5000/api/customers', {
 3. 确认删除
 
 **预期结果**:
-- ✅ 显示确认对话框
-- ✅ 点击确认后显示"删除成功"
-- ✅ 客户从列表中移除
-- ✅ Network中看到DELETE /api/customers/{id} 返回200
+-  显示确认对话框
+-  点击确认后显示"删除成功"
+-  客户从列表中移除
+-  Network中看到DELETE /api/customers/{id} 返回200
 
 ### 测试10：分页功能
 
@@ -276,14 +276,14 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"下一页"
 
 **预期结果**:
-- ✅ 页码更新
-- ✅ 显示不同的客户
-- ✅ Network中看到新的分页请求
-- ✅ "上一页"按钮变为可用
+-  页码更新
+-  显示不同的客户
+-  Network中看到新的分页请求
+-  "上一页"按钮变为可用
 
 ---
 
-## 📅 预约管理测试
+##  预约管理测试
 
 ### 测试11：创建预约
 
@@ -303,10 +303,10 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 预约出现在列表中
-- ✅ 状态为"pending"
-- ✅ Network中看到POST /api/appointments 返回201
+-  显示"创建成功"
+-  预约出现在列表中
+-  状态为"pending"
+-  Network中看到POST /api/appointments 返回201
 
 ### 测试12：确认预约
 
@@ -315,9 +315,9 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"确认"或"确认预约"按钮
 
 **预期结果**:
-- ✅ 状态变为"confirmed"
-- ✅ 显示"确认成功"
-- ✅ Network中看到PUT /api/appointments/{id}/confirm 返回200
+-  状态变为"confirmed"
+-  显示"确认成功"
+-  Network中看到PUT /api/appointments/{id}/confirm 返回200
 
 ### 测试13：完成预约
 
@@ -326,9 +326,9 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"完成"或"标记为完成"按钮
 
 **预期结果**:
-- ✅ 状态变为"completed"
-- ✅ 显示"完成成功"
-- ✅ Network中看到PUT /api/appointments/{id}/complete 返回200
+-  状态变为"completed"
+-  显示"完成成功"
+-  Network中看到PUT /api/appointments/{id}/complete 返回200
 
 ### 测试14：取消预约
 
@@ -337,13 +337,13 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"取消"按钮
 
 **预期结果**:
-- ✅ 状态变为"cancelled"
-- ✅ 显示"取消成功"
-- ✅ Network中看到PUT /api/appointments/{id}/cancel 返回200
+-  状态变为"cancelled"
+-  显示"取消成功"
+-  Network中看到PUT /api/appointments/{id}/cancel 返回200
 
 ---
 
-## 💼 美容师管理测试
+##  美容师管理测试
 
 ### 测试15：创建美容师
 
@@ -362,9 +362,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 美容师出现在列表中
-- ✅ Network中看到POST /api/staff 返回201
+-  显示"创建成功"
+-  美容师出现在列表中
+-  Network中看到POST /api/staff 返回201
 
 ### 测试16：更新评分
 
@@ -375,13 +375,13 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"更新成功"
-- ✅ 列表中显示新的评分
-- ✅ Network中看到PUT /api/staff/{id}/rating 返回200
+-  显示"更新成功"
+-  列表中显示新的评分
+-  Network中看到PUT /api/staff/{id}/rating 返回200
 
 ---
 
-## 🛍️ 产品管理测试
+## ️ 产品管理测试
 
 ### 测试17：创建产品
 
@@ -400,9 +400,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 产品出现在列表中
-- ✅ Network中看到POST /api/products 返回201
+-  显示"创建成功"
+-  产品出现在列表中
+-  Network中看到POST /api/products 返回201
 
 ### 测试18：库存管理
 
@@ -414,8 +414,8 @@ fetch('http://localhost:5000/api/customers', {
    - 或增加库存10件
 
 **预期结果**:
-- ✅ 库存数值变化
-- ✅ Network中看到相应的PUT请求返回200
+-  库存数值变化
+-  Network中看到相应的PUT请求返回200
 
 ### 测试19：搜索产品
 
@@ -425,12 +425,12 @@ fetch('http://localhost:5000/api/customers', {
 3. 按Enter搜索
 
 **预期结果**:
-- ✅ 只显示匹配的产品
-- ✅ Network中看到搜索请求返回200
+-  只显示匹配的产品
+-  Network中看到搜索请求返回200
 
 ---
 
-## ⚠️ 错误处理测试
+## ️ 错误处理测试
 
 ### 测试20：无效凭证登录
 
@@ -440,9 +440,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 点击登录
 
 **预期结果**:
-- ✅ 显示错误提示信息
-- ✅ 停留在登录页
-- ✅ Network中看到POST返回401或400
+-  显示错误提示信息
+-  停留在登录页
+-  Network中看到POST返回401或400
 
 ### 测试21：网络错误处理
 
@@ -452,9 +452,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 尝试进行任何操作（如创建客户）
 
 **预期结果**:
-- ✅ 显示网络错误提示
-- ✅ 清晰的错误消息
-- ✅ UI不崩溃
+-  显示网络错误提示
+-  清晰的错误消息
+-  UI不崩溃
 
 ### 测试22：过期Token处理
 
@@ -467,12 +467,12 @@ localStorage.removeItem('authToken');
 3. 尝试进行任何需要认证的操作
 
 **预期结果**:
-- ✅ 显示"请重新登录"提示
-- ✅ 返回登录页
+-  显示"请重新登录"提示
+-  返回登录页
 
 ---
 
-## 📊 性能测试
+##  性能测试
 
 ### 测试23：大数据加载
 
@@ -482,9 +482,9 @@ localStorage.removeItem('authToken');
 3. 观察加载时间和响应
 
 **预期结果**:
-- ✅ 列表在2秒内加载完成
-- ✅ UI保持响应
-- ✅ 分页工作正常
+-  列表在2秒内加载完成
+-  UI保持响应
+-  分页工作正常
 
 ### 测试24：并发请求
 
@@ -493,13 +493,13 @@ localStorage.removeItem('authToken');
 2. 观察系统反应
 
 **预期结果**:
-- ✅ 所有请求都能正常处理
-- ✅ 数据一致性正确
-- ✅ 没有重复提交
+-  所有请求都能正常处理
+-  数据一致性正确
+-  没有重复提交
 
 ---
 
-## 📋 测试检查清单
+##  测试检查清单
 
 ### 基础功能
 - [ ] 注册功能正常
@@ -542,7 +542,7 @@ localStorage.removeItem('authToken');
 
 ---
 
-## 🔧 调试技巧
+##  调试技巧
 
 ### 查看API请求
 
@@ -581,7 +581,7 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## 📝 测试报告模板
+##  测试报告模板
 
 ```
 测试日期: ____年____月____日
@@ -589,7 +589,7 @@ fetch('http://localhost:5000/api/customers', {
 测试环境: Windows/Mac/Linux
 浏览器: Chrome/Firefox/Safari
 
-总体结果: ✅ 通过 / ❌ 失败
+总体结果:  通过 /  失败
 
 通过的测试: ____ / 24
 失败的测试: ____ / 24
@@ -606,26 +606,26 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## ✅ 测试完成标准
+##  测试完成标准
 
 所有测试完成且满足以下条件：
 
-✅ 所有24个测试用例都通过
-✅ 没有JavaScript错误
-✅ 所有API调用返回正确的状态码
-✅ 用户提示信息清晰正确
-✅ 数据加载速度满足要求（<2秒）
-✅ 错误处理完善
-✅ 没有数据不一致
+ 所有24个测试用例都通过
+ 没有JavaScript错误
+ 所有API调用返回正确的状态码
+ 用户提示信息清晰正确
+ 数据加载速度满足要求（<2秒）
+ 错误处理完善
+ 没有数据不一致
 
 ---
 
-**测试状态**: 🚀 准备就绪
+**测试状态**:  准备就绪
 **下一步**: 开始执行测试
 **预计耗时**: 30-60分钟
 
 
-## 📋 测试计划
+##  测试计划
 
 ### 第1部分：基础环境测试
 - [x] 后端服务启动
@@ -678,7 +678,7 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## 🚀 环境启动
+##  环境启动
 
 ### 1. 启动后端服务
 
@@ -695,9 +695,9 @@ npm run dev
 
 **预期输出**:
 ```
-✅ 数据库连接成功
-✅ 数据库模型同步成功
-🚀 美容院管理系统 API 服务已启动
+ 数据库连接成功
+ 数据库模型同步成功
+ 美容院管理系统 API 服务已启动
 服务器地址: http://localhost:5000
 ```
 
@@ -715,8 +715,8 @@ npm run dev
 ```
 VITE v4.x.x  ready in xxx ms
 
-➜  Local:   http://localhost:3000/
-➜  press h to show help
+  Local:   http://localhost:3000/
+  press h to show help
 ```
 
 ### 3. 打开浏览器
@@ -727,7 +727,7 @@ VITE v4.x.x  ready in xxx ms
 
 ---
 
-## 🔐 认证测试
+##  认证测试
 
 ### 测试1：用户注册
 
@@ -742,10 +742,10 @@ VITE v4.x.x  ready in xxx ms
 3. 点击"注册"按钮
 
 **预期结果**:
-- ✅ 显示"注册成功"提示
-- ✅ 自动跳转到主页
-- ✅ 页面显示用户信息
-- ✅ Network中看到POST /api/auth/register 返回200
+-  显示"注册成功"提示
+-  自动跳转到主页
+-  页面显示用户信息
+-  Network中看到POST /api/auth/register 返回200
 
 **响应示例**:
 ```json
@@ -775,10 +775,10 @@ VITE v4.x.x  ready in xxx ms
 4. 点击"登录"按钮
 
 **预期结果**:
-- ✅ 显示"登录成功"提示
-- ✅ 自动跳转到主页
-- ✅ 可以看到用户角色和名称
-- ✅ Network中看到POST /api/auth/login 返回200
+-  显示"登录成功"提示
+-  自动跳转到主页
+-  可以看到用户角色和名称
+-  Network中看到POST /api/auth/login 返回200
 
 ### 测试3：Token验证
 
@@ -793,9 +793,9 @@ console.log('Token长度:', token?.length);
 ```
 
 **预期结果**:
-- ✅ 能看到Token值
-- ✅ Token长度超过100字符
-- ✅ Token格式为 `eyJhbGc...`
+-  能看到Token值
+-  Token长度超过100字符
+-  Token格式为 `eyJhbGc...`
 
 ### 测试4：用户登出
 
@@ -804,14 +804,14 @@ console.log('Token长度:', token?.length);
 2. 确认登出操作
 
 **预期结果**:
-- ✅ 显示"登出成功"提示
-- ✅ 返回登录页
-- ✅ localStorage中的Token被清除
-- ✅ Network中看到POST /api/auth/logout 返回200
+-  显示"登出成功"提示
+-  返回登录页
+-  localStorage中的Token被清除
+-  Network中看到POST /api/auth/logout 返回200
 
 ---
 
-## 👥 客户管理测试
+##  客户管理测试
 
 ### 测试5：创建客户
 
@@ -830,9 +830,9 @@ console.log('Token长度:', token?.length);
 5. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"提示
-- ✅ 客户列表中出现新客户
-- ✅ Network中看到POST /api/customers 返回201
+-  显示"创建成功"提示
+-  客户列表中出现新客户
+-  Network中看到POST /api/customers 返回201
 
 **验证**:
 ```javascript
@@ -851,10 +851,10 @@ fetch('http://localhost:5000/api/customers', {
 2. 观察客户列表
 
 **预期结果**:
-- ✅ 显示分页信息
-- ✅ 每一行显示客户基本信息
-- ✅ 能看到操作按钮（编辑、删除）
-- ✅ Network中看到GET /api/customers?page=1&limit=10 返回200
+-  显示分页信息
+-  每一行显示客户基本信息
+-  能看到操作按钮（编辑、删除）
+-  Network中看到GET /api/customers?page=1&limit=10 返回200
 
 ### 测试7：搜索客户
 
@@ -864,9 +864,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 按Enter或点击搜索按钮
 
 **预期结果**:
-- ✅ 列表只显示匹配的客户
-- ✅ 显示搜索结果数量
-- ✅ Network中看到GET /api/customers/search?keyword=张三 返回200
+-  列表只显示匹配的客户
+-  显示搜索结果数量
+-  Network中看到GET /api/customers/search?keyword=张三 返回200
 
 ### 测试8：更新客户
 
@@ -877,9 +877,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"更新成功"提示
-- ✅ 列表中的数据已更新
-- ✅ Network中看到PUT /api/customers/{id} 返回200
+-  显示"更新成功"提示
+-  列表中的数据已更新
+-  Network中看到PUT /api/customers/{id} 返回200
 
 ### 测试9：删除客户
 
@@ -889,10 +889,10 @@ fetch('http://localhost:5000/api/customers', {
 3. 确认删除
 
 **预期结果**:
-- ✅ 显示确认对话框
-- ✅ 点击确认后显示"删除成功"
-- ✅ 客户从列表中移除
-- ✅ Network中看到DELETE /api/customers/{id} 返回200
+-  显示确认对话框
+-  点击确认后显示"删除成功"
+-  客户从列表中移除
+-  Network中看到DELETE /api/customers/{id} 返回200
 
 ### 测试10：分页功能
 
@@ -901,14 +901,14 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"下一页"
 
 **预期结果**:
-- ✅ 页码更新
-- ✅ 显示不同的客户
-- ✅ Network中看到新的分页请求
-- ✅ "上一页"按钮变为可用
+-  页码更新
+-  显示不同的客户
+-  Network中看到新的分页请求
+-  "上一页"按钮变为可用
 
 ---
 
-## 📅 预约管理测试
+##  预约管理测试
 
 ### 测试11：创建预约
 
@@ -928,10 +928,10 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 预约出现在列表中
-- ✅ 状态为"pending"
-- ✅ Network中看到POST /api/appointments 返回201
+-  显示"创建成功"
+-  预约出现在列表中
+-  状态为"pending"
+-  Network中看到POST /api/appointments 返回201
 
 ### 测试12：确认预约
 
@@ -940,9 +940,9 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"确认"或"确认预约"按钮
 
 **预期结果**:
-- ✅ 状态变为"confirmed"
-- ✅ 显示"确认成功"
-- ✅ Network中看到PUT /api/appointments/{id}/confirm 返回200
+-  状态变为"confirmed"
+-  显示"确认成功"
+-  Network中看到PUT /api/appointments/{id}/confirm 返回200
 
 ### 测试13：完成预约
 
@@ -951,9 +951,9 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"完成"或"标记为完成"按钮
 
 **预期结果**:
-- ✅ 状态变为"completed"
-- ✅ 显示"完成成功"
-- ✅ Network中看到PUT /api/appointments/{id}/complete 返回200
+-  状态变为"completed"
+-  显示"完成成功"
+-  Network中看到PUT /api/appointments/{id}/complete 返回200
 
 ### 测试14：取消预约
 
@@ -962,13 +962,13 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"取消"按钮
 
 **预期结果**:
-- ✅ 状态变为"cancelled"
-- ✅ 显示"取消成功"
-- ✅ Network中看到PUT /api/appointments/{id}/cancel 返回200
+-  状态变为"cancelled"
+-  显示"取消成功"
+-  Network中看到PUT /api/appointments/{id}/cancel 返回200
 
 ---
 
-## 💼 美容师管理测试
+##  美容师管理测试
 
 ### 测试15：创建美容师
 
@@ -987,9 +987,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 美容师出现在列表中
-- ✅ Network中看到POST /api/staff 返回201
+-  显示"创建成功"
+-  美容师出现在列表中
+-  Network中看到POST /api/staff 返回201
 
 ### 测试16：更新评分
 
@@ -1000,13 +1000,13 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"更新成功"
-- ✅ 列表中显示新的评分
-- ✅ Network中看到PUT /api/staff/{id}/rating 返回200
+-  显示"更新成功"
+-  列表中显示新的评分
+-  Network中看到PUT /api/staff/{id}/rating 返回200
 
 ---
 
-## 🛍️ 产品管理测试
+## ️ 产品管理测试
 
 ### 测试17：创建产品
 
@@ -1025,9 +1025,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 产品出现在列表中
-- ✅ Network中看到POST /api/products 返回201
+-  显示"创建成功"
+-  产品出现在列表中
+-  Network中看到POST /api/products 返回201
 
 ### 测试18：库存管理
 
@@ -1039,8 +1039,8 @@ fetch('http://localhost:5000/api/customers', {
    - 或增加库存10件
 
 **预期结果**:
-- ✅ 库存数值变化
-- ✅ Network中看到相应的PUT请求返回200
+-  库存数值变化
+-  Network中看到相应的PUT请求返回200
 
 ### 测试19：搜索产品
 
@@ -1050,12 +1050,12 @@ fetch('http://localhost:5000/api/customers', {
 3. 按Enter搜索
 
 **预期结果**:
-- ✅ 只显示匹配的产品
-- ✅ Network中看到搜索请求返回200
+-  只显示匹配的产品
+-  Network中看到搜索请求返回200
 
 ---
 
-## ⚠️ 错误处理测试
+## ️ 错误处理测试
 
 ### 测试20：无效凭证登录
 
@@ -1065,9 +1065,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 点击登录
 
 **预期结果**:
-- ✅ 显示错误提示信息
-- ✅ 停留在登录页
-- ✅ Network中看到POST返回401或400
+-  显示错误提示信息
+-  停留在登录页
+-  Network中看到POST返回401或400
 
 ### 测试21：网络错误处理
 
@@ -1077,9 +1077,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 尝试进行任何操作（如创建客户）
 
 **预期结果**:
-- ✅ 显示网络错误提示
-- ✅ 清晰的错误消息
-- ✅ UI不崩溃
+-  显示网络错误提示
+-  清晰的错误消息
+-  UI不崩溃
 
 ### 测试22：过期Token处理
 
@@ -1092,12 +1092,12 @@ localStorage.removeItem('authToken');
 3. 尝试进行任何需要认证的操作
 
 **预期结果**:
-- ✅ 显示"请重新登录"提示
-- ✅ 返回登录页
+-  显示"请重新登录"提示
+-  返回登录页
 
 ---
 
-## 📊 性能测试
+##  性能测试
 
 ### 测试23：大数据加载
 
@@ -1107,9 +1107,9 @@ localStorage.removeItem('authToken');
 3. 观察加载时间和响应
 
 **预期结果**:
-- ✅ 列表在2秒内加载完成
-- ✅ UI保持响应
-- ✅ 分页工作正常
+-  列表在2秒内加载完成
+-  UI保持响应
+-  分页工作正常
 
 ### 测试24：并发请求
 
@@ -1118,13 +1118,13 @@ localStorage.removeItem('authToken');
 2. 观察系统反应
 
 **预期结果**:
-- ✅ 所有请求都能正常处理
-- ✅ 数据一致性正确
-- ✅ 没有重复提交
+-  所有请求都能正常处理
+-  数据一致性正确
+-  没有重复提交
 
 ---
 
-## 📋 测试检查清单
+##  测试检查清单
 
 ### 基础功能
 - [ ] 注册功能正常
@@ -1167,7 +1167,7 @@ localStorage.removeItem('authToken');
 
 ---
 
-## 🔧 调试技巧
+##  调试技巧
 
 ### 查看API请求
 
@@ -1206,7 +1206,7 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## 📝 测试报告模板
+##  测试报告模板
 
 ```
 测试日期: ____年____月____日
@@ -1214,7 +1214,7 @@ fetch('http://localhost:5000/api/customers', {
 测试环境: Windows/Mac/Linux
 浏览器: Chrome/Firefox/Safari
 
-总体结果: ✅ 通过 / ❌ 失败
+总体结果:  通过 /  失败
 
 通过的测试: ____ / 24
 失败的测试: ____ / 24
@@ -1231,26 +1231,26 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## ✅ 测试完成标准
+##  测试完成标准
 
 所有测试完成且满足以下条件：
 
-✅ 所有24个测试用例都通过
-✅ 没有JavaScript错误
-✅ 所有API调用返回正确的状态码
-✅ 用户提示信息清晰正确
-✅ 数据加载速度满足要求（<2秒）
-✅ 错误处理完善
-✅ 没有数据不一致
+ 所有24个测试用例都通过
+ 没有JavaScript错误
+ 所有API调用返回正确的状态码
+ 用户提示信息清晰正确
+ 数据加载速度满足要求（<2秒）
+ 错误处理完善
+ 没有数据不一致
 
 ---
 
-**测试状态**: 🚀 准备就绪
+**测试状态**:  准备就绪
 **下一步**: 开始执行测试
 **预计耗时**: 30-60分钟
 
 
-## 📋 测试计划
+##  测试计划
 
 ### 第1部分：基础环境测试
 - [x] 后端服务启动
@@ -1303,7 +1303,7 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## 🚀 环境启动
+##  环境启动
 
 ### 1. 启动后端服务
 
@@ -1320,9 +1320,9 @@ npm run dev
 
 **预期输出**:
 ```
-✅ 数据库连接成功
-✅ 数据库模型同步成功
-🚀 美容院管理系统 API 服务已启动
+ 数据库连接成功
+ 数据库模型同步成功
+ 美容院管理系统 API 服务已启动
 服务器地址: http://localhost:5000
 ```
 
@@ -1340,8 +1340,8 @@ npm run dev
 ```
 VITE v4.x.x  ready in xxx ms
 
-➜  Local:   http://localhost:3000/
-➜  press h to show help
+  Local:   http://localhost:3000/
+  press h to show help
 ```
 
 ### 3. 打开浏览器
@@ -1352,7 +1352,7 @@ VITE v4.x.x  ready in xxx ms
 
 ---
 
-## 🔐 认证测试
+##  认证测试
 
 ### 测试1：用户注册
 
@@ -1367,10 +1367,10 @@ VITE v4.x.x  ready in xxx ms
 3. 点击"注册"按钮
 
 **预期结果**:
-- ✅ 显示"注册成功"提示
-- ✅ 自动跳转到主页
-- ✅ 页面显示用户信息
-- ✅ Network中看到POST /api/auth/register 返回200
+-  显示"注册成功"提示
+-  自动跳转到主页
+-  页面显示用户信息
+-  Network中看到POST /api/auth/register 返回200
 
 **响应示例**:
 ```json
@@ -1400,10 +1400,10 @@ VITE v4.x.x  ready in xxx ms
 4. 点击"登录"按钮
 
 **预期结果**:
-- ✅ 显示"登录成功"提示
-- ✅ 自动跳转到主页
-- ✅ 可以看到用户角色和名称
-- ✅ Network中看到POST /api/auth/login 返回200
+-  显示"登录成功"提示
+-  自动跳转到主页
+-  可以看到用户角色和名称
+-  Network中看到POST /api/auth/login 返回200
 
 ### 测试3：Token验证
 
@@ -1418,9 +1418,9 @@ console.log('Token长度:', token?.length);
 ```
 
 **预期结果**:
-- ✅ 能看到Token值
-- ✅ Token长度超过100字符
-- ✅ Token格式为 `eyJhbGc...`
+-  能看到Token值
+-  Token长度超过100字符
+-  Token格式为 `eyJhbGc...`
 
 ### 测试4：用户登出
 
@@ -1429,14 +1429,14 @@ console.log('Token长度:', token?.length);
 2. 确认登出操作
 
 **预期结果**:
-- ✅ 显示"登出成功"提示
-- ✅ 返回登录页
-- ✅ localStorage中的Token被清除
-- ✅ Network中看到POST /api/auth/logout 返回200
+-  显示"登出成功"提示
+-  返回登录页
+-  localStorage中的Token被清除
+-  Network中看到POST /api/auth/logout 返回200
 
 ---
 
-## 👥 客户管理测试
+##  客户管理测试
 
 ### 测试5：创建客户
 
@@ -1455,9 +1455,9 @@ console.log('Token长度:', token?.length);
 5. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"提示
-- ✅ 客户列表中出现新客户
-- ✅ Network中看到POST /api/customers 返回201
+-  显示"创建成功"提示
+-  客户列表中出现新客户
+-  Network中看到POST /api/customers 返回201
 
 **验证**:
 ```javascript
@@ -1476,10 +1476,10 @@ fetch('http://localhost:5000/api/customers', {
 2. 观察客户列表
 
 **预期结果**:
-- ✅ 显示分页信息
-- ✅ 每一行显示客户基本信息
-- ✅ 能看到操作按钮（编辑、删除）
-- ✅ Network中看到GET /api/customers?page=1&limit=10 返回200
+-  显示分页信息
+-  每一行显示客户基本信息
+-  能看到操作按钮（编辑、删除）
+-  Network中看到GET /api/customers?page=1&limit=10 返回200
 
 ### 测试7：搜索客户
 
@@ -1489,9 +1489,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 按Enter或点击搜索按钮
 
 **预期结果**:
-- ✅ 列表只显示匹配的客户
-- ✅ 显示搜索结果数量
-- ✅ Network中看到GET /api/customers/search?keyword=张三 返回200
+-  列表只显示匹配的客户
+-  显示搜索结果数量
+-  Network中看到GET /api/customers/search?keyword=张三 返回200
 
 ### 测试8：更新客户
 
@@ -1502,9 +1502,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"更新成功"提示
-- ✅ 列表中的数据已更新
-- ✅ Network中看到PUT /api/customers/{id} 返回200
+-  显示"更新成功"提示
+-  列表中的数据已更新
+-  Network中看到PUT /api/customers/{id} 返回200
 
 ### 测试9：删除客户
 
@@ -1514,10 +1514,10 @@ fetch('http://localhost:5000/api/customers', {
 3. 确认删除
 
 **预期结果**:
-- ✅ 显示确认对话框
-- ✅ 点击确认后显示"删除成功"
-- ✅ 客户从列表中移除
-- ✅ Network中看到DELETE /api/customers/{id} 返回200
+-  显示确认对话框
+-  点击确认后显示"删除成功"
+-  客户从列表中移除
+-  Network中看到DELETE /api/customers/{id} 返回200
 
 ### 测试10：分页功能
 
@@ -1526,14 +1526,14 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"下一页"
 
 **预期结果**:
-- ✅ 页码更新
-- ✅ 显示不同的客户
-- ✅ Network中看到新的分页请求
-- ✅ "上一页"按钮变为可用
+-  页码更新
+-  显示不同的客户
+-  Network中看到新的分页请求
+-  "上一页"按钮变为可用
 
 ---
 
-## 📅 预约管理测试
+##  预约管理测试
 
 ### 测试11：创建预约
 
@@ -1553,10 +1553,10 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 预约出现在列表中
-- ✅ 状态为"pending"
-- ✅ Network中看到POST /api/appointments 返回201
+-  显示"创建成功"
+-  预约出现在列表中
+-  状态为"pending"
+-  Network中看到POST /api/appointments 返回201
 
 ### 测试12：确认预约
 
@@ -1565,9 +1565,9 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"确认"或"确认预约"按钮
 
 **预期结果**:
-- ✅ 状态变为"confirmed"
-- ✅ 显示"确认成功"
-- ✅ Network中看到PUT /api/appointments/{id}/confirm 返回200
+-  状态变为"confirmed"
+-  显示"确认成功"
+-  Network中看到PUT /api/appointments/{id}/confirm 返回200
 
 ### 测试13：完成预约
 
@@ -1576,9 +1576,9 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"完成"或"标记为完成"按钮
 
 **预期结果**:
-- ✅ 状态变为"completed"
-- ✅ 显示"完成成功"
-- ✅ Network中看到PUT /api/appointments/{id}/complete 返回200
+-  状态变为"completed"
+-  显示"完成成功"
+-  Network中看到PUT /api/appointments/{id}/complete 返回200
 
 ### 测试14：取消预约
 
@@ -1587,13 +1587,13 @@ fetch('http://localhost:5000/api/customers', {
 2. 点击"取消"按钮
 
 **预期结果**:
-- ✅ 状态变为"cancelled"
-- ✅ 显示"取消成功"
-- ✅ Network中看到PUT /api/appointments/{id}/cancel 返回200
+-  状态变为"cancelled"
+-  显示"取消成功"
+-  Network中看到PUT /api/appointments/{id}/cancel 返回200
 
 ---
 
-## 💼 美容师管理测试
+##  美容师管理测试
 
 ### 测试15：创建美容师
 
@@ -1612,9 +1612,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 美容师出现在列表中
-- ✅ Network中看到POST /api/staff 返回201
+-  显示"创建成功"
+-  美容师出现在列表中
+-  Network中看到POST /api/staff 返回201
 
 ### 测试16：更新评分
 
@@ -1625,13 +1625,13 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"更新成功"
-- ✅ 列表中显示新的评分
-- ✅ Network中看到PUT /api/staff/{id}/rating 返回200
+-  显示"更新成功"
+-  列表中显示新的评分
+-  Network中看到PUT /api/staff/{id}/rating 返回200
 
 ---
 
-## 🛍️ 产品管理测试
+## ️ 产品管理测试
 
 ### 测试17：创建产品
 
@@ -1650,9 +1650,9 @@ fetch('http://localhost:5000/api/customers', {
 4. 点击"保存"
 
 **预期结果**:
-- ✅ 显示"创建成功"
-- ✅ 产品出现在列表中
-- ✅ Network中看到POST /api/products 返回201
+-  显示"创建成功"
+-  产品出现在列表中
+-  Network中看到POST /api/products 返回201
 
 ### 测试18：库存管理
 
@@ -1664,8 +1664,8 @@ fetch('http://localhost:5000/api/customers', {
    - 或增加库存10件
 
 **预期结果**:
-- ✅ 库存数值变化
-- ✅ Network中看到相应的PUT请求返回200
+-  库存数值变化
+-  Network中看到相应的PUT请求返回200
 
 ### 测试19：搜索产品
 
@@ -1675,12 +1675,12 @@ fetch('http://localhost:5000/api/customers', {
 3. 按Enter搜索
 
 **预期结果**:
-- ✅ 只显示匹配的产品
-- ✅ Network中看到搜索请求返回200
+-  只显示匹配的产品
+-  Network中看到搜索请求返回200
 
 ---
 
-## ⚠️ 错误处理测试
+## ️ 错误处理测试
 
 ### 测试20：无效凭证登录
 
@@ -1690,9 +1690,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 点击登录
 
 **预期结果**:
-- ✅ 显示错误提示信息
-- ✅ 停留在登录页
-- ✅ Network中看到POST返回401或400
+-  显示错误提示信息
+-  停留在登录页
+-  Network中看到POST返回401或400
 
 ### 测试21：网络错误处理
 
@@ -1702,9 +1702,9 @@ fetch('http://localhost:5000/api/customers', {
 3. 尝试进行任何操作（如创建客户）
 
 **预期结果**:
-- ✅ 显示网络错误提示
-- ✅ 清晰的错误消息
-- ✅ UI不崩溃
+-  显示网络错误提示
+-  清晰的错误消息
+-  UI不崩溃
 
 ### 测试22：过期Token处理
 
@@ -1717,12 +1717,12 @@ localStorage.removeItem('authToken');
 3. 尝试进行任何需要认证的操作
 
 **预期结果**:
-- ✅ 显示"请重新登录"提示
-- ✅ 返回登录页
+-  显示"请重新登录"提示
+-  返回登录页
 
 ---
 
-## 📊 性能测试
+##  性能测试
 
 ### 测试23：大数据加载
 
@@ -1732,9 +1732,9 @@ localStorage.removeItem('authToken');
 3. 观察加载时间和响应
 
 **预期结果**:
-- ✅ 列表在2秒内加载完成
-- ✅ UI保持响应
-- ✅ 分页工作正常
+-  列表在2秒内加载完成
+-  UI保持响应
+-  分页工作正常
 
 ### 测试24：并发请求
 
@@ -1743,13 +1743,13 @@ localStorage.removeItem('authToken');
 2. 观察系统反应
 
 **预期结果**:
-- ✅ 所有请求都能正常处理
-- ✅ 数据一致性正确
-- ✅ 没有重复提交
+-  所有请求都能正常处理
+-  数据一致性正确
+-  没有重复提交
 
 ---
 
-## 📋 测试检查清单
+##  测试检查清单
 
 ### 基础功能
 - [ ] 注册功能正常
@@ -1792,7 +1792,7 @@ localStorage.removeItem('authToken');
 
 ---
 
-## 🔧 调试技巧
+##  调试技巧
 
 ### 查看API请求
 
@@ -1831,7 +1831,7 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## 📝 测试报告模板
+##  测试报告模板
 
 ```
 测试日期: ____年____月____日
@@ -1839,7 +1839,7 @@ fetch('http://localhost:5000/api/customers', {
 测试环境: Windows/Mac/Linux
 浏览器: Chrome/Firefox/Safari
 
-总体结果: ✅ 通过 / ❌ 失败
+总体结果:  通过 /  失败
 
 通过的测试: ____ / 24
 失败的测试: ____ / 24
@@ -1856,21 +1856,21 @@ fetch('http://localhost:5000/api/customers', {
 
 ---
 
-## ✅ 测试完成标准
+##  测试完成标准
 
 所有测试完成且满足以下条件：
 
-✅ 所有24个测试用例都通过
-✅ 没有JavaScript错误
-✅ 所有API调用返回正确的状态码
-✅ 用户提示信息清晰正确
-✅ 数据加载速度满足要求（<2秒）
-✅ 错误处理完善
-✅ 没有数据不一致
+ 所有24个测试用例都通过
+ 没有JavaScript错误
+ 所有API调用返回正确的状态码
+ 用户提示信息清晰正确
+ 数据加载速度满足要求（<2秒）
+ 错误处理完善
+ 没有数据不一致
 
 ---
 
-**测试状态**: 🚀 准备就绪
+**测试状态**:  准备就绪
 **下一步**: 开始执行测试
 **预计耗时**: 30-60分钟
 

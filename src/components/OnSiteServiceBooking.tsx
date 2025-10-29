@@ -281,8 +281,8 @@ export const OnSiteServiceBooking: React.FC<OnSiteServiceBookingProps> = ({ mode
               <span className="text-gray-600 font-semibold">服务方式：</span>
               {[
                 { id: 'both' as ServiceMode, label: '全部' },
-                { id: 'home' as ServiceMode, label: '上门服务', icon: '🏠' },
-                { id: 'store' as ServiceMode, label: '到店服务', icon: '🏪' },
+                { id: 'home' as ServiceMode, label: '上门服务', icon: '' },
+                { id: 'store' as ServiceMode, label: '到店服务', icon: '' },
               ].map(({ id, label, icon }) => (
                 <button
                   key={id}
@@ -515,7 +515,7 @@ export const OnSiteServiceBooking: React.FC<OnSiteServiceBookingProps> = ({ mode
         <div>
           {isAdminMode && (
             <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-blue-800 font-semibold">📊 管理视图</p>
+              <p className="text-blue-800 font-semibold"> 管理视图</p>
               <p className="text-blue-600 text-sm mt-1">查看所有客户的上门服务预约和状态</p>
             </div>
           )}

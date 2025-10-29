@@ -45,7 +45,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '季节促销',
     category: 'promotion',
     description: '适合春夏秋冬季节性推广',
-    icon: '🌸',
+    icon: '',
     contentTemplate: '{season}优惠\n全场{discount}折\n{callToAction}',
     style: 'modern',
     colors: { primary: '#FF6B6B', secondary: '#FFE66D' },
@@ -56,7 +56,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '新品上市',
     category: 'product',
     description: '展示新护肤产品上市',
-    icon: '🎁',
+    icon: '',
     contentTemplate: '新品上市\n{productName}\n{description}\n尊享首购价',
     style: 'elegant',
     colors: { primary: '#E8D5F2', secondary: '#9B59B6' },
@@ -67,7 +67,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '护肤方案',
     category: 'skincare',
     description: '推荐定制化护肤方案',
-    icon: '✨',
+    icon: '',
     contentTemplate: '护肤方案\n{skinType}肌专属\n专业美容师打造\n立即预约',
     style: 'elegant',
     colors: { primary: '#FFF0F5', secondary: '#FF69B4' },
@@ -78,7 +78,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '会员卡权益',
     category: 'event',
     description: '推广会员卡和权益',
-    icon: '💳',
+    icon: '',
     contentTemplate: '会员升级\n享受专属权益\n{benefit1}\n{benefit2}\n立即开卡',
     style: 'modern',
     colors: { primary: '#FFE5B4', secondary: '#FF8C00' },
@@ -89,7 +89,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '活动邀请',
     category: 'event',
     description: '邀请客户参加活动',
-    icon: '🎉',
+    icon: '',
     contentTemplate: '诚邀参加\n{eventName}\n{date} {time}\n位置：{location}',
     style: 'playful',
     colors: { primary: '#6C63FF', secondary: '#FF006E' },
@@ -100,7 +100,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '课程推广',
     category: 'event',
     description: '推广美容课程培训',
-    icon: '📚',
+    icon: '',
     contentTemplate: '美容课程开班\n{courseType}\n名额有限 欢迎报名\n专业讲师授课',
     style: 'modern',
     colors: { primary: '#00A86B', secondary: '#87CEEB' },
@@ -111,7 +111,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '限时秒杀',
     category: 'promotion',
     description: '限时秒杀活动',
-    icon: '⚡',
+    icon: '',
     contentTemplate: '限时秒杀\n{product}\n仅售{price}\n仅限{duration}',
     style: 'playful',
     colors: { primary: '#FF4500', secondary: '#FFD700' },
@@ -122,7 +122,7 @@ const POSTER_TEMPLATES: PosterTemplate[] = [
     name: '推荐返利',
     category: 'promotion',
     description: '客户推荐返利活动',
-    icon: '🎁',
+    icon: '',
     contentTemplate: '邀请好友\n双倍好礼\n推荐返利{percent}%\n开始分享',
     style: 'playful',
     colors: { primary: '#FF1493', secondary: '#FFB6C1' },
@@ -426,7 +426,7 @@ export const SmartPosterMaker: React.FC = () => {
                       <h3 className="font-bold text-gray-900">{poster.title}</h3>
                       {poster.status === 'success' && (
                         <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                          ✅ 已生成
+                           已生成
                         </span>
                       )}
                       {poster.status === 'generating' && (
@@ -437,7 +437,7 @@ export const SmartPosterMaker: React.FC = () => {
                       )}
                       {poster.status === 'error' && (
                         <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
-                          ❌ 失败
+                           失败
                         </span>
                       )}
                     </div>

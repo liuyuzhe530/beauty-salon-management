@@ -552,7 +552,7 @@ export const OnSiteServiceManagement: React.FC = () => {
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <span key={i} className={i < item.rating ? 'text-yellow-400' : 'text-gray-300'}>
-                          ★
+                          
                         </span>
                       ))}
                       <span className="ml-2 font-semibold text-yellow-600">{item.rating}.0</span>
