@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Zap, TrendingUp, Users, ShoppingBag, Clock, CheckCircle, Target, ListTodo, BarChart3, MessageSquare } from 'lucide-react';
 import { MarketingAssistant } from './MarketingAssistant';
 import { IntelligentProcurementAI } from './IntelligentProcurementAI';
+import { DataAnalyticsDashboard } from './DataAnalyticsDashboard';
 
 interface AIRecommendation {
   id: string;
@@ -219,61 +220,7 @@ export const AIAssistant: React.FC = () => {
 
       {/* Content - Analytics Recommendations */}
       {activeTab === 'recommendations' && (
-        <div className="space-y-4">
-          {recommendations.map(rec => {
-            const Icon = getTypeIcon(rec.type);
-            const isSelected = selectedRecommendation === rec.id;
-
-            return (
-              <div
-                key={rec.id}
-                onClick={() => setSelectedRecommendation(isSelected ? null : rec.id)}
-                className="bg-white rounded-lg border border-green-200 p-6 hover:border-green-300 transition-all cursor-pointer"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-green-600" />
-                    </div>
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-lg font-semibold text-gray-900">{rec.title}</h3>
-                          <span className={`text-xs px-2 py-1 rounded font-medium border ${getPriorityColor(rec.priority)}`}>
-                            {rec.priority === 'high' ? '高优先级' : rec.priority === 'medium' ? '中优先级' : '低优先级'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="text-gray-700 mt-2">{rec.description}</p>
-
-                    {isSelected && (
-                      <div className="mt-4 pt-4 border-t border-green-200">
-                        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                          <p className="text-sm text-green-900 font-medium">预期影响</p>
-                          <p className="text-green-700 text-sm mt-1">{rec.impact}</p>
-                        </div>
-
-                        <div className="flex gap-2 mt-4">
-                          <button className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
-                            接受建议
-                          </button>
-                          <button className="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium">
-                            详情
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <DataAnalyticsDashboard />
       )}
 
       {/* Content - Marketing Assistant */}
