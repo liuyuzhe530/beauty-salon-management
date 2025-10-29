@@ -9,6 +9,7 @@ import { Dashboard } from './components/Dashboard';
 import { Staff } from './components/Staff';
 import { CustomerManagement } from './components/CustomerManagement';
 import { BeautyProductMall } from './components/BeautyProductMall';
+import { MallPage } from './components/MallPage';
 import { AIAssistant } from './components/AIAssistant';
 import { Promotion } from './components/Promotion';
 import { AIChat } from './components/AIChat';
@@ -70,7 +71,8 @@ function AppContent() {
       case 'staff':
         return <Staff />;
       case 'shop':
-        return <BeautyProductMall />;
+        // 管理员使用原 MallPage，客户使用新的美容产品商城
+        return userRole === 'admin' ? <MallPage /> : <BeautyProductMall />;
       case 'ai':
         return <AIAssistant />;
       case 'promotion':
