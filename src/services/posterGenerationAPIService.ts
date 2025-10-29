@@ -1,304 +1,263 @@
 /**
- * 海报生成 API 服务
+ * 海报生成 API 服务 - 真实 RunningHub API 集成
  * 集成 RunningHub 的智能海报生成服务
  * API 地址: https://www.runninghub.cn/task/openapi/ai-app/run
  */
 
+import axios from 'axios';
+
 export interface PosterGenerationRequest {
-  // 海报内容
-  content: string;
-  
-  // 海报样式
+  content?: string;
   style?: 'modern' | 'elegant' | 'playful' | 'minimalist';
-  
-  // 海报格式
-  format?: 'vertical' | 'horizontal' | 'square';
-  
-  // 海报类型
+  format?: 'vertical' | 'horizontal';
   type?: 'promotion' | 'product' | 'skincare' | 'event' | 'general';
-  
-  // 配色方案
-  colorScheme?: {
-    backgroundColor?: string;
-    accentColor?: string;
-    textColor?: string;
-    secondaryText?: string;
-  };
-  
-  // 尺寸
-  width?: number;
-  height?: number;
-  
-  // 其他参数
   includeQRCode?: boolean;
-  qrCodeUrl?: string;
+  [key: string]: any;
 }
 
 export interface PosterGenerationResponse {
   success: boolean;
   data?: {
-    imageUrl: string;
     format: string;
-    size: {
-      width: number;
-      height: number;
-    };
+    size: { width: number; height: number };
     design: {
       style: string;
-      colorScheme: any;
       elements: string[];
+      colorScheme?: any;
     };
+    posterUrl?: string;
+    metadata?: any;
   };
   error?: {
-    code: number;
+    code: string;
     message: string;
   };
   meta?: {
+    source: 'api' | 'local';
     processingTime: number;
-    generatedAt: string;
   };
 }
 
 class PosterGenerationAPIService {
+  // RunningHub API 配置
   private apiEndpoint = 'https://www.runninghub.cn/task/openapi/ai-app/run';
-  private fallbackMode = true; // 默认启用降级模式
-  
+  private apiTimeout = 10000; // 10秒超时
+  private fallbackMode = true; // 自动降级模式
+  private apiKey = process.env.REACT_APP_RUNNINGHUB_API_KEY || ''; // 从环境变量读取
+
   /**
-   * 调用 API 生成海报
+   * 生成海报 - 真实 API 调用
    */
   async generatePoster(request: PosterGenerationRequest): Promise<PosterGenerationResponse> {
-    try {
-      // 检查 API 可用性
-      const isApiAvailable = await this.checkAPIAvailability();
-      
-      if (!isApiAvailable) {
-        console.warn('RunningHub API 不可用，使用本地生成模式');
-        return this.generatePosterLocally(request);
-      }
+    const startTime = Date.now();
 
-      // 调用远程 API
-      return await this.callRemoteAPI(request);
-    } catch (error: any) {
-      console.error('海报 API 调用失败:', error.message);
-      
-      // 降级到本地生成
-      if (this.fallbackMode) {
-        console.log('降级到本地海报生成...');
-        return this.generatePosterLocally(request);
-      }
-      
-      throw {
-        success: false,
-        error: {
-          code: 500,
-          message: `海报生成失败: ${error.message}`
-        }
-      };
-    }
-  }
-
-  /**
-   * 检查 API 可用性
-   */
-  private async checkAPIAvailability(): Promise<boolean> {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
-      
-      const response = await fetch(this.apiEndpoint, {
-        method: 'OPTIONS',
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeoutId);
-      return response.status < 500;
-    } catch (error) {
-      console.warn('API 可用性检查失败，将使用本地生成');
-      return false;
-    }
-  }
+      // 1. 构建请求数据
+      const payload = this.buildAPIPayload(request);
 
-  /**
-   * 调用远程 API
-   */
-  private async callRemoteAPI(request: PosterGenerationRequest): Promise<PosterGenerationResponse> {
-    const payload = this.buildAPIPayload(request);
-    
-    try {
-      const response = await fetch(this.apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload),
-        timeout: 30000
+      console.log('🔄 调用 RunningHub API...', {
+        endpoint: this.apiEndpoint,
+        payload: payload
       });
 
-      const data = await response.json();
+      // 2. 调用真实 API
+      const response = await this.callRemoteAPI(payload);
+      const duration = Date.now() - startTime;
 
-      // 处理 API 响应
-      if (data.code === 0 || data.code === 200) {
+      if (response.success) {
+        console.log('✅ API 调用成功', {
+          duration: duration,
+          dataSize: JSON.stringify(response.data).length
+        });
+
         return {
           success: true,
-          data: data.data,
+          data: response.data,
           meta: {
-            processingTime: Date.now(),
-            generatedAt: new Date().toISOString()
+            source: 'api',
+            processingTime: duration
           }
         };
       } else {
-        throw new Error(data.msg || '海报生成失败');
+        // API 返回错误，使用降级方案
+        console.warn('⚠️ API 返回错误:', response.error);
+        return this.fallbackGeneratePoster(request, duration);
       }
     } catch (error: any) {
-      throw new Error(`API 调用失败: ${error.message}`);
+      console.error('❌ API 调用失败:', error.message);
+      const duration = Date.now() - startTime;
+
+      // 如果启用了降级模式，使用本地生成
+      if (this.fallbackMode) {
+        console.log('🔄 切换到本地生成...');
+        return this.fallbackGeneratePoster(request, duration);
+      } else {
+        return {
+          success: false,
+          error: {
+            code: 'API_ERROR',
+            message: error.message
+          }
+        };
+      }
+    }
+  }
+
+  /**
+   * 调用真实 RunningHub API
+   */
+  private async callRemoteAPI(payload: any): Promise<any> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.apiTimeout);
+
+    try {
+      const response = await axios.post(this.apiEndpoint, payload, {
+        timeout: this.apiTimeout,
+        signal: controller.signal as any,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': this.apiKey ? `Bearer ${this.apiKey}` : undefined
+        }
+      });
+
+      clearTimeout(timeoutId);
+
+      console.log('📨 API 响应:', {
+        status: response.status,
+        code: response.data?.code,
+        dataLength: response.data?.data ? JSON.stringify(response.data.data).length : 0
+      });
+
+      // 检查 API 响应
+      if (response.data?.code === 0 || response.data?.success) {
+        return {
+          success: true,
+          data: {
+            format: payload.format || 'vertical',
+            size: {
+              width: payload.format === 'horizontal' ? 1920 : 1080,
+              height: payload.format === 'horizontal' ? 1080 : 1440
+            },
+            design: {
+              style: payload.style || 'modern',
+              elements: ['generated_by_ai'],
+              colorScheme: response.data?.data?.colorScheme
+            },
+            posterUrl: response.data?.data?.url || response.data?.data?.posterUrl,
+            metadata: response.data?.data
+          }
+        };
+      } else {
+        return {
+          success: false,
+          error: {
+            code: response.data?.code || 'UNKNOWN_ERROR',
+            message: response.data?.msg || response.data?.message || '未知错误'
+          }
+        };
+      }
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+
+      if (error.code === 'ECONNABORTED') {
+        throw new Error('API 请求超时 (10秒)');
+      }
+
+      throw error;
     }
   }
 
   /**
    * 构建 API 请求体
    */
-  private buildAPIPayload(request: PosterGenerationRequest) {
+  private buildAPIPayload(request: PosterGenerationRequest): any {
+    const { content = '', style = 'modern', format = 'vertical', type = 'general' } = request;
+
+    // 根据内容生成提示词
+    const prompt = this.generatePrompt(content, type, style);
+
     return {
-      task: 'poster_generation',
-      model: 'ai-poster-v1',
-      params: {
-        content: request.content,
-        style: request.style || 'modern',
-        format: request.format || 'vertical',
-        type: request.type || 'general',
-        colorScheme: request.colorScheme,
-        width: request.width || (request.format === 'horizontal' ? 1920 : 1080),
-        height: request.height || (request.format === 'horizontal' ? 1080 : 1920),
-        quality: 'high',
-        includeQRCode: request.includeQRCode || false,
-        qrCodeUrl: request.qrCodeUrl
-      }
-    };
-  }
+      // RunningHub 特定字段
+      app_id: process.env.REACT_APP_RUNNINGHUB_APP_ID || 'poster-generator',
+      task_id: `poster_${Date.now()}`,
 
-  /**
-   * 本地海报生成（降级方案）
-   */
-  private generatePosterLocally(request: PosterGenerationRequest): PosterGenerationResponse {
-    const startTime = Date.now();
-    
-    try {
-      // 生成模拟的海报数据
-      const mockImageUrl = this.generateMockPosterImage(request);
+      // 海报参数
+      poster_type: type,
+      content: content,
+      style: style,
+      format: format === 'vertical' ? '竖版' : '横版',
+      size: format === 'vertical' ? '1080x1440' : '1920x1080',
+
+      // AI 提示词
+      prompt: prompt,
+      prompt_lang: 'zh',
+
+      // 生成参数
+      quality: 'high', // high | medium | low
+      includeQRCode: request.includeQRCode ?? true,
+      includeWatermark: false,
       
-      return {
-        success: true,
-        data: {
-          imageUrl: mockImageUrl,
-          format: request.format || 'vertical',
-          size: {
-            width: request.width || 1080,
-            height: request.height || 1920
-          },
-          design: {
-            style: request.style || 'modern',
-            colorScheme: request.colorScheme || this.getDefaultColorScheme(request.type),
-            elements: this.generatePosterElements(request)
-          }
-        },
-        meta: {
-          processingTime: Date.now() - startTime,
-          generatedAt: new Date().toISOString()
-        }
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: {
-          code: 500,
-          message: `本地生成失败: ${error.message}`
-        }
-      };
-    }
+      // 高级配置
+      ai_model: 'dall-e-3', // 使用高质量模型
+      temperature: 0.7,
+      seed: undefined // 随机生成
+    };
   }
 
   /**
-   * 生成模拟海报图像 URL
+   * 根据类型和样式生成提示词
    */
-  private generateMockPosterImage(request: PosterGenerationRequest): string {
-    const width = request.width || 1080;
-    const height = request.height || 1920;
-    const bgColor = (request.colorScheme?.backgroundColor || '#FF6B6B').replace('#', '');
-    
-    // 使用占位符服务生成图片
-    return `https://via.placeholder.com/${width}x${height}/${bgColor}/FFFFFF?text=${encodeURIComponent(request.content.substring(0, 50))}`;
-  }
-
-  /**
-   * 生成海报元素
-   */
-  private generatePosterElements(request: PosterGenerationRequest): string[] {
-    const elements: string[] = [];
-    const content = request.content.toLowerCase();
-
-    // 根据内容类型生成元素
-    if (content.includes('特价') || content.includes('优惠')) {
-      elements.push('价格标签', '倒计时', '热门标签');
-    }
-    if (content.includes('新品') || content.includes('产品')) {
-      elements.push('产品名称', '产品描述', 'Logo');
-    }
-    if (content.includes('美肤') || content.includes('护肤')) {
-      elements.push('效果展示', '前后对比', '成分表');
-    }
-    if (content.includes('活动') || content.includes('开业')) {
-      elements.push('事件标题', '日期时间', '地点信息');
-    }
-
-    // 添加通用元素
-    elements.push('主标题', '副标题', '行动号召按钮');
-    
-    if (request.includeQRCode) {
-      elements.push('二维码');
-    }
-
-    return [...new Set(elements)]; // 去重
-  }
-
-  /**
-   * 获取默认配色方案
-   */
-  private getDefaultColorScheme(type?: string) {
-    const schemes: { [key: string]: any } = {
-      promotion: {
-        backgroundColor: '#FF6B6B',
-        accentColor: '#FFE66D',
-        textColor: '#ffffff',
-        secondaryText: '#2d3436'
-      },
-      product: {
-        backgroundColor: '#E8D5F2',
-        accentColor: '#9B59B6',
-        textColor: '#2C1640',
-        secondaryText: '#ffffff'
-      },
-      skincare: {
-        backgroundColor: '#FFF0F5',
-        accentColor: '#FF69B4',
-        textColor: '#881391',
-        secondaryText: '#ffffff'
-      },
-      event: {
-        backgroundColor: '#FFE5B4',
-        accentColor: '#FF8C00',
-        textColor: '#8B4513',
-        secondaryText: '#ffffff'
-      },
-      general: {
-        backgroundColor: '#F5F5F5',
-        accentColor: '#333333',
-        textColor: '#1a1a1a',
-        secondaryText: '#666666'
-      }
+  private generatePrompt(content: string, type: string, style: string): string {
+    const styleDescriptions: { [key: string]: string } = {
+      modern: '现代、简洁、专业的',
+      elegant: '优雅、高端、精致的',
+      playful: '活泼、开心、充满活力的',
+      minimalist: '简约、纯净、高效的'
     };
 
-    return schemes[type || 'general'];
+    const typeDescriptions: { [key: string]: string } = {
+      promotion: '促销活动',
+      product: '产品展示',
+      skincare: '护肤服务',
+      event: '活动宣传',
+      general: '通用推广'
+    };
+
+    const styleDesc = styleDescriptions[style] || '专业的';
+    const typeDesc = typeDescriptions[type] || '推广';
+
+    return `生成一个${styleDesc}${typeDesc}海报。
+内容主题: ${content}
+要求:
+- 视觉吸引力强
+- 信息清晰易读
+- 专业商业级设计
+- 符合${typeDesc}特点
+- 配色协调美观
+- 适合微信分享和网页展示`;
+  }
+
+  /**
+   * 降级方案 - 本地生成（当 API 不可用时）
+   */
+  private fallbackGeneratePoster(
+    request: PosterGenerationRequest,
+    apiDuration: number
+  ): PosterGenerationResponse {
+    const startTime = Date.now();
+
+    // 这里可以调用本地的 Canvas 绘制或返回错误
+    return {
+      success: false,
+      error: {
+        code: 'API_UNAVAILABLE',
+        message: 'RunningHub API 暂时不可用，无法生成高质量海报。请稍后重试或联系技术支持。'
+      },
+      meta: {
+        source: 'local',
+        processingTime: apiDuration + (Date.now() - startTime)
+      }
+    };
   }
 
   /**
@@ -307,31 +266,75 @@ class PosterGenerationAPIService {
   async generatePosterBatch(
     requests: PosterGenerationRequest[]
   ): Promise<PosterGenerationResponse[]> {
-    return Promise.all(requests.map(req => this.generatePoster(req)));
+    const results: PosterGenerationResponse[] = [];
+
+    // 串行处理，避免过度并发
+    for (const request of requests) {
+      try {
+        const response = await this.generatePoster(request);
+        results.push(response);
+        // 延迟 100ms 避免 API 限流
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } catch (error: any) {
+        results.push({
+          success: false,
+          error: {
+            code: 'BATCH_ERROR',
+            message: error.message
+          }
+        });
+      }
+    }
+
+    return results;
   }
 
   /**
-   * 启用/禁用 API 模式
+   * 检查 API 可用性
+   */
+  async getAPIStatus(): Promise<{ available: boolean; status: string; lastCheck: string }> {
+    try {
+      const response = await axios.get(
+        `${this.apiEndpoint}?action=health`,
+        { timeout: 3000 }
+      );
+
+      const available = response.status === 200 && (response.data?.code === 0 || response.data?.success);
+
+      return {
+        available: available,
+        status: available ? 'ONLINE' : 'ERROR',
+        lastCheck: new Date().toISOString()
+      };
+    } catch (error: any) {
+      return {
+        available: false,
+        status: error.code === 'ECONNABORTED' ? 'TIMEOUT' : 'OFFLINE',
+        lastCheck: new Date().toISOString()
+      };
+    }
+  }
+
+  /**
+   * 设置降级模式
    */
   setAPIFallbackMode(enabled: boolean): void {
     this.fallbackMode = enabled;
+    console.log(`🔄 降级模式: ${enabled ? '启用' : '禁用'}`);
   }
 
   /**
-   * 获取 API 状态
+   * 设置 API 超时时间
    */
-  async getAPIStatus(): Promise<{
-    available: boolean;
-    status: string;
-    lastCheck: string;
-  }> {
-    const isAvailable = await this.checkAPIAvailability();
-    
-    return {
-      available: isAvailable,
-      status: isAvailable ? '在线' : '离线',
-      lastCheck: new Date().toISOString()
-    };
+  setTimeout(ms: number): void {
+    this.apiTimeout = ms;
+  }
+
+  /**
+   * 设置 API 密钥
+   */
+  setAPIKey(key: string): void {
+    this.apiKey = key;
   }
 }
 
