@@ -335,45 +335,200 @@ const PosterMaker: React.FC = () => {
 
     const { backgroundColor, accentColor, textColor, secondaryText } = poster.colors;
 
-    // 背景
-    ctx.fillStyle = backgroundColor;
+    // 1. 绘制渐变背景
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, backgroundColor);
+    gradient.addColorStop(1, adjustColor(backgroundColor, 20));
+    ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 装饰条
-    ctx.fillStyle = accentColor;
-    ctx.fillRect(0, 0, canvas.width, isVertical ? 240 : 180);
+    // 2. 添加装饰圆圈（背景元素）
+    ctx.fillStyle = adjustColor(accentColor, -30);
+    ctx.globalAlpha = 0.1;
+    if (isVertical) {
+      ctx.beginPath();
+      ctx.arc(canvas.width * 0.2, canvas.height * 0.2, 300, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(canvas.width * 0.8, canvas.height * 0.8, 400, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.arc(canvas.width * 0.1, canvas.height * 0.5, 250, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(canvas.width * 0.9, canvas.height * 0.3, 300, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
 
-    // 标题 - 从海报内容第一行获取
+    // 3. 顶部设计区 - 渐变色块 + 装饰
+    const headerHeight = isVertical ? 280 : 200;
+    const headerGradient = ctx.createLinearGradient(0, 0, canvas.width, headerHeight);
+    headerGradient.addColorStop(0, accentColor);
+    headerGradient.addColorStop(1, adjustColor(accentColor, -20));
+    ctx.fillStyle = headerGradient;
+    ctx.fillRect(0, 0, canvas.width, headerHeight);
+
+    // 顶部装饰线
+    ctx.strokeStyle = adjustColor(secondaryText, -50);
+    ctx.lineWidth = 3;
+    ctx.setLineDash([10, 5]);
+    ctx.beginPath();
+    ctx.moveTo(0, headerHeight);
+    ctx.lineTo(canvas.width, headerHeight);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 4. 主标题 - 第一行内容
     const titleText = poster.content.split('\n')[0] || '推荐推广';
     ctx.fillStyle = secondaryText;
-    ctx.font = `bold ${isVertical ? 80 : 60}px Arial`;
+    ctx.font = `bold ${isVertical ? 90 : 70}px 'Arial', sans-serif`;
     ctx.textAlign = 'center';
-    ctx.fillText(titleText, canvas.width / 2, isVertical ? 160 : 120);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 3;
+    
+    const titleY = isVertical ? 120 : 90;
+    // 文字换行处理
+    const titleLines = wrapText(titleText, isVertical ? 35 : 45);
+    titleLines.forEach((line, index) => {
+      ctx.fillText(line, canvas.width / 2, titleY + index * (isVertical ? 100 : 75));
+    });
 
-    // 主要内容
+    // 5. 副标题装饰 - 小横线
+    ctx.shadowColor = 'rgba(0, 0, 0, 0)';
+    ctx.strokeStyle = secondaryText;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    const decorLineY = isVertical ? 200 : 140;
+    ctx.moveTo(canvas.width / 2 - 80, decorLineY);
+    ctx.lineTo(canvas.width / 2 + 80, decorLineY);
+    ctx.stroke();
+
+    // 6. 中间内容区
     ctx.fillStyle = textColor;
-    ctx.font = `${isVertical ? 50 : 40}px Arial`;
+    ctx.font = `${isVertical ? 60 : 45}px 'Arial', sans-serif`;
+    ctx.textAlign = 'center';
     
     const lines = poster.content.split('\n').filter((l: string) => l.trim());
     let yPosition = isVertical ? 450 : 350;
-    const lineHeight = isVertical ? 100 : 80;
+    const lineHeight = isVertical ? 120 : 90;
+    const contentPadding = isVertical ? 60 : 40;
 
-    // 跳过第一行（已作为标题），显示剩余内容
-    lines.slice(1, 3).forEach((line: string) => {
-      ctx.fillText(line, canvas.width / 2, yPosition);
-      yPosition += lineHeight;
+    // 内容背景框
+    const contentBoxHeight = Math.min(lines.length - 1, 2) * lineHeight + 100;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.fillRect(contentPadding, yPosition - 50, canvas.width - contentPadding * 2, contentBoxHeight);
+
+    // 绘制内容文字
+    lines.slice(1, 3).forEach((line: string, index: number) => {
+      ctx.fillStyle = textColor;
+      const contentLines = wrapText(line, isVertical ? 25 : 35);
+      contentLines.forEach((contentLine) => {
+        ctx.fillText(contentLine, canvas.width / 2, yPosition);
+        yPosition += lineHeight / contentLines.length;
+      });
     });
 
-    // 底部 CTA - 改为通用文案
-    ctx.fillStyle = accentColor;
-    ctx.fillRect(0, isVertical ? canvas.height - 180 : canvas.height - 150, canvas.width, isVertical ? 180 : 150);
+    // 7. 底部 CTA 区 - 专业设计
+    const footerHeight = isVertical ? 200 : 150;
+    const footerY = isVertical ? canvas.height - footerHeight : canvas.height - footerHeight;
     
-    ctx.fillStyle = secondaryText;
-    ctx.font = `bold ${isVertical ? 60 : 48}px Arial`;
+    // 底部背景
+    const footerGradient = ctx.createLinearGradient(0, footerY, canvas.width, canvas.height);
+    footerGradient.addColorStop(0, accentColor);
+    footerGradient.addColorStop(1, adjustColor(accentColor, -30));
+    ctx.fillStyle = footerGradient;
+    ctx.fillRect(0, footerY, canvas.width, footerHeight);
+
+    // 底部装饰线
+    ctx.strokeStyle = secondaryText;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(0, footerY);
+    ctx.lineTo(canvas.width, footerY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // CTA 按钮背景
+    const buttonWidth = isVertical ? 600 : 800;
+    const buttonHeight = isVertical ? 80 : 60;
+    const buttonX = (canvas.width - buttonWidth) / 2;
+    const buttonY = footerY + (footerHeight - buttonHeight) / 2;
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+    
+    // 按钮边框
+    ctx.strokeStyle = secondaryText;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+    // CTA 文字
+    ctx.fillStyle = accentColor;
+    ctx.font = `bold ${isVertical ? 50 : 40}px 'Arial', sans-serif`;
     ctx.textAlign = 'center';
-    ctx.fillText('立即了解更多', canvas.width / 2, isVertical ? canvas.height - 70 : canvas.height - 55);
+    ctx.fillText('立即了解更多', canvas.width / 2, buttonY + buttonHeight / 2 + 18);
+
+    // 8. 角落装饰
+    drawCornerDecoration(ctx, canvas.width, canvas.height, accentColor, isVertical);
 
     return canvas;
+  };
+
+  // 辅助函数：文字换行
+  const wrapText = (text: string, maxCharsPerLine: number): string[] => {
+    const result: string[] = [];
+    let currentLine = '';
+    for (let i = 0; i < text.length; i++) {
+      if (currentLine.length >= maxCharsPerLine) {
+        result.push(currentLine);
+        currentLine = '';
+      }
+      currentLine += text[i];
+    }
+    if (currentLine) result.push(currentLine);
+    return result;
+  };
+
+  // 辅助函数：颜色调整
+  const adjustColor = (color: string, amount: number): string => {
+    const num = parseInt(color.replace('#', ''), 16);
+    const r = Math.max(0, Math.min(255, (num >> 16) + amount));
+    const g = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amount));
+    const b = Math.max(0, Math.min(255, (num & 0x0000FF) + amount));
+    return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
+  };
+
+  // 辅助函数：角落装饰
+  const drawCornerDecoration = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    color: string,
+    isVertical: boolean
+  ) => {
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.15;
+    const size = isVertical ? 100 : 80;
+    
+    // 左上角
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(size, 0);
+    ctx.lineTo(0, size);
+    ctx.fill();
+    
+    // 右下角
+    ctx.beginPath();
+    ctx.moveTo(width, height);
+    ctx.lineTo(width - size, height);
+    ctx.lineTo(width, height - size);
+    ctx.fill();
+    
+    ctx.globalAlpha = 1;
   };
 
   // 下载海报
