@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Calendar, Plus, Search, Edit2, Trash2, CheckCircle, Clock, AlertCircle, TrendingUp, Home, MapPin } from 'lucide-react';
+import { Users, Calendar, Plus, Search, Edit2, Trash2, CheckCircle, Clock, AlertCircle, TrendingUp, Home, MapPin, Target } from 'lucide-react';
 import { useCustomerStorage } from '../hooks/useCustomerStorage';
 import { useAppointmentStorage } from '../hooks/useAppointmentStorage';
 import { useToast } from './Toast';
@@ -8,14 +8,17 @@ import { CustomerForm } from './CustomerForm';
 import { AppointmentForm } from './AppointmentForm';
 import { InStoreService } from './InStoreService';
 import { OnSiteServiceBooking } from './OnSiteServiceBooking';
-import { Customer, Appointment } from '../types/index';
+import { CustomerProfile } from './CustomerProfile';
+import { Customer, Appointment, Staff } from '../types/index';
+import { useStaffStorage } from '../hooks/useStaffStorage';
 
 export const CustomerManagement: React.FC = () => {
   const { customers, addCustomer, updateCustomer, deleteCustomer, searchCustomers } = useCustomerStorage();
   const { appointments, addAppointment, updateAppointment, deleteAppointment } = useAppointmentStorage();
+  const { staff: staffList } = useStaffStorage();
   const { showToast } = useToast();
   
-  const [activeTab, setActiveTab] = useState<'customers' | 'appointments' | 'instore' | 'onsite' | 'operations'>('customers');
+  const [activeTab, setActiveTab] = useState<'customers' | 'appointments' | 'instore' | 'onsite' | 'profile'>('customers');
   const [searchQuery, setSearchQuery] = useState('');
   const [customerFilter, setCustomerFilter] = useState<'all' | 'active' | 'vip' | 'inactive'>('all');
   const [appointmentFilter, setAppointmentFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all');
@@ -183,6 +186,11 @@ export const CustomerManagement: React.FC = () => {
     setShowServiceModal(true);
   };
 
+  const handleViewProfile = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setActiveTab('profile');
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -241,11 +249,11 @@ export const CustomerManagement: React.FC = () => {
           上门
         </button>
         <button
-          onClick={() => setActiveTab('operations')}
-          className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'operations' ? 'border-b-2 border-green-500 text-green-600' : 'text-gray-600'}`}
+          onClick={() => setActiveTab('profile')}
+          className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'profile' ? 'border-b-2 border-green-500 text-green-600' : 'text-gray-600'}`}
         >
-          <TrendingUp className="w-4 h-4 inline mr-2" />
-          运营
+          <Target className="w-4 h-4 inline mr-2" />
+          客户画像
         </button>
       </div>
 
@@ -321,6 +329,12 @@ export const CustomerManagement: React.FC = () => {
                         className="text-blue-600 hover:text-blue-700 ml-2"
                       >
                         <MapPin className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleViewProfile(customer)}
+                        className="text-purple-600 hover:text-purple-700 ml-2"
+                      >
+                        <Target className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>
@@ -411,6 +425,20 @@ export const CustomerManagement: React.FC = () => {
 
       {activeTab === 'instore' && <InStoreService />}
       {activeTab === 'onsite' && <OnSiteServiceBooking mode="admin" />}
+      
+      {/* 客户画像标签页 */}
+      {activeTab === 'profile' && (
+        <div>
+          {selectedCustomer ? (
+            <CustomerProfile customer={selectedCustomer} staffList={staffList} />
+          ) : (
+            <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+              <Target className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-600 text-lg">请从左侧客户列表中选择一个客户来查看其详细的画像分析</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {activeTab === 'operations' && (
         <div className="space-y-6">

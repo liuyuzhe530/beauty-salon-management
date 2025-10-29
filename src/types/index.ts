@@ -25,6 +25,41 @@ export interface Customer {
   preferredStaff: string;
   status: 'active' | 'atrisk' | 'inactive' | 'vip';
   photo: string;
+  // 新增：客户画像数据
+  profile?: {
+    // 家庭信息
+    family?: {
+      maritalStatus?: string; // 已婚/未婚/离异
+      hasChildren?: boolean;
+      familyMembers?: number;
+    };
+    // 喜好信息
+    preferences?: {
+      skinType?: string; // 肤质类型
+      skinConcerns?: string[]; // 皮肤问题
+      preferredServices?: string[]; // 偏好服务
+      allergies?: string[]; // 过敏信息
+      budget?: 'economy' | 'standard' | 'premium' | 'luxury';
+    };
+    // 美容师匹配
+    staffAffinity?: {
+      [staffId: string]: number; // 与美容师的亲和度 (0-100)
+    };
+    // 消费行为
+    consumptionPattern?: {
+      averagePerVisit?: number;
+      preferredTimeSlot?: string; // 偏好时段
+      visitFrequency?: 'weekly' | 'biweekly' | 'monthly' | 'irregular';
+      lastPurchaseCategory?: string;
+    };
+    // 生活方式
+    lifestyle?: {
+      occupation?: string;
+      ageRange?: string;
+      interests?: string[];
+      socialMediaActive?: boolean;
+    };
+  };
 }
 
 // 预约
