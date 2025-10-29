@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, Image, FileText, User, Target, X, Plus, Copy, Download } from 'lucide-react';
+import posterGenerationAPIService from '../services/posterGenerationAPIService';
 
 interface MarketingFeature {
   id: string;
@@ -113,6 +114,8 @@ const PosterMaker: React.FC = () => {
   const [generatedScheme, setGeneratedScheme] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [posterFormat, setPosterFormat] = useState('vertical'); // vertical or horizontal
+  const [apiStatus, setApiStatus] = useState<{available: boolean; source?: string}>({available: false});
+  const [processingTime, setProcessingTime] = useState(0);
 
   // 根据文字内容分析生成海报配置
   const analyzePosterContent = (text: string) => {
@@ -216,7 +219,7 @@ const PosterMaker: React.FC = () => {
     };
   };
 
-  // 生成海报
+  // 增强的海报生成函数 - 集成 RunningHub API
   const generatePoster = async () => {
     if (!content.trim()) {
       alert('请输入海报内容！');
@@ -224,26 +227,94 @@ const PosterMaker: React.FC = () => {
     }
 
     setIsLoading(true);
+    const startTime = Date.now();
 
-    // 模拟 AI 处理时间
-    setTimeout(() => {
+    try {
+      // 分析海报内容
+      const posterConfig = analyzePosterContent(content);
+
+      // 调用 API 服务生成海报
+      const apiResponse = await posterGenerationAPIService.generatePoster({
+        content: content,
+        style: posterConfig.style,
+        format: posterFormat === 'vertical' ? 'vertical' : 'horizontal',
+        type: posterConfig.posterType,
+        includeQRCode: true
+      });
+
+      const duration = Date.now() - startTime;
+      setProcessingTime(duration);
+
+      if (apiResponse.success && apiResponse.data) {
+        // API 成功生成
+        setApiStatus({
+          available: true,
+          source: apiResponse.meta?.source || 'api'
+        });
+
+        const scheme = generateMarketingScheme(content, posterConfig);
+        
+        // 使用 API 返回的海报数据
+        const poster = {
+          type: posterConfig.posterType,
+          style: posterConfig.style,
+          colors: apiResponse.data.design?.colorScheme || posterConfig.colorScheme,
+          content: content,
+          format: posterFormat,
+          timestamp: new Date().toISOString(),
+          posterUrl: apiResponse.data.posterUrl,
+          source: apiResponse.meta?.source || 'api'
+        };
+
+        setGeneratedPoster(poster);
+        setGeneratedScheme(scheme);
+      } else {
+        // API 失败或返回错误，使用本地生成
+        setApiStatus({
+          available: false,
+          source: 'fallback'
+        });
+
+        const scheme = generateMarketingScheme(content, posterConfig);
+        const poster = {
+          type: posterConfig.posterType,
+          style: posterConfig.style,
+          colors: posterConfig.colorScheme,
+          content: content,
+          format: posterFormat,
+          timestamp: new Date().toISOString(),
+          source: 'local-fallback'
+        };
+
+        setGeneratedPoster(poster);
+        setGeneratedScheme(scheme);
+      }
+    } catch (error: any) {
+      console.error('海报生成失败:', error);
+      
+      // 异常情况下使用本地生成
+      setApiStatus({
+        available: false,
+        source: 'fallback'
+      });
+
       const posterConfig = analyzePosterContent(content);
       const scheme = generateMarketingScheme(content, posterConfig);
-
-      // 生成海报数据
       const poster = {
         type: posterConfig.posterType,
         style: posterConfig.style,
         colors: posterConfig.colorScheme,
         content: content,
         format: posterFormat,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        source: 'error-fallback'
       };
 
       setGeneratedPoster(poster);
       setGeneratedScheme(scheme);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   // 生成 Canvas 图片
@@ -324,13 +395,28 @@ const PosterMaker: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* API 状态指示 */}
+      <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className={`w-3 h-3 rounded-full ${apiStatus.available ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+            <span className="text-sm font-medium text-gray-700">
+              {apiStatus.available ? '🟢 API 在线' : '🟡 使用本地生成'}
+            </span>
+          </div>
+          {processingTime > 0 && (
+            <span className="text-xs text-gray-500">耗时: {processingTime}ms</span>
+          )}
+        </div>
+      </div>
+
       {/* 输入区域 */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4">海报内容</h3>
         
-    <div className="space-y-4">
+        <div className="space-y-4">
           {/* 内容输入 */}
-        <div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">输入您的海报文字内容</label>
             <textarea
               value={content}
@@ -339,10 +425,10 @@ const PosterMaker: React.FC = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               rows={5}
             />
-        </div>
+          </div>
 
           {/* 格式选择 */}
-        <div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">海报格式</label>
             <div className="flex gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -365,23 +451,46 @@ const PosterMaker: React.FC = () => {
                 />
                 <span className="text-sm text-gray-700">横版 (1920x1080)</span>
               </label>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      {/* 生成按钮 */}
-      <button
+          {/* 生成按钮 */}
+          <button
             onClick={generatePoster}
-        disabled={isLoading}
-            className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:opacity-50 font-medium transition-all"
+            disabled={isLoading}
+            className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 disabled:opacity-50 font-medium transition-all flex items-center justify-center gap-2"
           >
-            {isLoading ? '正在生成海报和方案...' : '生成海报和营销方案'}
-      </button>
+            {isLoading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                正在生成海报...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4" />
+                AI 智能生成海报和营销方案
+              </>
+            )}
+          </button>
         </div>
       </div>
 
       {/* 结果展示 */}
       {generatedPoster && (
         <>
+          {/* 生成来源提示 */}
+          <div className={`rounded-lg border-l-4 p-4 ${
+            generatedPoster.source === 'api' 
+              ? 'bg-green-50 border-green-500' 
+              : 'bg-blue-50 border-blue-500'
+          }`}>
+            <p className="text-sm font-medium text-gray-900">
+              {generatedPoster.source === 'api' 
+                ? '✨ 使用 RunningHub AI 生成的高质量海报'
+                : '⚡ 使用本地生成的海报（API 暂不可用）'}
+            </p>
+          </div>
+
           {/* 海报预览 */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-bold text-gray-900 mb-4">海报预览</h3>
@@ -389,39 +498,39 @@ const PosterMaker: React.FC = () => {
             <div className="flex justify-center mb-4">
               <div
                 className="rounded-lg overflow-hidden shadow-xl border-4"
-            style={{
+                style={{
                   aspectRatio: posterFormat === 'vertical' ? '3/4' : '16/9',
                   maxWidth: posterFormat === 'vertical' ? '300px' : '600px',
-              backgroundColor: generatedPoster.colors.backgroundColor,
+                  backgroundColor: generatedPoster.colors.backgroundColor,
                   borderColor: generatedPoster.colors.accentColor
-            }}
-          >
+                }}
+              >
                 {/* 顶部 */}
-            <div
-              style={{ backgroundColor: generatedPoster.colors.accentColor }}
+                <div
+                  style={{ backgroundColor: generatedPoster.colors.accentColor }}
                   className="px-4 py-6 text-center text-white"
-            >
+                >
                   <div className="text-2xl font-bold">美容院特别推荐</div>
-            </div>
+                </div>
 
                 {/* 内容 */}
                 <div className="p-6 flex flex-col justify-center items-center flex-1 text-center">
-              <div
-                style={{ color: generatedPoster.colors.textColor }}
-                className="text-lg font-semibold whitespace-pre-wrap"
-              >
-                {generatedPoster.content}
-              </div>
-            </div>
+                  <div
+                    style={{ color: generatedPoster.colors.textColor }}
+                    className="text-lg font-semibold whitespace-pre-wrap"
+                  >
+                    {generatedPoster.content}
+                  </div>
+                </div>
 
                 {/* 底部 */}
-            <div
-              style={{ backgroundColor: generatedPoster.colors.accentColor }}
+                <div
+                  style={{ backgroundColor: generatedPoster.colors.accentColor }}
                   className="px-4 py-4 text-center text-white font-bold text-lg"
-            >
+                >
                   立即预约咨询
-            </div>
-          </div>
+                </div>
+              </div>
             </div>
 
             {/* 下载按钮 */}
@@ -431,7 +540,7 @@ const PosterMaker: React.FC = () => {
             >
               下载高清海报
             </button>
-      </div>
+          </div>
 
           {/* 营销方案 */}
           {generatedScheme && (
