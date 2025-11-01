@@ -30,7 +30,7 @@ export const AdminMallManagement: React.FC = () => {
   const categories = ['护肤品', '美甲用品', '美睫用品', 'SPA用品', '化妆工具', '其他'];
 
   // 防抖更新
-  const debounceTimer = React.useRef<Record<string, NodeJS.Timeout>>({});
+  const debounceTimer = React.useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const handleTempInputChange = (productId: string, field: string, value: number) => {
     // 更新临时值
@@ -52,13 +52,13 @@ export const AdminMallManagement: React.FC = () => {
       try {
         if (field === 'stock') {
           await updateProduct(productId, { stock: value });
-          showToast('✅ 库存已更新', 'success');
+          showToast('success', '✅ 库存已更新');
         } else if (field === 'price') {
           await updateProduct(productId, { price: value });
-          showToast('✅ 价格已更新', 'success');
+          showToast('success', '✅ 价格已更新');
         }
       } catch (error) {
-        showToast('更新失败', 'error');
+        showToast('error', '更新失败');
       }
     }, 500);
   };
@@ -71,16 +71,16 @@ export const AdminMallManagement: React.FC = () => {
   // 添加产品
   const handleAddProduct = async () => {
     if (!formData.name || !formData.category) {
-      showToast('请填写产品名称和分类', 'error');
+      showToast('error', '请填写产品名称和分类');
       return;
     }
 
     try {
       await addProduct(formData);
-      showToast(`✅ 产品 "${formData.name}" 已上架！`, 'success');
+      showToast('success', `✅ 产品 "${formData.name}" 已上架！`);
       resetForm();
     } catch (error) {
-      showToast('添加产品失败', 'error');
+      showToast('error', '添加产品失败');
     }
   };
 
@@ -89,9 +89,9 @@ export const AdminMallManagement: React.FC = () => {
     if (confirm(`确认要删除 "${productName}" 吗？`)) {
       try {
         await deleteProduct(productId);
-        showToast(`✅ 产品 "${productName}" 已删除`, 'success');
+        showToast('success', `✅ 产品 "${productName}" 已删除`);
       } catch (error) {
-        showToast('删除产品失败', 'error');
+        showToast('error', '删除产品失败');
       }
     }
   };
