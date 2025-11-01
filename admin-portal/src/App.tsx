@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Suspense, useCallback } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginPage } from './components/LoginPage';
 import { Navigation } from './components/Navigation';
@@ -20,22 +20,36 @@ import { SmartPhotoSeries } from './components/SmartPhotoSeries';
 // 管理员端：强制使用 admin 角色
 const ADMIN_ROLE = 'admin';
 
+// 加载指示器组件
+const LoadingComponent = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50">
+    <div className="text-center">
+      <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
+      <p className="text-gray-600">加载中...</p>
+    </div>
+  </div>
+);
+
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
   const [userRole] = useState(ADMIN_ROLE);
   const [currentPage, setCurrentPage] = useState<string>('dashboard');
   const [isDemoMode, setIsDemoMode] = useState(false);
 
+  // 使用 useCallback 缓存页面切换函数
+  const handlePageChange = useCallback((page: string) => {
+    setCurrentPage(page);
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    logout();
+    setIsDemoMode(false);
+    setCurrentPage('dashboard');
+  }, [logout]);
+
   // 检查加载状态
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
-          <p className="text-gray-600">加载中...</p>
-        </div>
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   // 如果未认证且不在演示模式，显示登陆页面
@@ -51,39 +65,23 @@ function AppContent() {
     );
   }
 
-  const handleLogout = () => {
-    logout();
-    setIsDemoMode(false);
-    setCurrentPage('dashboard');
-  };
-
   const renderPage = () => {
-    switch(currentPage) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'customermanagement':
-        return <CustomerManagement />;
-      case 'staff':
-        return <Staff />;
-      case 'shop':
-        return <MallPage />;
-      case 'mall-admin':
-        return <AdminMallManagement />;
-      case 'ai':
-        return <AIAssistant />;
-      case 'promotion':
-        return <Promotion />;
-      case 'promotion-plan':
-        return <PromotionPlan />;
-      case 'training':
-        return <TrainingEducation />;
-      case 'onsite':
-        return <OnSiteServiceManagement />;
-      case 'health-assistant':
-        return <SmartPhotoSeries onSelectService={setCurrentPage} />;
-      default:
-        return <Dashboard />;
-    }
+    return (
+      <Suspense fallback={<LoadingComponent />}>
+        {currentPage === 'dashboard' && <Dashboard />}
+        {currentPage === 'customermanagement' && <CustomerManagement />}
+        {currentPage === 'staff' && <Staff />}
+        {currentPage === 'shop' && <MallPage />}
+        {currentPage === 'mall-admin' && <AdminMallManagement />}
+        {currentPage === 'ai' && <AIAssistant />}
+        {currentPage === 'promotion' && <Promotion />}
+        {currentPage === 'promotion-plan' && <PromotionPlan />}
+        {currentPage === 'training' && <TrainingEducation />}
+        {currentPage === 'onsite' && <OnSiteServiceManagement />}
+        {currentPage === 'health-assistant' && <SmartPhotoSeries onSelectService={handlePageChange} />}
+        {!['dashboard', 'customermanagement', 'staff', 'shop', 'mall-admin', 'ai', 'promotion', 'promotion-plan', 'training', 'onsite', 'health-assistant'].includes(currentPage) && <Dashboard />}
+      </Suspense>
+    );
   };
 
   return (
@@ -92,7 +90,7 @@ function AppContent() {
       <Navigation 
         currentPage={currentPage}
         userRole={ADMIN_ROLE}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
         onLogout={handleLogout}
       />
       
@@ -100,7 +98,7 @@ function AppContent() {
       <BottomNavigation
         currentPage={currentPage}
         userRole={ADMIN_ROLE}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
         onLogout={handleLogout}
       />
       
