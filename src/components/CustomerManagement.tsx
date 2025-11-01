@@ -589,6 +589,7 @@ const CustomerManagementContent: React.FC = () => {
         </div>
       )}
 
+      {/* 模态框 */}
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -598,12 +599,14 @@ const CustomerManagementContent: React.FC = () => {
           <CustomerForm
             initialData={editingData as Customer}
             onSubmit={handleFormSubmit}
+            onCancel={handleCloseModal}
             isLoading={isLoading}
           />
         ) : (
           <AppointmentForm
             initialData={editingData as Appointment}
             onSubmit={handleFormSubmit}
+            onCancel={handleCloseModal}
             isLoading={isLoading}
           />
         )}

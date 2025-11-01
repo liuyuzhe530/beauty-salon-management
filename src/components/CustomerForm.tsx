@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Customer } from '../types/index';
+import { Save, X } from 'lucide-react';
 
 interface CustomerFormProps {
   initialData?: Partial<Customer>;
   onSubmit: (data: Omit<Customer, 'id'>) => void;
+  onCancel?: () => void;
   isLoading?: boolean;
 }
 
 export const CustomerForm: React.FC<CustomerFormProps> = ({
   initialData,
   onSubmit,
+  onCancel,
   isLoading = false
 }) => {
   const [formData, setFormData] = useState({
@@ -227,8 +230,35 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
         />
       </div>
 
-      {/* 隐藏的提交按钮 - 通过 Modal 的 onConfirm 触发 */}
-      <button type="submit" className="hidden" />
+      {/* 按钮区域 */}
+      <div className="flex gap-3 mt-6 pt-4 border-t">
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={isLoading}
+          className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          <X size={16} />
+          取 消
+        </button>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {isLoading ? (
+            <>
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              保 存 中...
+            </>
+          ) : (
+            <>
+              <Save size={16} />
+              确 认
+            </>
+          )}
+        </button>
+      </div>
     </form>
   );
 };
