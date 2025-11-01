@@ -220,8 +220,8 @@ class TongueCoatingAnalysisService {
         const coatingCoverage = (coatingPixels / pixelCount) * 100;
 
         // 计算色调范围
-        const minHue = Math.min(...hueValues);
-        const maxHue = Math.max(...hueValues);
+        const minHue = hueValues.length > 0 ? Math.min(...hueValues) : 0;
+        const maxHue = hueValues.length > 0 ? Math.max(...hueValues) : 0;
 
         resolve({
           brightness: Math.round(brightness),
@@ -229,6 +229,16 @@ class TongueCoatingAnalysisService {
           hueRange: { min: Math.round(minHue), max: Math.round(maxHue) },
           textureComplexity: Math.round(textureVariance),
           coatingCoverage: Math.round(coatingCoverage)
+        });
+      };
+      img.onerror = (e) => {
+        console.error('Failed to load image for visual feature extraction:', e);
+        resolve({
+          brightness: 0,
+          saturation: 0,
+          hueRange: { min: 0, max: 0 },
+          textureComplexity: 0,
+          coatingCoverage: 0
         });
       };
       img.src = imageData;
