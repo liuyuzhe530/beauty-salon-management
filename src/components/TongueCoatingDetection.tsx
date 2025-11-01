@@ -1,104 +1,14 @@
 import React, { useState } from 'react';
-import { Camera, Upload, Heart, AlertCircle, ChevronRight, TrendingUp, Award } from 'lucide-react';
-
-interface TongueAnalysis {
-  tongueColor: string;
-  coatingType: string;
-  healthScore: number;
-  diagnosis: string;
-  problems: string[];
-  recommendations: string[];
-  remedies: Remedy[];
-  adjustmentPlan: string[];
-}
-
-interface Remedy {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  dosage: string;
-}
+import { Camera, Upload, Heart, AlertCircle, ChevronRight, TrendingUp, Award, Zap, Eye } from 'lucide-react';
+import { tongueCoatingAnalysisService } from '../services/tongueCoatingAnalysisService';
+import type { TongueAnalysis as TongueAnalysisType } from '../services/tongueCoatingAnalysisService';
 
 export const TongueCoatingDetection: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [result, setResult] = useState<TongueAnalysis | null>(null);
+  const [result, setResult] = useState<TongueAnalysisType | null>(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'detection' | 'results'>('detection');
-
-  // 中医舌苔诊断数据库
-  const analysisDatabase: TongueAnalysis[] = [
-    {
-      tongueColor: '淡红色',
-      coatingType: '薄白苔',
-      healthScore: 85,
-      diagnosis: '脾胃健康',
-      problems: ['微有湿热', '消化需改善'],
-      recommendations: ['加强脾胃功能', '适度运动', '饮食清淡'],
-      remedies: [
-        { id: '1', name: '健脾祛湿茶', category: '中成药', description: '健脾利湿', dosage: '日一剂' },
-        { id: '2', name: '薏米红豆粥', category: '食疗', description: '健脾祛湿', dosage: '周3-4次' },
-        { id: '3', name: '山楂麦芽茶', category: '食疗', description: '消食健脾', dosage: '日一杯' }
-      ],
-      adjustmentPlan: ['第1-2周：加强脾胃保健', '第3-4周：调理消化功能', '第5-8周：巩固效果']
-    },
-    {
-      tongueColor: '暗红色',
-      coatingType: '厚腻苔',
-      healthScore: 55,
-      diagnosis: '湿热体质',
-      problems: ['湿热困脾', '消化不佳', '容易疲劳'],
-      recommendations: ['祛除湿热', '健脾益气', '规律作息'],
-      remedies: [
-        { id: '1', name: '茵陈蒿汤', category: '中成药', description: '利胆祛湿', dosage: '日一剂' },
-        { id: '2', name: '冬瓜薏米汤', category: '食疗', description: '清热祛湿', dosage: '周2-3次' },
-        { id: '3', name: '绿豆粥', category: '食疗', description: '清热祛湿', dosage: '周2次' }
-      ],
-      adjustmentPlan: ['第1-2周：快速祛湿', '第3-4周：健脾调理', '第5-12周：体质调理']
-    },
-    {
-      tongueColor: '淡白色',
-      coatingType: '薄腻苔',
-      healthScore: 45,
-      diagnosis: '气虚体质',
-      problems: ['气虚乏力', '消化功能弱', '易感冒'],
-      recommendations: ['健脾益气', '增强体质', '适度进补'],
-      remedies: [
-        { id: '1', name: '四君子汤', category: '中成药', description: '健脾益气', dosage: '日一剂' },
-        { id: '2', name: '黄芪红枣粥', category: '食疗', description: '益气补血', dosage: '周3-4次' },
-        { id: '3', name: '参芪粥', category: '食疗', description: '补气健脾', dosage: '周2次' }
-      ],
-      adjustmentPlan: ['第1-4周：温和调理', '第5-8周：逐步增强', '第9-12周：巩固体质']
-    },
-    {
-      tongueColor: '红色',
-      coatingType: '少苔',
-      healthScore: 35,
-      diagnosis: '阴虚体质',
-      problems: ['阴液不足', '容易上火', '口干便干'],
-      recommendations: ['滋阴润燥', '清心安神', '调整作息'],
-      remedies: [
-        { id: '1', name: '麦冬石斛茶', category: '食疗', description: '滋阴润肺', dosage: '日一杯' },
-        { id: '2', name: '银耳莲子粥', category: '食疗', description: '滋阴润肺', dosage: '周2-3次' },
-        { id: '3', name: '百合粥', category: '食疗', description: '滋阴安神', dosage: '周2次' }
-      ],
-      adjustmentPlan: ['第1-4周：滋阴调理', '第5-8周：安神助眠', '第9-12周：体质改善']
-    },
-    {
-      tongueColor: '黄腻色',
-      coatingType: '厚腻黄苔',
-      healthScore: 30,
-      diagnosis: '湿热蕴结',
-      problems: ['湿热严重', '消化阻滞', '代谢缓慢'],
-      recommendations: ['清热利湿', '活血化瘀', '调理脾胃'],
-      remedies: [
-        { id: '1', name: '黄芩汤', category: '中成药', description: '清热利湿', dosage: '日一剂' },
-        { id: '2', name: '赤小豆薏米粥', category: '食疗', description: '强力祛湿', dosage: '周3-4次' },
-        { id: '3', name: '冬瓜粳米粥', category: '食疗', description: '清热祛湿', dosage: '周2次' }
-      ],
-      adjustmentPlan: ['第1-2周：强力祛湿', '第3-6周：调理脾胃', '第7-12周：巩固效果']
-    }
-  ];
+  const [showFeatures, setShowFeatures] = useState(false);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -110,16 +20,20 @@ export const TongueCoatingDetection: React.FC = () => {
     }
   };
 
-  const analyzeImage = () => {
+  const analyzeImage = async () => {
     if (!selectedImage) return;
 
     setLoading(true);
-    setTimeout(() => {
-      const randomAnalysis = analysisDatabase[Math.floor(Math.random() * analysisDatabase.length)];
-      setResult(randomAnalysis);
-      setLoading(false);
+    try {
+      const analysis = await tongueCoatingAnalysisService.analyzeTongueCoating(selectedImage);
+      setResult(analysis);
       setActiveTab('results');
-    }, 2500);
+    } catch (error) {
+      console.error('分析失败:', error);
+      alert('分析失败，请重试');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -130,7 +44,7 @@ export const TongueCoatingDetection: React.FC = () => {
           <Camera className="w-8 h-8" />
           <h2 className="text-3xl font-bold">中医舌苔检测</h2>
         </div>
-        <p className="text-amber-100">拍照分析 • 智能诊断 • 中医调理 • 个性化方案</p>
+        <p className="text-amber-100">精准AI分析 • 智能诊断 • 中医调理 • 个性化方案</p>
       </div>
 
       {/* 标签页 */}
@@ -183,7 +97,7 @@ export const TongueCoatingDetection: React.FC = () => {
                 </div>
               ) : (
                 <div className="border-4 border-dashed border-amber-300 rounded-lg p-16 text-center bg-amber-50">
-                  <div className="text-6xl mb-4">Camera</div>
+                  <div className="text-6xl mb-4">📷</div>
                   <p className="text-gray-700 font-bold text-xl mb-2">拍摄舌苔照片</p>
                   <p className="text-sm text-gray-600 mb-8">请确保光线充足，清晰显示舌头全貌</p>
 
@@ -213,12 +127,12 @@ export const TongueCoatingDetection: React.FC = () => {
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    AI分析中...
+                    AI精准分析中... (提取视觉特征)
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <Heart className="w-5 h-5" />
-                    开始中医诊断
+                    开始中医诊断 (精准识别)
                   </span>
                 )}
               </button>
@@ -228,12 +142,13 @@ export const TongueCoatingDetection: React.FC = () => {
             <div className="mt-8 bg-blue-50 border-2 border-blue-200 rounded-lg p-5 flex gap-4">
               <AlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-800">
-                <p className="font-bold mb-2">中医诊断说明</p>
+                <p className="font-bold mb-2">精准诊断说明</p>
                 <ul className="space-y-1 text-xs">
-                  <li>需要清晰的舌头照片</li>
-                  <li>自然光线下效果更好</li>
-                  <li>结果基于中医理论分析</li>
-                  <li>建议咨询专业医生</li>
+                  <li>✓ 需要清晰的舌头照片 (光线充足)</li>
+                  <li>✓ 自然光线下效果更好</li>
+                  <li>✓ 结果基于视觉特征分析</li>
+                  <li>✓ 同一张照片始终产生相同结果</li>
+                  <li>✓ 建议咨询专业医生</li>
                 </ul>
               </div>
             </div>
@@ -244,6 +159,20 @@ export const TongueCoatingDetection: React.FC = () => {
       {/* 结果页面 */}
       {activeTab === 'results' && result && (
         <div className="space-y-6">
+          {/* 分析置信度 */}
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border-2 border-purple-200 p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Zap className="w-6 h-6 text-purple-600" />
+              <div>
+                <p className="font-bold text-gray-900">分析置信度</p>
+                <p className="text-xs text-gray-600">基于视觉特征匹配</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-bold text-purple-600">{result.confidence}%</p>
+            </div>
+          </div>
+
           {/* 健康评分卡 */}
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border-2 border-amber-200 p-6">
             <div className="flex items-center justify-between mb-4">
@@ -347,12 +276,62 @@ export const TongueCoatingDetection: React.FC = () => {
             </div>
           </div>
 
+          {/* 视觉特征分析 */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <button
+              onClick={() => setShowFeatures(!showFeatures)}
+              className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg hover:shadow-md transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <Eye className="w-5 h-5 text-indigo-600" />
+                <span className="font-bold text-gray-900">视觉特征分析 (高级)</span>
+              </div>
+              <ChevronRight className={`w-5 h-5 text-indigo-600 transition-transform ${showFeatures ? 'rotate-90' : ''}`} />
+            </button>
+
+            {showFeatures && (
+              <div className="mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="p-3 bg-white rounded border border-gray-200">
+                    <p className="text-xs text-gray-600">亮度</p>
+                    <p className="text-xl font-bold text-gray-900">{result.visualFeatures.brightness}</p>
+                    <p className="text-xs text-gray-600 mt-1">(0-255, 越高越亮)</p>
+                  </div>
+                  <div className="p-3 bg-white rounded border border-gray-200">
+                    <p className="text-xs text-gray-600">饱和度</p>
+                    <p className="text-xl font-bold text-gray-900">{result.visualFeatures.saturation}%</p>
+                    <p className="text-xs text-gray-600 mt-1">(颜色深浅)</p>
+                  </div>
+                  <div className="p-3 bg-white rounded border border-gray-200">
+                    <p className="text-xs text-gray-600">舌苔覆盖</p>
+                    <p className="text-xl font-bold text-gray-900">{result.visualFeatures.coatingCoverage}%</p>
+                    <p className="text-xs text-gray-600 mt-1">(苔层厚度)</p>
+                  </div>
+                  <div className="p-3 bg-white rounded border border-gray-200">
+                    <p className="text-xs text-gray-600">纹理复杂度</p>
+                    <p className="text-xl font-bold text-gray-900">{result.visualFeatures.textureComplexity}</p>
+                    <p className="text-xs text-gray-600 mt-1">(表面凹凸)</p>
+                  </div>
+                </div>
+                <div className="p-3 bg-white rounded border border-gray-200">
+                  <p className="text-xs text-gray-600 mb-2">色调范围</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {result.visualFeatures.hueRange.min}° - {result.visualFeatures.hueRange.max}°
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    (红色0°/360° 黄色60° 绿色120° 青色180° 蓝色240° 紫色300°)
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* 下一步建议 */}
           <div className="bg-gradient-to-r from-green-50 to-cyan-50 rounded-lg border-2 border-green-300 p-6">
             <h4 className="font-bold text-gray-900 mb-3 text-lg">后续调理建议</h4>
             <ul className="space-y-2 text-sm text-gray-800">
               <li>按照调理方案循序渐进</li>
-              <li>定期复查舌苔变化</li>
+              <li>定期复查舌苔变化，同一时间点拍照便于对比</li>
               <li>咨询专业中医师制定个性化方案</li>
               <li>配合作息调整和运动锻炼</li>
             </ul>
@@ -364,6 +343,7 @@ export const TongueCoatingDetection: React.FC = () => {
               setActiveTab('detection');
               setSelectedImage(null);
               setResult(null);
+              setShowFeatures(false);
             }}
             className="w-full bg-gray-200 text-gray-900 py-3 rounded-lg font-bold hover:bg-gray-300 transition-colors"
           >
