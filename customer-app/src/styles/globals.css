@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a1e4b5;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6ee7a5;
+}
+
+/* 基础样式 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #f0fdf4 0%, #f8fefb 100%);
+}
+
+/* 平滑过渡 */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* 禁用按钮样式 */
+button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* 主色按钮 - 绿色 */
+.btn-primary {
+  @apply bg-green-500 text-white hover:bg-green-600 transition-colors;
+}
+
+.btn-primary-light {
+  @apply bg-green-100 text-green-700 hover:bg-green-200 transition-colors;
+}
+
+/* 移动端安全区域 */
+@supports (padding: max(0px)) {
+  body {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+  
+  main {
+    padding-bottom: 80px; /* 为底部导航预留空间 */
+  }
+}
+
+/* 绿色渐变背景 */
+.gradient-green {
+  @apply bg-gradient-to-br from-green-50 to-green-100;
+}
+
+/* 绿色卡片效果 */
+.card-green {
+  @apply bg-white rounded-lg border border-green-200 shadow-sm hover:shadow-md hover:border-green-300 transition-all;
+}

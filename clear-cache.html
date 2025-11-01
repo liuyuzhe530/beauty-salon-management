@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清除缓存 - 美容院管理系统</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #f8fefb 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #22c55e;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+    
+    .info {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 15px;
+      margin-bottom: 30px;
+      text-align: left;
+      border-radius: 4px;
+      color: #15803d;
+    }
+    
+    .info p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
+    
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .btn-clear {
+      background: #22c55e;
+      color: white;
+    }
+    
+    .btn-clear:hover {
+      background: #16a34a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+    
+    .btn-cancel {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    
+    .btn-cancel:hover {
+      background: #d1d5db;
+    }
+    
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .status.success {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+      display: block;
+    }
+    
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+      display: block;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .spinner {
+      border: 4px solid #f0fdf4;
+      border-top: 4px solid #22c55e;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .ports {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f9fafb;
+      border-radius: 8px;
+      text-align: left;
+    }
+    
+    .ports h3 {
+      color: #374151;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .port-link {
+      display: block;
+      margin: 8px 0;
+      color: #22c55e;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+    
+    .port-link:hover {
+      color: #16a34a;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔄 清除缓存</h1>
+    
+    <div class="info">
+      <p>✓ 清除浏览器缓存 (localStorage)</p>
+      <p>✓ 重新加载应用数据</p>
+      <p>✓ 恢复到初始状态</p>
+    </div>
+    
+    <div class="button-group">
+      <button class="btn-clear" onclick="clearCache()">
+        🗑️ 确认清除缓存
+      </button>
+      <button class="btn-cancel" onclick="cancel()">
+        ❌ 取消
+      </button>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>正在清除缓存...</p>
+    </div>
+    
+    <div class="ports">
+      <h3>📱 清除完成后访问：</h3>
+      <a href="http://localhost:5173" class="port-link">👑 管理员端 (5173)</a>
+      <a href="http://localhost:5174" class="port-link">👩‍💼 美容师端 (5174)</a>
+      <a href="http://localhost:5175" class="port-link">👤 客户端 (5175)</a>
+    </div>
+  </div>
+  
+  <script>
+    function clearCache() {
+      const statusDiv = document.getElementById('status');
+      const loading = document.getElementById('loading');
+      const button = event.target;
+      
+      button.disabled = true;
+      loading.style.display = 'block';
+      
+      try {
+        // 清除所有 localStorage
+        const keys = [
+          'beauty_salon_customers',
+          'beauty_salon_appointments',
+          'beauty_salon_products',
+          'beauty_salon_staff',
+          'authToken',
+          'currentUser'
+        ];
+        
+        keys.forEach(key => {
+          localStorage.removeItem(key);
+          console.log(`✓ 已清除: ${key}`);
+        });
+        
+        // 清除所有 localStorage
+        localStorage.clear();
+        
+        // 清除 sessionStorage
+        sessionStorage.clear();
+        
+        // 显示成功信息
+        setTimeout(() => {
+          loading.style.display = 'none';
+          statusDiv.className = 'status success';
+          statusDiv.innerHTML = '✅ <strong>缓存已清除！</strong><br>页面将在 2 秒后跳转...';
+          
+          // 2秒后刷新当前页面
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
+        }, 500);
+        
+      } catch (error) {
+        loading.style.display = 'none';
+        statusDiv.className = 'status error';
+        statusDiv.innerHTML = '❌ <strong>清除失败！</strong><br>' + error.message;
+        button.disabled = false;
+        console.error('清除缓存失败:', error);
+      }
+    }
+    
+    function cancel() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>
+
+

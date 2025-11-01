@@ -6,12 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const path_1 = __importDefault(require("path"));
 const database_1 = __importDefault(require("./config/database"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const customers_1 = __importDefault(require("./routes/customers"));
 const staff_1 = __importDefault(require("./routes/staff"));
 const appointments_1 = __importDefault(require("./routes/appointments"));
 const products_1 = __importDefault(require("./routes/products"));
+const upload_1 = __importDefault(require("./routes/upload"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3001;
@@ -19,12 +21,15 @@ const PORT = process.env.PORT || 3001;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+// 提供上传文件的静态访问
+app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '../uploads')));
 // Routes
 app.use('/api/auth', auth_1.default);
 app.use('/api/customers', customers_1.default);
 app.use('/api/staff', staff_1.default);
 app.use('/api/appointments', appointments_1.default);
 app.use('/api/products', products_1.default);
+app.use('/api/upload', upload_1.default);
 // Health check
 app.get('/api/health', (_req, res) => {
     res.json({ success: true, message: 'Server is running' });
@@ -47,6 +52,8 @@ const startServer = async () => {
         console.log('Database synchronized');
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
+            console.log(`Upload endpoint: http://localhost:${PORT}/api/upload/image`);
+            console.log(`Static files: http://localhost:${PORT}/uploads/`);
         });
     }
     catch (error) {

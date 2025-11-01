@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>网页诊断工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .test {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 4px solid #ddd;
+        }
+        .test.pass {
+            border-left-color: green;
+            background-color: #f0fff0;
+        }
+        .test.fail {
+            border-left-color: red;
+            background-color: #fff0f0;
+        }
+        .test.pending {
+            border-left-color: orange;
+            background-color: #fffbf0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 网页诊断工具</h1>
+        <p>检查您的 React 应用是否能正确加载...</p>
+        
+        <div id="tests"></div>
+        
+        <button onclick="runDiagnostics()">运行完整诊断</button>
+        <button onclick="testReactApp()">测试 React 应用</button>
+        <button onclick="testDevServer()">测试开发服务器</button>
+        <button onclick="location.reload()">刷新页面</button>
+    </div>
+
+    <script>
+        const testsDiv = document.getElementById('tests');
+        
+        function addTest(name, status, message) {
+            const div = document.createElement('div');
+            div.className = `test ${status}`;
+            const statusEmoji = status === 'pass' ? '✅' : status === 'fail' ? '❌' : '⏳';
+            div.innerHTML = `<strong>${statusEmoji} ${name}</strong><br><small>${message}</small>`;
+            testsDiv.appendChild(div);
+        }
+        
+        function clearTests() {
+            testsDiv.innerHTML = '';
+        }
+        
+        function runDiagnostics() {
+            clearTests();
+            addTest('DOM Root 元素', 'pending', '检查中...');
+            
+            setTimeout(() => {
+                // 测试 1: DOM 根元素
+                if (document.getElementById('root')) {
+                    addTest('DOM Root 元素', 'pass', '找到 id="root" 元素');
+                } else {
+                    addTest('DOM Root 元素', 'fail', '未找到 id="root" 元素');
+                }
+                
+                // 测试 2: React 库
+                addTest('React 库', document.documentElement.innerHTML.includes('React') ? 'pass' : 'pending', 
+                    'React 库加载检查');
+                
+                // 测试 3: 浏览器信息
+                const browserInfo = `${navigator.userAgent.substring(0, 60)}...`;
+                addTest('浏览器信息', 'pass', browserInfo);
+                
+                // 测试 4: 连接测试
+                fetch('/')
+                    .then(r => r.text())
+                    .then(() => {
+                        addTest('服务器连接', 'pass', '✓ 服务器响应正常');
+                    })
+                    .catch(e => {
+                        addTest('服务器连接', 'fail', `✗ 无法连接: ${e.message}`);
+                    });
+                
+                // 测试 5: 网络状态
+                if (navigator.onLine) {
+                    addTest('网络连接', 'pass', '网络在线');
+                } else {
+                    addTest('网络连接', 'fail', '网络离线');
+                }
+            }, 500);
+        }
+        
+        function testReactApp() {
+            clearTests();
+            addTest('React 应用测试', 'pending', '正在打开主应用...');
+            
+            setTimeout(() => {
+                window.location.href = 'http://localhost:5173/';
+            }, 1000);
+        }
+        
+        function testDevServer() {
+            clearTests();
+            addTest('开发服务器测试', 'pending', '连接到 localhost:5173...');
+            
+            fetch('http://localhost:5173/')
+                .then(r => r.text())
+                .then(html => {
+                    const hasRoot = html.includes('id="root"');
+                    const hasScript = html.includes('src="/src/main.tsx"');
+                    
+                    if (hasRoot && hasScript) {
+                        addTest('开发服务器', 'pass', '✓ 服务器运行正常，HTML 完整');
+                    } else {
+                        addTest('开发服务器', 'fail', '✗ HTML 不完整 - root: ' + hasRoot + ', script: ' + hasScript);
+                    }
+                })
+                .catch(e => {
+                    addTest('开发服务器', 'fail', '✗ 无法连接: ' + e.message);
+                });
+        }
+        
+        // 自动运行诊断
+        window.addEventListener('load', runDiagnostics);
+    </script>
+</body>
+</html>
