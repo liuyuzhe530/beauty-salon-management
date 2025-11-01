@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Users, Calendar, Plus, Search, Edit2, Trash2, CheckCircle, Clock, AlertCircle, TrendingUp, Home, MapPin, Target } from 'lucide-react';
 import { useCustomerStorage } from '../hooks/useCustomerStorage';
 import { useAppointmentStorage } from '../hooks/useAppointmentStorage';
@@ -11,8 +11,39 @@ import { OnSiteServiceBooking } from './OnSiteServiceBooking';
 import { CustomerProfile } from './CustomerProfile';
 import { Customer, Appointment, Staff } from '../types/index';
 import { useStaffStorage } from '../hooks/useStaffStorage';
+import { debounce } from '../utils/debounce';
 
-export const CustomerManagement: React.FC = () => {
+// 分离出列表项组件并使用 React.memo 优化
+const CustomerListItem = React.memo(({ 
+  customer, 
+  onEdit, 
+  onDelete, 
+  onViewProfile 
+}: {
+  customer: Customer;
+  onEdit: (customer: Customer) => void;
+  onDelete: (id: string) => void;
+  onViewProfile: (customer: Customer) => void;
+}) => (
+  <div className="flex items-center justify-between p-3 bg-white border-b hover:bg-gray-50 transition">
+    <div className="flex-1" onClick={() => onViewProfile(customer)}>
+      <p className="font-semibold text-gray-900">{customer.name}</p>
+      <p className="text-sm text-gray-500">{customer.phone}</p>
+    </div>
+    <div className="flex gap-2">
+      <button onClick={() => onEdit(customer)} className="p-1 text-blue-600 hover:bg-blue-50 rounded">
+        <Edit2 size={16} />
+      </button>
+      <button onClick={() => onDelete(customer.id)} className="p-1 text-red-600 hover:bg-red-50 rounded">
+        <Trash2 size={16} />
+      </button>
+    </div>
+  </div>
+));
+
+CustomerListItem.displayName = 'CustomerListItem';
+
+const CustomerManagementContent: React.FC = () => {
   const { customers, addCustomer, updateCustomer, deleteCustomer, searchCustomers } = useCustomerStorage();
   const { appointments, addAppointment, updateAppointment, deleteAppointment } = useAppointmentStorage();
   const { staff: staffList } = useStaffStorage();
@@ -31,6 +62,14 @@ export const CustomerManagement: React.FC = () => {
   const [onsiteAppointments, setOnsiteAppointments] = useState<any[]>([]);
   const [onsiteHistory, setOnsiteHistory] = useState<any[]>([]);
 
+  // 使用 useCallback 缓存搜索函数
+  const handleSearch = useCallback(
+    debounce((query: string) => {
+      setSearchQuery(query);
+    }, 500),
+    []
+  );
+
   const searchResults = searchQuery.trim() ? searchCustomers(searchQuery) : customers;
   const filteredCustomers = searchResults.filter(c =>
     customerFilter === 'all' ? true : c.status === customerFilter
@@ -48,10 +87,9 @@ export const CustomerManagement: React.FC = () => {
   const getCustomerStatusLabel = (status: string) => {
     switch(status) {
       case 'active': return '活跃';
-      case 'vip': return '贵宾';
+      case 'vip': return 'VIP';
       case 'inactive': return '不活跃';
-      case 'atrisk': return '风险客户';
-      default: return status;
+      default: return '未知';
     }
   };
 
@@ -75,7 +113,7 @@ export const CustomerManagement: React.FC = () => {
       case 'confirmed': return '已确认';
       case 'completed': return '已完成';
       case 'cancelled': return '已取消';
-      default: return status;
+      default: return '未知';
     }
   };
 
@@ -93,32 +131,32 @@ export const CustomerManagement: React.FC = () => {
     return appointmentDate > today && a.status !== 'cancelled';
   }).slice(0, 5);
 
-  const handleOpenAddCustomer = () => {
+  const handleOpenAddCustomer = useCallback(() => {
     setEditingData(null);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenEditCustomer = (customer: Customer) => {
+  const handleOpenEditCustomer = useCallback((customer: Customer) => {
     setEditingData(customer);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenAddAppointment = () => {
+  const handleOpenAddAppointment = useCallback(() => {
     setEditingData(null);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenEditAppointment = (appointment: Appointment) => {
+  const handleOpenEditAppointment = useCallback((appointment: Appointment) => {
     setEditingData(appointment);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setEditingData(null);
-  };
+  }, []);
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = useCallback(async (data: any) => {
     setIsLoading(true);
     try {
       if (activeTab === 'customers') {
@@ -146,31 +184,31 @@ export const CustomerManagement: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeTab, editingData, addCustomer, updateCustomer, addAppointment, updateAppointment, showToast, handleCloseModal]);
 
-  const handleDeleteCustomer = (id: string, name: string) => {
+  const handleDeleteCustomer = useCallback((id: string, name: string) => {
     if (confirm(`确定要删除客户 ${name} 吗？`)) {
       deleteCustomer(id);
       showToast('success', `已删除客户 ${name}`, 3000);
     }
-  };
+  }, [deleteCustomer, showToast]);
 
-  const handleDeleteAppointment = (id: string) => {
+  const handleDeleteAppointment = useCallback((id: string) => {
     if (confirm('确定要删除这个预约吗？')) {
       deleteAppointment(id);
       showToast('success', '已删除预约', 3000);
     }
-  };
+  }, [deleteAppointment, showToast]);
 
-  const handleUpdateAppointmentStatus = (id: string, newStatus: 'pending' | 'confirmed' | 'completed' | 'cancelled') => {
+  const handleUpdateAppointmentStatus = useCallback((id: string, newStatus: 'pending' | 'confirmed' | 'completed' | 'cancelled') => {
     const appointment = appointments.find(a => a.id === id);
     if (appointment) {
       updateAppointment(id, { ...appointment, status: newStatus });
       showToast('success', `预约状态已更新为 ${getAppointmentStatusLabel(newStatus)}`, 3000);
     }
-  };
+  }, [appointments, updateAppointment, showToast]);
 
-  const handleViewCustomerServices = (customer: Customer) => {
+  const handleViewCustomerServices = useCallback((customer: Customer) => {
     setSelectedCustomer(customer);
     
     // 从 localStorage 获取上门预约
@@ -184,12 +222,12 @@ export const CustomerManagement: React.FC = () => {
     setOnsiteAppointments(onsiteApptsList);
     setOnsiteHistory(onsiteHistList);
     setShowServiceModal(true);
-  };
+  }, []);
 
-  const handleViewProfile = (customer: Customer) => {
+  const handleViewProfile = useCallback((customer: Customer) => {
     setSelectedCustomer(customer);
     setActiveTab('profile');
-  };
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -265,7 +303,7 @@ export const CustomerManagement: React.FC = () => {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 placeholder="搜索客户名称或电话..."
                 className="flex-1 px-3 py-2 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               />
@@ -573,4 +611,7 @@ export const CustomerManagement: React.FC = () => {
     </div>
   );
 };
+
+// 使用 React.memo 包装整个组件
+export const CustomerManagement = React.memo(CustomerManagementContent);
 

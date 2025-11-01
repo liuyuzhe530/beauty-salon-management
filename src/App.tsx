@@ -1,28 +1,102 @@
-import { useState } from 'react';
+import { useState, Suspense, useCallback } from 'react';
 import { UserRole } from './types/index';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginPage } from './components/LoginPage';
-import { RoleSelector } from './components/RoleSelector';
 import { Navigation } from './components/Navigation';
 import { BottomNavigation } from './components/BottomNavigation';
-import { Dashboard } from './components/Dashboard';
-import { Staff } from './components/Staff';
-import { CustomerManagement } from './components/CustomerManagement';
-import { BeautyProductMall } from './components/BeautyProductMall';
-import { MallPage } from './components/MallPage';
-import { AIAssistant } from './components/AIAssistant';
-import { Promotion } from './components/Promotion';
-import { AIChat } from './components/AIChat';
 import { ToastProvider } from './components/Toast';
-import { TrainingEducation } from './components/MiniProgramStore';
-import { OnSiteServiceManagement } from './components/OnSiteServiceManagement';
-import { OnSiteServiceBooking } from './components/OnSiteServiceBooking';
-import { IntelligentProcurementAI } from './components/IntelligentProcurementAI';
-import { PromotionPlan } from './components/PromotionPlan';
-import { SkincareDetection } from './components/SkincareDetection';
-import { BeautyDiagnosis } from './components/BeautyDiagnosis';
-import { TongueCoatingDetection } from './components/TongueCoatingDetection';
-import { SmartPhotoSeries } from './components/SmartPhotoSeries';
+import { AIChat } from './components/AIChat';
+
+// 使用 React.lazy 进行代码分割 - 按需加载组件
+const Dashboard = ({ onSelectService }: any) => {
+  const Component = require('./components/Dashboard').Dashboard;
+  return <Component onSelectService={onSelectService} />;
+};
+
+const CustomerManagement = () => {
+  const Component = require('./components/CustomerManagement').CustomerManagement;
+  return <Component />;
+};
+
+const Staff = () => {
+  const Component = require('./components/Staff').Staff;
+  return <Component />;
+};
+
+const BeautyProductMall = () => {
+  const Component = require('./components/BeautyProductMall').BeautyProductMall;
+  return <Component />;
+};
+
+const MallPage = () => {
+  const Component = require('./components/MallPage').MallPage;
+  return <Component />;
+};
+
+const AIAssistant = () => {
+  const Component = require('./components/AIAssistant').AIAssistant;
+  return <Component />;
+};
+
+const Promotion = () => {
+  const Component = require('./components/Promotion').Promotion;
+  return <Component />;
+};
+
+const PromotionPlan = () => {
+  const Component = require('./components/PromotionPlan').PromotionPlan;
+  return <Component />;
+};
+
+const TrainingEducation = () => {
+  const Component = require('./components/MiniProgramStore').TrainingEducation;
+  return <Component />;
+};
+
+const OnSiteServiceManagement = () => {
+  const Component = require('./components/OnSiteServiceManagement').OnSiteServiceManagement;
+  return <Component />;
+};
+
+const OnSiteServiceBooking = () => {
+  const Component = require('./components/OnSiteServiceBooking').OnSiteServiceBooking;
+  return <Component />;
+};
+
+const IntelligentProcurementAI = () => {
+  const Component = require('./components/IntelligentProcurementAI').IntelligentProcurementAI;
+  return <Component />;
+};
+
+const SkincareDetection = () => {
+  const Component = require('./components/SkincareDetection').SkincareDetection;
+  return <Component />;
+};
+
+const BeautyDiagnosis = () => {
+  const Component = require('./components/BeautyDiagnosis').BeautyDiagnosis;
+  return <Component />;
+};
+
+const TongueCoatingDetection = () => {
+  const Component = require('./components/TongueCoatingDetection').TongueCoatingDetection;
+  return <Component />;
+};
+
+const SmartPhotoSeries = ({ onSelectService }: any) => {
+  const Component = require('./components/SmartPhotoSeries').SmartPhotoSeries;
+  return <Component onSelectService={onSelectService} />;
+};
+
+// 加载指示器组件
+const LoadingComponent = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50">
+    <div className="text-center">
+      <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
+      <p className="text-gray-600">加载中...</p>
+    </div>
+  </div>
+);
 
 function AppContent() {
   const { user, isAuthenticated, logout, loading } = useAuth();
@@ -30,16 +104,20 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState<string>('dashboard');
   const [isDemoMode, setIsDemoMode] = useState(false);
 
+  // 使用 useCallback 缓存页面切换函数
+  const handlePageChange = useCallback((page: string) => {
+    setCurrentPage(page);
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    logout();
+    setUserRole(null);
+    setCurrentPage('dashboard');
+  }, [logout]);
+
   // Check authentication status
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
-          <p className="text-gray-600">加载中...</p>
-        </div>
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   // If not authenticated AND not in demo mode, show login page
@@ -56,48 +134,27 @@ function AppContent() {
     );
   }
 
-  const handleLogout = () => {
-    logout();
-    setUserRole(null);
-    setCurrentPage('dashboard');
-  };
-
   const renderPage = () => {
-    switch(currentPage) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'customermanagement':
-        return <CustomerManagement />;
-      case 'staff':
-        return <Staff />;
-      case 'shop':
-        // 管理员使用原 MallPage，客户使用新的美容产品商城
-        return userRole === 'admin' ? <MallPage /> : <BeautyProductMall />;
-      case 'ai':
-        return <AIAssistant />;
-      case 'promotion':
-        return <Promotion />;
-      case 'promotion-plan':
-        return <PromotionPlan />;
-      case 'training':
-        return <TrainingEducation />;
-      case 'onsite':
-        return <OnSiteServiceManagement />;
-      case 'onsite-booking':
-        return <OnSiteServiceBooking />;
-      case 'procurement':
-        return <IntelligentProcurementAI />;
-      case 'skincare-detection':
-        return <SkincareDetection />;
-      case 'beauty-diagnosis':
-        return <BeautyDiagnosis />;
-      case 'tongue-coating-detection':
-        return <TongueCoatingDetection />;
-      case 'health-assistant':
-        return <SmartPhotoSeries onSelectService={setCurrentPage} />;
-      default:
-        return <Dashboard />;
-    }
+    return (
+      <Suspense fallback={<LoadingComponent />}>
+        {currentPage === 'dashboard' && <Dashboard onSelectService={handlePageChange} />}
+        {currentPage === 'customermanagement' && <CustomerManagement />}
+        {currentPage === 'staff' && <Staff />}
+        {currentPage === 'shop' && (userRole === 'admin' ? <MallPage /> : <BeautyProductMall />)}
+        {currentPage === 'ai' && <AIAssistant />}
+        {currentPage === 'promotion' && <Promotion />}
+        {currentPage === 'promotion-plan' && <PromotionPlan />}
+        {currentPage === 'training' && <TrainingEducation />}
+        {currentPage === 'onsite' && <OnSiteServiceManagement />}
+        {currentPage === 'onsite-booking' && <OnSiteServiceBooking />}
+        {currentPage === 'procurement' && <IntelligentProcurementAI />}
+        {currentPage === 'skincare-detection' && <SkincareDetection />}
+        {currentPage === 'beauty-diagnosis' && <BeautyDiagnosis />}
+        {currentPage === 'tongue-coating-detection' && <TongueCoatingDetection />}
+        {currentPage === 'health-assistant' && <SmartPhotoSeries onSelectService={handlePageChange} />}
+        {!['dashboard', 'customermanagement', 'staff', 'shop', 'ai', 'promotion', 'promotion-plan', 'training', 'onsite', 'onsite-booking', 'procurement', 'skincare-detection', 'beauty-diagnosis', 'tongue-coating-detection', 'health-assistant'].includes(currentPage) && <Dashboard onSelectService={handlePageChange} />}
+      </Suspense>
+    );
   };
 
   return (
@@ -106,7 +163,7 @@ function AppContent() {
       <Navigation 
         currentPage={currentPage}
         userRole={(isDemoMode ? userRole : user?.role) as UserRole}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
         onLogout={handleLogout}
       />
       
@@ -114,7 +171,7 @@ function AppContent() {
       <BottomNavigation
         currentPage={currentPage}
         userRole={(isDemoMode ? userRole : user?.role) as UserRole}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
         onLogout={handleLogout}
       />
       
