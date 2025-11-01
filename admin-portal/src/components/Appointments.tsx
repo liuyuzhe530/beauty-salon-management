@@ -290,6 +290,7 @@ export const Appointments: React.FC = () => {
         <AppointmentForm
           initialData={editingAppointment || undefined}
           onSubmit={handleFormSubmit}
+          onCancel={handleCloseModal}
           isLoading={isLoading}
         />
       </Modal>

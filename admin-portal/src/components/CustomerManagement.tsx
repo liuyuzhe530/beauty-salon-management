@@ -560,12 +560,14 @@ export const CustomerManagement: React.FC = () => {
           <CustomerForm
             initialData={editingData as Customer}
             onSubmit={handleFormSubmit}
+            onCancel={handleCloseModal}
             isLoading={isLoading}
           />
         ) : (
           <AppointmentForm
             initialData={editingData as Appointment}
             onSubmit={handleFormSubmit}
+            onCancel={handleCloseModal}
             isLoading={isLoading}
           />
         )}

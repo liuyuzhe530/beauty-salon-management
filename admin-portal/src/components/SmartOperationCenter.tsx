@@ -843,6 +843,7 @@ export const CustomerManagement: React.FC = () => {
           <AppointmentForm
             initialData={selectedAppointmentForEdit || (editingData && 'service' in editingData ? (editingData as Appointment) : undefined)}
             onSubmit={handleFormSubmit}
+            onCancel={handleCloseModal}
             isLoading={isLoading}
           />
         )}
