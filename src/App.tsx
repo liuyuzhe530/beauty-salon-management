@@ -6,87 +6,22 @@ import { Navigation } from './components/Navigation';
 import { BottomNavigation } from './components/BottomNavigation';
 import { ToastProvider } from './components/Toast';
 import { AIChat } from './components/AIChat';
-
-// 使用 React.lazy 进行代码分割 - 按需加载组件
-const Dashboard = ({ onSelectService }: any) => {
-  const Component = require('./components/Dashboard').Dashboard;
-  return <Component onSelectService={onSelectService} />;
-};
-
-const CustomerManagement = () => {
-  const Component = require('./components/CustomerManagement').CustomerManagement;
-  return <Component />;
-};
-
-const Staff = () => {
-  const Component = require('./components/Staff').Staff;
-  return <Component />;
-};
-
-const BeautyProductMall = () => {
-  const Component = require('./components/BeautyProductMall').BeautyProductMall;
-  return <Component />;
-};
-
-const MallPage = () => {
-  const Component = require('./components/MallPage').MallPage;
-  return <Component />;
-};
-
-const AIAssistant = () => {
-  const Component = require('./components/AIAssistant').AIAssistant;
-  return <Component />;
-};
-
-const Promotion = () => {
-  const Component = require('./components/Promotion').Promotion;
-  return <Component />;
-};
-
-const PromotionPlan = () => {
-  const Component = require('./components/PromotionPlan').PromotionPlan;
-  return <Component />;
-};
-
-const TrainingEducation = () => {
-  const Component = require('./components/MiniProgramStore').TrainingEducation;
-  return <Component />;
-};
-
-const OnSiteServiceManagement = () => {
-  const Component = require('./components/OnSiteServiceManagement').OnSiteServiceManagement;
-  return <Component />;
-};
-
-const OnSiteServiceBooking = () => {
-  const Component = require('./components/OnSiteServiceBooking').OnSiteServiceBooking;
-  return <Component />;
-};
-
-const IntelligentProcurementAI = () => {
-  const Component = require('./components/IntelligentProcurementAI').IntelligentProcurementAI;
-  return <Component />;
-};
-
-const SkincareDetection = () => {
-  const Component = require('./components/SkincareDetection').SkincareDetection;
-  return <Component />;
-};
-
-const BeautyDiagnosis = () => {
-  const Component = require('./components/BeautyDiagnosis').BeautyDiagnosis;
-  return <Component />;
-};
-
-const TongueCoatingDetection = () => {
-  const Component = require('./components/TongueCoatingDetection').TongueCoatingDetection;
-  return <Component />;
-};
-
-const SmartPhotoSeries = ({ onSelectService }: any) => {
-  const Component = require('./components/SmartPhotoSeries').SmartPhotoSeries;
-  return <Component onSelectService={onSelectService} />;
-};
+import { Dashboard } from './components/Dashboard';
+import { CustomerManagement } from './components/CustomerManagement';
+import { Staff } from './components/Staff';
+import { BeautyProductMall } from './components/BeautyProductMall';
+import { MallPage } from './components/MallPage';
+import { AIAssistant } from './components/AIAssistant';
+import { Promotion } from './components/Promotion';
+import { PromotionPlan } from './components/PromotionPlan';
+import { TrainingEducation } from './components/MiniProgramStore';
+import { OnSiteServiceManagement } from './components/OnSiteServiceManagement';
+import { OnSiteServiceBooking } from './components/OnSiteServiceBooking';
+import { IntelligentProcurementAI } from './components/IntelligentProcurementAI';
+import { SkincareDetection } from './components/SkincareDetection';
+import { BeautyDiagnosis } from './components/BeautyDiagnosis';
+import { TongueCoatingDetection } from './components/TongueCoatingDetection';
+import { SmartPhotoSeries } from './components/SmartPhotoSeries';
 
 // 加载指示器组件
 const LoadingComponent = () => (
