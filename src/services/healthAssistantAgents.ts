@@ -288,8 +288,8 @@ async function analyzeHealthIndicators(indicators: any): Promise<any> {
 
 async function callAIModel(type: 'vision' | 'text', payload: any): Promise<any> {
   try {
-    // 调用 GLM API（需要配置 API 密钥）
-    const apiKey = process.env.REACT_APP_GLM_API_KEY || '';
+    // 调用 GLM API（使用环境变量或默认密钥）
+    const apiKey = import.meta.env.VITE_GLM_API_KEY || 'bddc38fc438e478cac87712b13d7a68f.KDOj6fpAoEOb8slt';
     const endpoint = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 
     const response = await axios.post(endpoint, {
