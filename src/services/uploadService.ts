@@ -35,10 +35,19 @@ export const uploadImage = async (
 
   try {
     // 检查后端是否可用
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+
     const healthCheck = await fetch('http://localhost:3001/api/health', {
       method: 'GET',
-      timeout: 3000,
-    }).catch(() => null);
+      signal: controller.signal
+    }).then(response => {
+      clearTimeout(timeoutId);
+      return response;
+    }).catch(() => {
+      clearTimeout(timeoutId);
+      return null;
+    });
 
     if (!healthCheck || !healthCheck.ok) {
       throw new Error('后端服务未启动，请确保运行了 npm start');
@@ -197,4 +206,10 @@ export default {
   uploadImages,
   checkUploadService,
 };
+
+
+
+
+
+
 

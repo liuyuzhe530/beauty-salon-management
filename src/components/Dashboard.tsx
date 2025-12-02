@@ -5,7 +5,11 @@ import { useAppointmentStorage } from '../hooks/useAppointmentStorage';
 import { useStaffStorage } from '../hooks/useStaffStorage';
 import { useProductStorage } from '../hooks/useProductStorage';
 
-export const Dashboard: React.FC = () => {
+interface DashboardProps {
+  onSelectService?: (page: string) => void;
+}
+
+export const Dashboard: React.FC<DashboardProps> = ({ onSelectService }) => {
   const { customers } = useCustomerStorage();
   const { appointments } = useAppointmentStorage();
   const { staff } = useStaffStorage();

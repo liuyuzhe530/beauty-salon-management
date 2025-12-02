@@ -49,14 +49,20 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 // Start server
 const startServer = async () => {
   try {
-    await sequelize.authenticate();
-    console.log('Database connected');
-
-    await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
-    console.log('Database synchronized');
+    try {
+      await sequelize.authenticate();
+      console.log('✅ Database connected successfully');
+      
+      await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
+      console.log('✅ Database synchronized');
+    } catch (dbError: any) {
+      console.warn('⚠️ Database connection failed:', dbError.message);
+      console.warn('⚠️ Running server without database connection...');
+    }
 
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`✅ Server running on port ${PORT}`);
+      console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
       console.log(`Upload endpoint: http://localhost:${PORT}/api/upload/image`);
       console.log(`Static files: http://localhost:${PORT}/uploads/`);
     });
